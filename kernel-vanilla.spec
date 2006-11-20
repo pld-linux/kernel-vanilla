@@ -26,7 +26,6 @@
 %define		_e2fsprogs_ver		1.29
 %define		_jfsutils_ver		1.1.3
 %define		_reiserfsprogs_ver	3.6.3
-%define		_reiser4progs_ver	1.0.0
 %define		_xfsprogs_ver		2.6.0
 %define		_pcmcia_cs_ver		3.1.21
 %define		_pcmciautils_ver	004
@@ -90,12 +89,10 @@ Requires:	geninitrd >= 2.57
 Requires:	module-init-tools >= 0.9.9
 Provides:	%{name}-up = %{epoch}:%{version}-%{release}
 Provides:	kernel = %{epoch}:%{version}-%{release}
-Provides:	kernel(netfilter) = %{_netfilter_snap}
 Provides:	kernel(realtime-lsm) = 0.1.1
 Provides:	kernel-misc-fuse
 Provides:	kernel-net-hostap = 0.4.4
 Provides:	kernel-net-ieee80211
-Provides:	kernel-net-ipp2p = 1:0.8.0
 Provides:	kernel-net-ipw2100 = 1.1.3
 Provides:	kernel-net-ipw2200 = 1.0.8
 Provides:	module-info
@@ -108,7 +105,6 @@ Conflicts:	oprofile < %{_oprofile_ver}
 Conflicts:	ppp < %{_ppp_ver}
 Conflicts:	procps < %{_procps_ver}
 Conflicts:	quota-tools < %{_quota_tools_ver}
-Conflicts:	reiser4progs < %{_reiser4progs_ver}
 Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
 Conflicts:	udev < %{_udev_ver}
 Conflicts:	util-linux < %{_util_linux_ver}
@@ -282,12 +278,10 @@ Requires:	coreutils
 Requires:	geninitrd >= 2.26
 Requires:	module-init-tools >= 0.9.9
 Provides:	kernel = %{epoch}:%{version}-%{release}
-Provides:	kernel(netfilter) = %{_netfilter_snap}
 Provides:	kernel(realtime-lsm) = 0.1.1
 Provides:	kernel-smp-misc-fuse
 Provides:	kernel-smp-net-hostap = 0.4.4
 Provides:	kernel-smp-net-ieee80211
-Provides:	kernel-smp-net-ipp2p = 1:0.8.0
 Provides:	kernel-smp-net-ipw2100 = 1.1.3
 Provides:	kernel-smp-net-ipw2200 = 1.0.8
 Provides:	module-info
@@ -300,7 +294,6 @@ Conflicts:	oprofile < %{_oprofile_ver}
 Conflicts:	ppp < %{_ppp_ver}
 Conflicts:	procps < %{_procps_ver}
 Conflicts:	quota-tools < %{_quota_tools_ver}
-Conflicts:	reiser4progs < %{_reiser4progs_ver}
 Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
 Conflicts:	util-linux < %{_util_linux_ver}
 Conflicts:	xfsprogs < %{_xfsprogs_ver}
@@ -437,7 +430,6 @@ Provides:	kernel-headers = %{epoch}:%{version}-%{release}
 Provides:	kernel-headers(agpgart) = %{version}
 Provides:	kernel-headers(alsa-drivers)
 Provides:	kernel-headers(bridging) = %{version}
-Provides:	kernel-headers(netfilter) = %{_netfilter_snap}
 Provides:	kernel-headers(reiserfs) = %{version}
 Autoreqprov:	no
 
