@@ -71,12 +71,11 @@ Source23:	kernel-vanilla-x86_64.config
 Source24:	kernel-vanilla-x86_64-smp.config
 Source25:	kernel-vanilla-ppc.config
 Source26:	kernel-vanilla-ppc-smp.config
-Source27:       kernel-vanilla-preempt-nort.config
-Source28:       kernel-vanilla-netfilter.config
+Source27:	kernel-vanilla-preempt-nort.config
+Source28:	kernel-vanilla-netfilter.config
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
-BuildRequires:	diffutils
 BuildRequires:	gcc >= 5:3.2
 BuildRequires:	module-init-tools
 # for hostname command
@@ -478,8 +477,8 @@ also build a custom kernel that is better tuned to your particular
 hardware.
 
 %description source -l de
-Das Kernel-Source-Packet enthält den source code (C/Assembler-Code) des
-Linux-Kernels. Die Source-Dateien werden gebraucht, um viele
+Das Kernel-Source-Packet enthält den source code (C/Assembler-Code)
+des Linux-Kernels. Die Source-Dateien werden gebraucht, um viele
 C-Programme zu kompilieren, da sie auf Konstanten zurückgreifen, die
 im Kernel-Source definiert sind. Die Source-Dateien können auch
 benutzt werden, um einen Kernel zu kompilieren, der besser auf Ihre
@@ -509,8 +508,8 @@ This is the documentation for the Linux kernel, as found in
 Documentation directory.
 
 %description doc -l de
-Dies ist die Kernel Dokumentation wie sie im 'Documentation' Verzeichniss
-vorgefunden werden kann.
+Dies ist die Kernel Dokumentation wie sie im 'Documentation'
+Verzeichniss vorgefunden werden kann.
 
 %description doc -l pl
 Pakiet zawiera dokumentacjê do j±dra Linuksa pochodz±c± z katalogu
