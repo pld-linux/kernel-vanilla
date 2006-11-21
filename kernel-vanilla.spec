@@ -45,7 +45,7 @@ Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
 %define		_basever	2.6.18
-%define		_postver	.2
+%define		_postver	.3
 %define		_rel		0.1
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
@@ -59,7 +59,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	296a6d150d260144639c3664d127d174
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	70c23255c697aa18a6e6ce97dc4eeb9b
+# Source1-md5:	43915b499164c0e2560d147638fd21ac
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
@@ -135,12 +135,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define __features Enabled features:\
 %{?debug: - DEBUG}\
-%{?with_preemptrt: - realtime-preempt patch by Ingo Molar}\
-%{?with_ck: - desktop patchset by Con Kolivas}\
-%{?with_grsec_minimal: - grsecurity minimal}\
- - %{?with_bootsplash:bootsplash}%{!?with_bootsplash:fbsplash}\
- - HZ=100%{!?with_laptop:0}
-
 %define Features_smp %(echo "%{__features}" | sed '/^$/d')
 %define Features_up %(echo "%{__features}
 %{?with_pae: - PAE (HIGHMEM64G) support}" | sed '/^$/d')
