@@ -6,6 +6,7 @@
 
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
+%bcond_with	preempt-nort	# build preemptable no realtime kernel
 
 %{?debug:%define with_verbose 1}
 
@@ -71,8 +72,10 @@ Source23:	kernel-vanilla-x86_64.config
 Source24:	kernel-vanilla-x86_64-smp.config
 Source25:	kernel-vanilla-ppc.config
 Source26:	kernel-vanilla-ppc-smp.config
-Source27:	kernel-vanilla-preempt-nort.config
-Source28:	kernel-vanilla-netfilter.config
+
+Source40:	kernel-vanilla-preempt-nort.config
+Source41:	kernel-vanilla-no-preempt-nort.config
+Source42:	kernel-vanilla-netfilter.config
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
@@ -589,8 +592,12 @@ BuildConfig() {
 
 	TuneUpConfigForIX86 .config "$smp"
 
-	cat %{SOURCE27} >> .config
-	cat %{SOURCE28} >> .config
+	%if %{with preempt-nort}
+		cat %{SOURCE40} >> .config
+	%else
+		cat %{SOURCE40} >> .config
+	%endif
+	cat %{SOURCE42} >> .config
 
 %{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" .config}
 %{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" .config}
