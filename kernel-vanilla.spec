@@ -595,7 +595,7 @@ BuildConfig() {
 	%if %{with preempt-nort}
 		cat %{SOURCE40} >> .config
 	%else
-		cat %{SOURCE40} >> .config
+		cat %{SOURCE41} >> .config
 	%endif
 	cat %{SOURCE42} >> .config
 
