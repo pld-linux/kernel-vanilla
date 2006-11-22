@@ -72,6 +72,8 @@ Source23:	kernel-vanilla-x86_64.config
 Source24:	kernel-vanilla-x86_64-smp.config
 Source25:	kernel-vanilla-ppc.config
 Source26:	kernel-vanilla-ppc-smp.config
+Source27:	kernel-vanilla-alpha.config
+Source28:	kernel-vanilla-alpha-smp.config
 
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
@@ -111,7 +113,7 @@ Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
 Conflicts:	udev < %{_udev_ver}
 Conflicts:	util-linux < %{_util_linux_ver}
 Conflicts:	xfsprogs < %{_xfsprogs_ver}
-ExclusiveArch:	%{ix86} %{x8664} ppc
+ExclusiveArch:	%{ix86} alpha %{x8664} ppc
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -586,7 +588,9 @@ BuildConfig() {
 
 	echo "Building config file [using $Config.conf] for KERNEL $1..."
 
+	%ifnarch alpha
 	cat %{SOURCE20} > .config
+	%endif
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
 	echo "CONFIG_LOCALVERSION=\"-%{release}$smp\"" >> .config
 
@@ -648,6 +652,11 @@ PreInstallKernel() {
 	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
 %ifarch %{ix86} %{x8664}
 	install arch/%{_target_base_arch}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
+%endif
+
+%ifarch alpha
+	gzip -cfv vmlinux > vmlinuz
+	install vmlinuz $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
 %endif
 
 %ifarch ppc
