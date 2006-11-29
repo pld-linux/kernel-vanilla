@@ -571,7 +571,7 @@ TuneUpConfigForIX86 () {
 %endif
 }
 
-
+rm -f .config
 BuildConfig() {
 	%{?debug:set -x}
 	# is this a special kernel we want to build?
@@ -588,6 +588,7 @@ BuildConfig() {
 
 	echo "Building config file [using $Config.conf] for KERNEL $1..."
 
+	echo "" > .config
 	%ifnarch alpha
 	cat %{SOURCE20} > .config
 	%endif
