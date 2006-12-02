@@ -1050,7 +1050,11 @@ fi
 %files smp
 %defattr(644,root,root,755)
 #doc FAQ-pl
+%ifarch sparc64
+/boot/vmlinux-%{ver_rel}smp
+%else
 /boot/vmlinuz-%{ver_rel}smp
+%endif
 /boot/System.map-%{ver_rel}smp
 %ghost /boot/initrd-%{ver_rel}smp.gz
 %dir /lib/modules/%{ver_rel}smp
@@ -1071,6 +1075,7 @@ fi
 /lib/modules/%{ver_rel}smp/kernel/sound/soundcore.*
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/media/video/*/*-alsa.ko*
 %dir /lib/modules/%{ver_rel}smp/misc
+%if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/pcmcia
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/*/pcmcia
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/bluetooth/*_cs.ko*
@@ -1082,6 +1087,7 @@ fi
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/serial/serial_cs.ko*
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/telephony/ixj_pcmcia.ko*
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/usb/host/sl811_cs.ko*
+%endif
 /lib/modules/%{ver_rel}smp/build
 %ghost /lib/modules/%{ver_rel}smp/modules.*
 %dir %{_sysconfdir}/modprobe.d/%{ver_rel}smp
@@ -1094,6 +1100,7 @@ fi
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}smp/kernel/drivers/char/drm
 
+%if %{have_pcmcia}
 %files smp-pcmcia
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}smp/kernel/drivers/pcmcia
@@ -1108,6 +1115,7 @@ fi
 /lib/modules/%{ver_rel}smp/kernel/drivers/telephony/ixj_pcmcia.ko*
 /lib/modules/%{ver_rel}smp/kernel/drivers/usb/host/sl811_cs.ko*
 /lib/modules/%{ver_rel}smp/kernel/sound/pcmcia
+%endif
 
 %files smp-sound-alsa
 %defattr(644,root,root,755)
@@ -1116,7 +1124,9 @@ fi
 %exclude %dir /lib/modules/%{ver_rel}smp/kernel/sound
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/soundcore.*
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/oss
+%if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/pcmcia
+%endif
 
 %files smp-sound-oss
 %defattr(644,root,root,755)
