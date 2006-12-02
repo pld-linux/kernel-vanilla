@@ -89,6 +89,9 @@ Source42:	kernel-vanilla-netfilter.config
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
+%ifarch sparc64
+BuildRequires:	elftoaout
+%endif
 BuildRequires:	gcc >= 5:3.2
 BuildRequires:	module-init-tools
 # for hostname command
@@ -960,10 +963,10 @@ fi
 %if %{with up}
 %files
 %defattr(644,root,root,755)
-%ifnarch sparc64
-/boot/vmlinuz-%{ver_rel}
-%else
+%ifarch sparc64
 /boot/vmlinux-%{ver_rel}
+%else
+/boot/vmlinuz-%{ver_rel}
 %endif
 /boot/System.map-%{ver_rel}
 %ghost /boot/initrd-%{ver_rel}.gz
