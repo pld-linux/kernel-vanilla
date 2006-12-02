@@ -20,6 +20,12 @@
 %define		have_isa	0
 %endif
 
+%ifarch sparc64
+%define		have_pcmcia	0
+%else
+%define		have_pcmcia	1
+%endif
+
 ## Program required by kernel to work.
 %define		_binutils_ver		2.12.1
 %define		_util_linux_ver		2.10o
@@ -74,6 +80,8 @@ Source25:	kernel-vanilla-ppc.config
 Source26:	kernel-vanilla-ppc-smp.config
 Source27:	kernel-vanilla-alpha.config
 Source28:	kernel-vanilla-alpha-smp.config
+Source29:	kernel-vanilla-sparc64.config
+Source30:	kernel-vanilla-sparc64-smp.config
 
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
@@ -113,7 +121,7 @@ Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
 Conflicts:	udev < %{_udev_ver}
 Conflicts:	util-linux < %{_util_linux_ver}
 Conflicts:	xfsprogs < %{_xfsprogs_ver}
-ExclusiveArch:	%{ix86} alpha %{x8664} ppc
+ExclusiveArch:	%{ix86} alpha %{x8664} ppc sparc64
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -126,6 +134,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %if "%{_target_base_arch}" != "%{_arch}"
 	%define	MakeOpts %{CommonOpts} ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
 	%define	DepMod /bin/true
+
+	%if "%{_arch}" == "sparc" && "%{_target_base_arch}" == "sparc64"
+	%undefine CommonOpts
+	%define MakeOpts ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
+	%define	DepMod /sbin/depmod
+	%endif
+
 
 	%if "%{_arch}" == "x86_64" && "%{_target_base_arch}" == "i386"
 	%define	MakeOpts %{CommonOpts} CC="%{__cc}" ARCH=%{_target_base_arch}
@@ -589,7 +604,7 @@ BuildConfig() {
 	echo "Building config file [using $Config.conf] for KERNEL $1..."
 
 	echo "" > .config
-	%ifnarch alpha
+	%ifnarch alpha sparc64
 	cat %{SOURCE20} > .config
 	%endif
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
@@ -632,9 +647,21 @@ BuildKernel() {
 	%{__make} %{MakeOpts} include/linux/version.h \
 		%{?with_verbose:V=1}
 
+#%ifarch sparc sparc64
+%ifarch sparc64
+	%{__make} %{MakeOpts} image \
+		%{?with_verbose:V=1}
 
+	%{__make} %{MakeOpts} modules \
+		%{?with_verbose:V=1}
+#%else
+#	sparc32 %{__make} \
+#		%{?with_verbose:V=1}
+#%endif
+%else
 	%{__make} %{MakeOpts} \
 		%{?with_verbose:V=1}
+%endif
 }
 
 PreInstallKernel() {
@@ -933,7 +960,11 @@ fi
 %if %{with up}
 %files
 %defattr(644,root,root,755)
+%ifnarch sparc64
 /boot/vmlinuz-%{ver_rel}
+%else
+/boot/vmlinux-%{ver_rel}
+%endif
 /boot/System.map-%{ver_rel}
 %ghost /boot/initrd-%{ver_rel}.gz
 %dir /lib/modules/%{ver_rel}
@@ -954,6 +985,7 @@ fi
 /lib/modules/%{ver_rel}/kernel/sound/soundcore.*
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/media/video/*/*-alsa.ko*
 %dir /lib/modules/%{ver_rel}/misc
+%if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/pcmcia
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/*/pcmcia
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/bluetooth/*_cs.ko*
@@ -965,6 +997,7 @@ fi
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/serial/serial_cs.ko*
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/telephony/ixj_pcmcia.ko*
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/usb/host/sl811_cs.ko*
+%endif
 /lib/modules/%{ver_rel}/build
 %ghost /lib/modules/%{ver_rel}/modules.*
 %dir %{_sysconfdir}/modprobe.d/%{ver_rel}
@@ -977,6 +1010,7 @@ fi
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}/kernel/drivers/char/drm
 
+%if %{have_pcmcia}
 %files pcmcia
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}/kernel/drivers/pcmcia
@@ -991,6 +1025,7 @@ fi
 /lib/modules/%{ver_rel}/kernel/drivers/telephony/ixj_pcmcia.ko*
 /lib/modules/%{ver_rel}/kernel/drivers/usb/host/sl811_cs.ko*
 /lib/modules/%{ver_rel}/kernel/sound/pcmcia
+%endif
 
 %files sound-alsa
 %defattr(644,root,root,755)
@@ -999,7 +1034,9 @@ fi
 %exclude %dir /lib/modules/%{ver_rel}/kernel/sound
 %exclude /lib/modules/%{ver_rel}/kernel/sound/soundcore.*
 %exclude /lib/modules/%{ver_rel}/kernel/sound/oss
+%if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}/kernel/sound/pcmcia
+%endif
 
 %files sound-oss
 %defattr(644,root,root,755)
