@@ -22,15 +22,13 @@
 
 %ifarch sparc sparc64
 %define		have_pcmcia	0
+%define		have_oss	0
 %else
 %define		have_pcmcia	1
+%define		have_oss	1
 %endif
 
-%ifarch sparc
-%define		have_sound	0
-%else
 %define		have_sound	1
-%endif
 
 ## Program required by kernel to work.
 %define		_binutils_ver		2.12.1
@@ -1051,17 +1049,21 @@ fi
 /lib/modules/%{ver_rel}/kernel/drivers/media/video/*/*-alsa.ko*
 %exclude %dir /lib/modules/%{ver_rel}/kernel/sound
 %exclude /lib/modules/%{ver_rel}/kernel/sound/soundcore.*
+%if %{have_oss}
 %exclude /lib/modules/%{ver_rel}/kernel/sound/oss
+%endif
 %if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}/kernel/sound/pcmcia
 %endif
 
+%if %{have_oss}
 %files sound-oss
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}/kernel/sound/oss
 %if %{have_isa}
 /lib/modules/%{ver_rel}/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
+%endif			# %{have_oss}
 %endif			# %{have_sound}
 %endif			# %%{with up}
 
@@ -1149,17 +1151,21 @@ fi
 /lib/modules/%{ver_rel}smp/kernel/drivers/media/video/*/*-alsa.ko*
 %exclude %dir /lib/modules/%{ver_rel}smp/kernel/sound
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/soundcore.*
+%if %{have_oss}
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/oss
+%endif
 %if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/pcmcia
 %endif
 
+%if %{have_oss}
 %files smp-sound-oss
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}smp/kernel/sound/oss
 %if %{have_isa}
 /lib/modules/%{ver_rel}smp/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
+%endif			# %{have_oss}
 %endif			# %{have_sound}
 %endif			# %{with_smp}
 
