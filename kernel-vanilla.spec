@@ -691,11 +691,19 @@ PreInstallKernel() {
 	install arch/%{_target_base_arch}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
 %endif
 
-%ifarch alpha
+%ifarch alpha sparc sparc64
 	gzip -cfv vmlinux > vmlinuz
+	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinux-$KernelVer
 	install vmlinuz $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
+%ifarch sparc
+	elftoaout arch/sparc/boot/image -o vmlinux.aout
+	install vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-$KernelVer
 %endif
-
+%ifarch sparc64
+	elftoaout arch/sparc64/boot/image -o vmlinux.aout
+	install vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-$KernelVer
+%endif
+%endif
 %ifarch ppc
 	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
 %endif
@@ -970,8 +978,8 @@ fi
 %files
 %defattr(644,root,root,755)
 %ifarch sparc sparc64
-/boot/vmlinux-%{ver_rel}
-%else
+/boot/vmlinux.aout-%{ver_rel}
+%endif
 /boot/vmlinuz-%{ver_rel}
 %endif
 /boot/System.map-%{ver_rel}
@@ -1075,11 +1083,7 @@ fi
 %files smp
 %defattr(644,root,root,755)
 #doc FAQ-pl
-%ifarch sparc sparc64
-/boot/vmlinux-%{ver_rel}smp
-%else
 /boot/vmlinuz-%{ver_rel}smp
-%endif
 /boot/System.map-%{ver_rel}smp
 %ghost /boot/initrd-%{ver_rel}smp.gz
 %dir /lib/modules/%{ver_rel}smp
