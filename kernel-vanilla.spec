@@ -984,7 +984,7 @@ fi
 %ifnarch sparc
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/char/drm
 %endif
-%if %{have_isa}
+%if %{have_oss} && %{have_isa}
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
 /lib/modules/%{ver_rel}/kernel/fs
@@ -995,7 +995,9 @@ fi
 %dir /lib/modules/%{ver_rel}/kernel/sound
 /lib/modules/%{ver_rel}/kernel/sound/soundcore.*
 %if %{have_sound}
+%ifnarch sparc
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %endif
 %dir /lib/modules/%{ver_rel}/misc
 %if %{have_pcmcia}
@@ -1046,7 +1048,9 @@ fi
 %files sound-alsa
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}/kernel/sound
+%ifnarch sparc
 /lib/modules/%{ver_rel}/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %exclude %dir /lib/modules/%{ver_rel}/kernel/sound
 %exclude /lib/modules/%{ver_rel}/kernel/sound/soundcore.*
 %if %{have_oss}
@@ -1086,7 +1090,7 @@ fi
 %ifnarch sparc
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/char/drm
 %endif
-%if %{have_isa}
+%if %{have_oss} && %{have_isa}
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
 /lib/modules/%{ver_rel}smp/kernel/fs
@@ -1097,7 +1101,9 @@ fi
 %dir /lib/modules/%{ver_rel}smp/kernel/sound
 /lib/modules/%{ver_rel}smp/kernel/sound/soundcore.*
 %if %{have_sound}
+%ifnarch sparc
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %endif
 %dir /lib/modules/%{ver_rel}smp/misc
 %if %{have_pcmcia}
@@ -1148,7 +1154,9 @@ fi
 %files smp-sound-alsa
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}smp/kernel/sound
+%ifnarch sparc
 /lib/modules/%{ver_rel}smp/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %exclude %dir /lib/modules/%{ver_rel}smp/kernel/sound
 %exclude /lib/modules/%{ver_rel}smp/kernel/sound/soundcore.*
 %if %{have_oss}
