@@ -20,10 +20,16 @@
 %define		have_isa	0
 %endif
 
-%ifarch sparc64
+%ifarch sparc sparc64
 %define		have_pcmcia	0
 %else
 %define		have_pcmcia	1
+%endif
+
+%ifarch sparc
+%define		have_sound	0
+%else
+%define		have_sound	1
 %endif
 
 ## Program required by kernel to work.
@@ -82,6 +88,8 @@ Source27:	kernel-vanilla-alpha.config
 Source28:	kernel-vanilla-alpha-smp.config
 Source29:	kernel-vanilla-sparc64.config
 Source30:	kernel-vanilla-sparc64-smp.config
+Source31:	kernel-vanilla-sparc.config
+Source32:	kernel-vanilla-sparc-smp.config
 
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
@@ -124,7 +132,7 @@ Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
 Conflicts:	udev < %{_udev_ver}
 Conflicts:	util-linux < %{_util_linux_ver}
 Conflicts:	xfsprogs < %{_xfsprogs_ver}
-ExclusiveArch:	%{ix86} alpha %{x8664} ppc sparc64
+ExclusiveArch:	%{ix86} alpha %{x8664} ppc sparc sparc64
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -607,7 +615,7 @@ BuildConfig() {
 	echo "Building config file [using $Config.conf] for KERNEL $1..."
 
 	echo "" > .config
-	%ifnarch alpha sparc64
+	%ifnarch alpha sparc sparc64
 	cat %{SOURCE20} > .config
 	%endif
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
@@ -650,17 +658,17 @@ BuildKernel() {
 	%{__make} %{MakeOpts} include/linux/version.h \
 		%{?with_verbose:V=1}
 
-#%ifarch sparc sparc64
+%ifarch sparc sparc64
 %ifarch sparc64
 	%{__make} %{MakeOpts} image \
 		%{?with_verbose:V=1}
 
 	%{__make} %{MakeOpts} modules \
 		%{?with_verbose:V=1}
-#%else
-#	sparc32 %{__make} \
-#		%{?with_verbose:V=1}
-#%endif
+%else
+	sparc %{__make} \
+		%{?with_verbose:V=1}
+%endif
 %else
 	%{__make} %{MakeOpts} \
 		%{?with_verbose:V=1}
@@ -963,7 +971,7 @@ fi
 %if %{with up}
 %files
 %defattr(644,root,root,755)
-%ifarch sparc64
+%ifarch sparc sparc64
 /boot/vmlinux-%{ver_rel}
 %else
 /boot/vmlinuz-%{ver_rel}
@@ -975,7 +983,9 @@ fi
 /lib/modules/%{ver_rel}/kernel/arch
 /lib/modules/%{ver_rel}/kernel/crypto
 /lib/modules/%{ver_rel}/kernel/drivers
+%ifnarch sparc
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/char/drm
+%endif
 %if %{have_isa}
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
@@ -986,7 +996,9 @@ fi
 /lib/modules/%{ver_rel}/kernel/security
 %dir /lib/modules/%{ver_rel}/kernel/sound
 /lib/modules/%{ver_rel}/kernel/sound/soundcore.*
+%if %{have_sound}
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %dir /lib/modules/%{ver_rel}/misc
 %if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}/kernel/drivers/pcmcia
@@ -1009,9 +1021,11 @@ fi
 %defattr(644,root,root,755)
 /boot/vmlinux-%{ver_rel}
 
+%ifnarch sparc
 %files drm
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}/kernel/drivers/char/drm
+%endif
 
 %if %{have_pcmcia}
 %files pcmcia
@@ -1030,6 +1044,7 @@ fi
 /lib/modules/%{ver_rel}/kernel/sound/pcmcia
 %endif
 
+%if %{have_sound}
 %files sound-alsa
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}/kernel/sound
@@ -1047,13 +1062,14 @@ fi
 %if %{have_isa}
 /lib/modules/%{ver_rel}/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
+%endif			# %{have_sound}
 %endif			# %%{with up}
 
 %if %{with smp}
 %files smp
 %defattr(644,root,root,755)
 #doc FAQ-pl
-%ifarch sparc64
+%ifarch sparc sparc64
 /boot/vmlinux-%{ver_rel}smp
 %else
 /boot/vmlinuz-%{ver_rel}smp
@@ -1065,7 +1081,9 @@ fi
 /lib/modules/%{ver_rel}smp/kernel/arch
 /lib/modules/%{ver_rel}smp/kernel/crypto
 /lib/modules/%{ver_rel}smp/kernel/drivers
+%ifnarch sparc
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/char/drm
+%endif
 %if %{have_isa}
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
@@ -1076,7 +1094,9 @@ fi
 /lib/modules/%{ver_rel}smp/kernel/security
 %dir /lib/modules/%{ver_rel}smp/kernel/sound
 /lib/modules/%{ver_rel}smp/kernel/sound/soundcore.*
+%if %{have_sound}
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %dir /lib/modules/%{ver_rel}smp/misc
 %if %{have_pcmcia}
 %exclude /lib/modules/%{ver_rel}smp/kernel/drivers/pcmcia
@@ -1099,9 +1119,11 @@ fi
 %defattr(644,root,root,755)
 /boot/vmlinux-%{ver_rel}smp
 
+%ifnarch sparc
 %files smp-drm
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}smp/kernel/drivers/char/drm
+%endif
 
 %if %{have_pcmcia}
 %files smp-pcmcia
@@ -1120,6 +1142,7 @@ fi
 /lib/modules/%{ver_rel}smp/kernel/sound/pcmcia
 %endif
 
+%if %{have_sound}
 %files smp-sound-alsa
 %defattr(644,root,root,755)
 /lib/modules/%{ver_rel}smp/kernel/sound
@@ -1137,7 +1160,8 @@ fi
 %if %{have_isa}
 /lib/modules/%{ver_rel}smp/kernel/drivers/media/radio/miropcm20*.ko*
 %endif
-%endif			# %%{with smp}
+%endif			# %{have_sound}
+%endif			# %{with_smp}
 
 %files headers
 %defattr(644,root,root,755)
