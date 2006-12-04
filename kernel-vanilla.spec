@@ -57,8 +57,8 @@ Summary(de):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
 Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
-%define		_basever	2.6.18
-%define		_postver	.4
+%define		_basever	2.6.19
+%define		_postver	%{nil}
 %define		_rel		0.1
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
@@ -69,7 +69,7 @@ Group:		Base/Kernel
 #define		_rc	-rc6
 #Source0:	ftp://ftp.kernel.org/pub/linux/kernel/v2.6/testing/linux-%{_basever}%{_rc}.tar.bz2
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	296a6d150d260144639c3664d127d174
+# Source0-md5:	443c265b57e87eadc0c677c3acc37e20
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	84e18b05475fc79cc6aa191d5a133585
