@@ -97,7 +97,7 @@ Source42:	kernel-vanilla-netfilter.config
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
-%ifarch sparc64
+%ifarch sparc sparc64
 BuildRequires:	elftoaout
 %endif
 BuildRequires:	gcc >= 5:3.2
