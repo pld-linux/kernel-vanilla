@@ -552,7 +552,7 @@ Documentation.
 %endif
 
 # Fix EXTRAVERSION in main Makefile
-sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}-%{_rel}#g' Makefile
+sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
 
 sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 
