@@ -980,9 +980,8 @@ fi
 %defattr(644,root,root,755)
 %ifarch sparc sparc64
 /boot/vmlinux.aout-%{ver_rel}
-%else
-/boot/vmlinuz-%{ver_rel}
 %endif
+/boot/vmlinuz-%{ver_rel}
 /boot/System.map-%{ver_rel}
 %ghost /boot/initrd-%{ver_rel}.gz
 %dir /lib/modules/%{ver_rel}
@@ -1084,11 +1083,7 @@ fi
 %files smp
 %defattr(644,root,root,755)
 #doc FAQ-pl
-%ifarch sparc sparc64
-/boot/vmlinux.aout-%{ver_rel}smp
-%else
 /boot/vmlinuz-%{ver_rel}smp
-%endif
 /boot/System.map-%{ver_rel}smp
 %ghost /boot/initrd-%{ver_rel}smp.gz
 %dir /lib/modules/%{ver_rel}smp
