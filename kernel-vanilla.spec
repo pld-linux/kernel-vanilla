@@ -57,7 +57,7 @@ Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
 %define		_basever	2.6.18
 %define		_postver	.4
-%define		_rel		0.1
+%define		_rel		0.2
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
 Epoch:		3
@@ -552,7 +552,7 @@ Documentation.
 %endif
 
 # Fix EXTRAVERSION in main Makefile
-sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
+sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}-%{_rel}#g' Makefile
 
 sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 
