@@ -979,7 +979,7 @@ fi
 %defattr(644,root,root,755)
 %ifarch sparc sparc64
 /boot/vmlinux.aout-%{ver_rel}
-%endif
+%else
 /boot/vmlinuz-%{ver_rel}
 %endif
 /boot/System.map-%{ver_rel}
