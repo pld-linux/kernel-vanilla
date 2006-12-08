@@ -57,7 +57,7 @@ Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
 %define		_basever	2.6.19
 %define		_postver	%{nil}
-%define		_rel		0.1
+%define		_rel		0.2
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
 Epoch:		3
@@ -1083,6 +1083,9 @@ fi
 %files smp
 %defattr(644,root,root,755)
 #doc FAQ-pl
+%ifarch sparc sparc64
+/boot/vmlinux.aout-%{ver_rel}smp
+%endif
 /boot/vmlinuz-%{ver_rel}smp
 /boot/System.map-%{ver_rel}smp
 %ghost /boot/initrd-%{ver_rel}smp.gz
