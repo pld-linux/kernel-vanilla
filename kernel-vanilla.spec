@@ -56,8 +56,8 @@ Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
 %define		_basever	2.6.19
-%define		_postver	%{nil}
-%define		_rel		0.2
+%define		_postver	.1
+%define		_rel		0.1
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
 Epoch:		3
@@ -70,7 +70,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	443c265b57e87eadc0c677c3acc37e20
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	84e18b05475fc79cc6aa191d5a133585
+# Source1-md5:	899a0932373a5299b69b9579fceb099e
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
