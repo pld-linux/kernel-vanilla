@@ -104,6 +104,7 @@ BuildRequires:	module-init-tools
 BuildRequires:	net-tools
 BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.217
+BuildRequires:	sed >= 4.0
 Autoreqprov:	no
 Requires:	coreutils
 Requires:	geninitrd >= 2.57
