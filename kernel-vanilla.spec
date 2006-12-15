@@ -57,7 +57,7 @@ Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
 %define		_basever	2.6.19
 %define		_postver	.1
-%define		_rel		0.1
+%define		_rel		1
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
 Epoch:		3
