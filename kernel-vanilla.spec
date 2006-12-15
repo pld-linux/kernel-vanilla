@@ -634,13 +634,13 @@ BuildConfig() {
 %{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" .config}
 
 	install .config arch/%{_target_base_arch}/defconfig
-	install -d $KERNEL_INSTALL_DIR/usr/src/linux-%{ver}/include/linux
+	install -d $KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/include/linux
 	rm -f include/linux/autoconf.h
 	%{__make} %{MakeOpts} include/linux/autoconf.h
 	install include/linux/autoconf.h \
-		$KERNEL_INSTALL_DIR/usr/src/linux-%{ver}/include/linux/autoconf-${cfg}.h
+		$KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/include/linux/autoconf-${cfg}.h
 	install .config \
-		$KERNEL_INSTALL_DIR/usr/src/linux-%{ver}/config-${cfg}
+		$KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/config-${cfg}
 	install .config arch/%{_target_base_arch}/defconfig
 }
 
@@ -718,7 +718,7 @@ PreInstallKernel() {
 		KERNELRELEASE=$KernelVer
 
 	install Module.symvers \
-		$KERNEL_INSTALL_DIR/usr/src/linux-%{ver}/Module.symvers-${cfg}
+		$KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/Module.symvers-${cfg}
 
 	echo "CHECKING DEPENDENCIES FOR KERNEL MODULES"
 	%if "%{_target_base_arch}" != "%{_arch}"
@@ -782,7 +782,7 @@ done
 
 ln -sf linux-%{ver} $RPM_BUILD_ROOT%{_prefix}/src/linux-%{alt_kernel}
 
-find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$l "{}" "$RPM_BUILD_ROOT/usr/src/linux-%{ver}/" ";"
+find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$l "{}" "$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/" ";"
 
 cd $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
 
@@ -791,27 +791,27 @@ cd $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-UP/usr/src/linux-%{ver}/include/linux/autoconf-up.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-UP/usr/src/linux-%{ver}/include/linux/autoconf-up.h \
-	$RPM_BUILD_ROOT/usr/src/linux-%{ver}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-UP/usr/src/linux-%{ver}/config-up \
-	$RPM_BUILD_ROOT/usr/src/linux-%{ver}
+if [ -e $KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-up.h ]; then
+install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-up.h \
+	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux
+install	$KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/config-up \
+	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
 fi
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-SMP/usr/src/linux-%{ver}/include/linux/autoconf-smp.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-SMP/usr/src/linux-%{ver}/include/linux/autoconf-smp.h \
-	$RPM_BUILD_ROOT/usr/src/linux-%{ver}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-SMP/usr/src/linux-%{ver}/config-smp \
-	$RPM_BUILD_ROOT/usr/src/linux-%{ver}
+if [ -e $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-smp.h ]; then
+install $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-smp.h \
+	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux
+install	$KERNEL_BUILD_DIR/build-done/kernel-SMP%{_prefix}/src/linux-%{ver}/config-smp \
+	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
 fi
 
 %if %{with up} || %{with smp}
 # UP or SMP
-install $KERNEL_BUILD_DIR/build-done/kernel-*/usr/src/linux-%{ver}/include/linux/* \
-	$RPM_BUILD_ROOT/usr/src/linux-%{ver}/include/linux
+install $KERNEL_BUILD_DIR/build-done/kernel-*%{_prefix}/src/linux-%{ver}/include/linux/* \
+	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux
 %endif
 
-install $KERNEL_BUILD_DIR/build-done/kernel-UP/usr/src/linux-%{ver}/config-up \
+install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/config-up \
 	.config
 %{__make} %{MakeOpts} include/linux/version.h include/linux/utsrelease.h
 mv include/linux/version.h{,.save}
@@ -970,8 +970,8 @@ ln -sf vmlinux-%{ver_rel}smp /boot/vmlinux-%{alt_kernel}
 %depmod %{ver_rel}smp
 
 %post headers
-rm -f /usr/src/linux-%{alt_kernel}
-ln -snf linux-%{ver} /usr/src/linux-%{alt_kernel}
+rm -f %{_prefix}/src/linux-%{alt_kernel}
+ln -snf linux-%{ver} %{_prefix}/src/linux-%{alt_kernel}
 
 %postun headers
 if [ "$1" = "0" ]; then
