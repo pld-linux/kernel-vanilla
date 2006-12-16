@@ -52,7 +52,7 @@
 
 %define		_basever	2.6.19
 %define		_postver	.1
-%define		_rel		1
+%define		_rel		2
 %define		_rc	%{nil}
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -74,6 +74,7 @@ Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
+Source3:	kernel-vanilla-config.h
 
 Source20:	kernel-vanilla-common.config
 Source21:	kernel-vanilla-i386.config
@@ -822,7 +823,7 @@ mv include/linux/utsrelease.h{,.save}
 mv include/linux/version.h{.save,}
 mv include/linux/utsrelease.h{.save,}
 #install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf.h
-#install %{SOURCE4} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
+install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 
 # collect module-build files and directories
 %{__perl} %{SOURCE2} %{_kernelsrcdir} $KERNEL_BUILD_DIR
