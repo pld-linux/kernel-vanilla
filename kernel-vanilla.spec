@@ -136,6 +136,9 @@ ExclusiveArch:	%{ix86} alpha %{x8664} ppc sparc sparc64
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# No ELF objects there to strip (skips processing 27k files)
+%define		_noautostrip	.*%{_kernelsrcdir}/.*
+
 %define		initrd_dir	/boot
 
 # kernel release (used in filesystem and eventually in uname -r)
