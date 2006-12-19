@@ -70,7 +70,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	296a6d150d260144639c3664d127d174
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	84838f64ad0c171126757c4687e159b6
+# Source1-md5:	0290e7814031c52aaae09f3713fa3828
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
