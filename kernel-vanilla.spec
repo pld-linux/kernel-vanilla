@@ -56,8 +56,8 @@ Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
 %define		_basever	2.6.18
-%define		_postver	.5
-%define		_rel		2
+%define		_postver	.6
+%define		_rel		1
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
 Epoch:		3
