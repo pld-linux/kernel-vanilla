@@ -759,13 +759,19 @@ export DEPMOD=%{DepMod}
 install -d $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{ver_rel}{,smp}
 
+# test if we can hardlink -- %{_builddir} and $RPM_BUILD_ROOT on same partition
+if cp -al COPYING $RPM_BUILD_ROOT/COPYING 2>/dev/null; then
+	l=l
+	rm -f $RPM_BUILD_ROOT/COPYING
+fi
+
 KERNEL_BUILD_DIR=`pwd`
 
 %if %{with up} || %{with smp}
-cp -a $KERNEL_BUILD_DIR/build-done/kernel-*/* $RPM_BUILD_ROOT
+cp -a$1 $KERNEL_BUILD_DIR/build-done/kernel-*/* $RPM_BUILD_ROOT
 %endif
 
-for i in "" smp ; do
+for i in "" smp; do
 	if [ -e  $RPM_BUILD_ROOT/lib/modules/%{ver_rel}$i ] ; then
 		rm -f $RPM_BUILD_ROOT/lib/modules/%{ver_rel}$i/build
 		ln -sf %{_prefix}/src/linux-%{ver} \
@@ -776,7 +782,7 @@ done
 
 ln -sf linux-%{ver} $RPM_BUILD_ROOT%{_prefix}/src/linux-%{alt_kernel}
 
-find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a "{}" "$RPM_BUILD_ROOT/usr/src/linux-%{ver}/" ";"
+find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$1 "{}" "$RPM_BUILD_ROOT/usr/src/linux-%{ver}/" ";"
 
 cd $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
 
