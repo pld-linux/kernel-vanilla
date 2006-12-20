@@ -50,20 +50,20 @@
 
 %define		alt_kernel	vanilla
 
+%define		_basever	2.6.18
+%define		_postver	.6
+%define		_rel		1
+%define		_rc	%{nil}
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
 Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
-%define		_basever	2.6.18
-%define		_postver	.6
-%define		_rel		1
 Version:	%{_basever}%{_postver}
 Release:	%{_rel}
 Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
-%define		_rc	%{nil}
 #define		_rc	-rc6
 #Source0:	ftp://ftp.kernel.org/pub/linux/kernel/v2.6/testing/linux-%{_basever}%{_rc}.tar.bz2
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
@@ -167,10 +167,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %endif
 
 %define __features Enabled features:\
-%{?debug: - DEBUG}\
+%{?debug:- DEBUG}\
 %define Features_smp %(echo "%{__features}" | sed '/^$/d')
 %define Features_up %(echo "%{__features}
-%{?with_pae: - PAE (HIGHMEM64G) support}" | sed '/^$/d')
+%{?with_pae:- PAE (HIGHMEM64G) support}" | sed '/^$/d')
 # vim: "
 
 %description
@@ -638,13 +638,13 @@ BuildConfig() {
 %{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" .config}
 
 	install .config arch/%{_target_base_arch}/defconfig
-	install -d $KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/include/linux
+	install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}-%{ver}/include/linux
 	rm -f include/linux/autoconf.h
 	%{__make} %{MakeOpts} include/linux/autoconf.h
 	install include/linux/autoconf.h \
-		$KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/include/linux/autoconf-${cfg}.h
+		$KERNEL_INSTALL_DIR%{_kernelsrcdir}-%{ver}/include/linux/autoconf-${cfg}.h
 	install .config \
-		$KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/config-${cfg}
+		$KERNEL_INSTALL_DIR%{_kernelsrcdir}-%{ver}/config-${cfg}
 	install .config arch/%{_target_base_arch}/defconfig
 }
 
@@ -721,7 +721,7 @@ PreInstallKernel() {
 		KERNELRELEASE=$KernelVer
 
 	install Module.symvers \
-		$KERNEL_INSTALL_DIR%{_prefix}/src/linux-%{ver}/Module.symvers-${cfg}
+		$KERNEL_INSTALL_DIR%{_kernelsrcdir}-%{ver}/Module.symvers-${cfg}
 
 	echo "CHECKING DEPENDENCIES FOR KERNEL MODULES"
 	%if "%{_target_base_arch}" != "%{_arch}"
@@ -759,7 +759,7 @@ rm -rf $RPM_BUILD_ROOT
 umask 022
 export DEPMOD=%{DepMod}
 
-install -d $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
+install -d $RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{ver_rel}{,smp}
 
 # test if we can hardlink -- %{_builddir} and $RPM_BUILD_ROOT on same partition
@@ -777,44 +777,44 @@ cp -a$1 $KERNEL_BUILD_DIR/build-done/kernel-*/* $RPM_BUILD_ROOT
 for i in "" smp; do
 	if [ -e  $RPM_BUILD_ROOT/lib/modules/%{ver_rel}$i ] ; then
 		rm -f $RPM_BUILD_ROOT/lib/modules/%{ver_rel}$i/build
-		ln -sf %{_prefix}/src/linux-%{ver} \
+		ln -sf %{_kernelsrcdir}-%{ver} \
 			$RPM_BUILD_ROOT/lib/modules/%{ver_rel}$i/build
 		install -d $RPM_BUILD_ROOT/lib/modules/%{ver_rel}$i/{cluster,misc}
 	fi
 done
 
-ln -sf linux-%{ver} $RPM_BUILD_ROOT%{_prefix}/src/linux-%{alt_kernel}
+ln -sf linux-%{ver} $RPM_BUILD_ROOT%{_kernelsrcdir}-%{alt_kernel}
 
-find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$1 "{}" "$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/" ";"
+find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$1 "{}" "$RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}/" ";"
 
-cd $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
+cd $RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}
 
 %{__make} %{MakeOpts} mrproper \
 	RCS_FIND_IGNORE='-name build-done -prune -o'
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-up.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-up.h \
-	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/config-up \
-	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
+if [ -e $KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}-%{ver}/include/linux/autoconf-up.h ]; then
+install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}-%{ver}/include/linux/autoconf-up.h \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}/include/linux
+install	$KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}-%{ver}/config-up \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}
 fi
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-smp.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_prefix}/src/linux-%{ver}/include/linux/autoconf-smp.h \
-	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-SMP%{_prefix}/src/linux-%{ver}/config-smp \
-	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}
+if [ -e $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_kernelsrcdir}-%{ver}/include/linux/autoconf-smp.h ]; then
+install $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_kernelsrcdir}-%{ver}/include/linux/autoconf-smp.h \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}/include/linux
+install	$KERNEL_BUILD_DIR/build-done/kernel-SMP%{_kernelsrcdir}-%{ver}/config-smp \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}
 fi
 
 %if %{with up} || %{with smp}
 # UP or SMP
-install $KERNEL_BUILD_DIR/build-done/kernel-*%{_prefix}/src/linux-%{ver}/include/linux/* \
-	$RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux
+install $KERNEL_BUILD_DIR/build-done/kernel-*%{_kernelsrcdir}-%{ver}/include/linux/* \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}/include/linux
 %endif
 
-install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_prefix}/src/linux-%{ver}/config-up \
+install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}-%{ver}/config-up \
 	.config
 %{__make} %{MakeOpts} include/linux/version.h include/linux/utsrelease.h
 mv include/linux/version.h{,.save}
@@ -822,11 +822,11 @@ mv include/linux/utsrelease.h{,.save}
 %{__make} %{MakeOpts} mrproper
 mv include/linux/version.h{.save,}
 mv include/linux/utsrelease.h{.save,}
-#install %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/src/linux-%{ver}/include/linux/autoconf.h
+#install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}-%{ver}/include/linux/autoconf.h
 install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 
 # collect module-build files and directories
-%{__perl} %{SOURCE2} %{_prefix}/src/linux-%{ver} $KERNEL_BUILD_DIR
+%{__perl} %{SOURCE2} %{_kernelsrcdir}-%{ver} $KERNEL_BUILD_DIR
 
 %if %{with up} || %{with smp}
 # ghosted initrd
@@ -863,8 +863,8 @@ mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd-%{alt_kernel}.old 
 ln -sf initrd-%{ver_rel}.gz %{initrd_dir}/initrd-%{alt_kernel}
 
 if [ -x /sbin/new-kernel-pkg ]; then
-	if [ -f /etc/pld-release ]; then
-		title=$(sed 's/^[0-9.]\+ //' < /etc/pld-release)
+if [ -f %{_sysconfdir}/pld-release ]; then
+title=$(sed 's/^[0-9.]\+ //' < %{_sysconfdir}/pld-release)
 	else
 		title='PLD Linux'
 	fi
@@ -931,8 +931,8 @@ mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd.old-%{alt_kernel} 
 ln -sf initrd-%{ver_rel}smp.gz %{initrd_dir}/initrd-%{alt_kernel}
 
 if [ -x /sbin/new-kernel-pkg ]; then
-	if [ -f /etc/pld-release ]; then
-		title=$(sed 's/^[0-9.]\+ //' < /etc/pld-release)
+if [ -f %{_sysconfdir}/pld-release ]; then
+title=$(sed 's/^[0-9.]\+ //' < %{_sysconfdir}/pld-release)
 	else
 		title='PLD Linux'
 	fi
@@ -973,14 +973,14 @@ ln -sf vmlinux-%{ver_rel}smp /boot/vmlinux-%{alt_kernel}
 %depmod %{ver_rel}smp
 
 %post headers
-rm -f %{_prefix}/src/linux-%{alt_kernel}
-ln -snf linux-%{ver} %{_prefix}/src/linux-%{alt_kernel}
+rm -f %{_kernelsrcdir}-%{alt_kernel}
+ln -snf linux-%{ver} %{_kernelsrcdir}-%{alt_kernel}
 
 %postun headers
 if [ "$1" = "0" ]; then
-	if [ -L %{_prefix}/src/linux-%{alt_kernel} ]; then
-		if [ "`ls -l %{_prefix}/src/linux-%{alt_kernel} | awk '{ print $10 }'`" = "linux-%{ver}" ]; then
-			rm -f %{_prefix}/src/linux-%{alt_kernel}
+	if [ -L %{_kernelsrcdir}-%{alt_kernel} ]; then
+		if [ "`ls -l %{_kernelsrcdir}-%{alt_kernel} | awk '{ print $10 }'`" = "linux-%{ver}" ]; then
+			rm -f %{_kernelsrcdir}-%{alt_kernel}
 		fi
 	fi
 fi
@@ -1196,70 +1196,70 @@ fi
 
 %files headers
 %defattr(644,root,root,755)
-%dir %{_prefix}/src/linux-%{ver}
-%{_prefix}/src/linux-%{ver}/include
-%{_prefix}/src/linux-%{ver}/config-smp
-%{?with_smp:%{_prefix}/src/linux-%{ver}/Module.symvers-smp}
-%{_prefix}/src/linux-%{ver}/config-up
-%{?with_up:%{_prefix}/src/linux-%{ver}/Module.symvers-up}
+%dir %{_kernelsrcdir}-%{ver}
+%{_kernelsrcdir}-%{ver}/include
+%{_kernelsrcdir}-%{ver}/config-smp
+%{?with_smp:%{_kernelsrcdir}-%{ver}/Module.symvers-smp}
+%{_kernelsrcdir}-%{ver}/config-up
+%{?with_up:%{_kernelsrcdir}-%{ver}/Module.symvers-up}
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
-%{_prefix}/src/linux-%{ver}/Kbuild
-%{_prefix}/src/linux-%{ver}/arch/*/kernel/asm-offsets.*
-%{_prefix}/src/linux-%{ver}/arch/*/kernel/sigframe.h
-%dir %{_prefix}/src/linux-%{ver}/scripts
-%dir %{_prefix}/src/linux-%{ver}/scripts/kconfig
-%{_prefix}/src/linux-%{ver}/scripts/Kbuild.include
-%{_prefix}/src/linux-%{ver}/scripts/Makefile*
-%{_prefix}/src/linux-%{ver}/scripts/basic
-%{_prefix}/src/linux-%{ver}/scripts/mkmakefile
-%{_prefix}/src/linux-%{ver}/scripts/mod
-%{_prefix}/src/linux-%{ver}/scripts/setlocalversion
-%{_prefix}/src/linux-%{ver}/scripts/*.c
-%{_prefix}/src/linux-%{ver}/scripts/*.sh
-%{_prefix}/src/linux-%{ver}/scripts/kconfig/*
+%{_kernelsrcdir}-%{ver}/Kbuild
+%{_kernelsrcdir}-%{ver}/arch/*/kernel/asm-offsets.*
+%{_kernelsrcdir}-%{ver}/arch/*/kernel/sigframe.h
+%dir %{_kernelsrcdir}-%{ver}/scripts
+%dir %{_kernelsrcdir}-%{ver}/scripts/kconfig
+%{_kernelsrcdir}-%{ver}/scripts/Kbuild.include
+%{_kernelsrcdir}-%{ver}/scripts/Makefile*
+%{_kernelsrcdir}-%{ver}/scripts/basic
+%{_kernelsrcdir}-%{ver}/scripts/mkmakefile
+%{_kernelsrcdir}-%{ver}/scripts/mod
+%{_kernelsrcdir}-%{ver}/scripts/setlocalversion
+%{_kernelsrcdir}-%{ver}/scripts/*.c
+%{_kernelsrcdir}-%{ver}/scripts/*.sh
+%{_kernelsrcdir}-%{ver}/scripts/kconfig/*
 
 %files doc
 %defattr(644,root,root,755)
-%{_prefix}/src/linux-%{ver}/Documentation
+%{_kernelsrcdir}-%{ver}/Documentation
 
 %if %{with source}
 %files source -f aux_files_exc
 %defattr(644,root,root,755)
-%{_prefix}/src/linux-%{ver}/arch/*/[!Mk]*
-%{_prefix}/src/linux-%{ver}/arch/*/kernel/[!M]*
-%exclude %{_prefix}/src/linux-%{ver}/arch/*/kernel/asm-offsets.*
-%exclude %{_prefix}/src/linux-%{ver}/arch/*/kernel/sigframe.h
-%{_prefix}/src/linux-%{ver}/block
-%{_prefix}/src/linux-%{ver}/crypto
-%{_prefix}/src/linux-%{ver}/drivers
-%{_prefix}/src/linux-%{ver}/fs
+%{_kernelsrcdir}-%{ver}/arch/*/[!Mk]*
+%{_kernelsrcdir}-%{ver}/arch/*/kernel/[!M]*
+%exclude %{_kernelsrcdir}-%{ver}/arch/*/kernel/asm-offsets.*
+%exclude %{_kernelsrcdir}-%{ver}/arch/*/kernel/sigframe.h
+%{_kernelsrcdir}-%{ver}/block
+%{_kernelsrcdir}-%{ver}/crypto
+%{_kernelsrcdir}-%{ver}/drivers
+%{_kernelsrcdir}-%{ver}/fs
 %if %{with grsec_minimal}
-%{_prefix}/src/linux-%{ver}/grsecurity
+%{_kernelsrcdir}-%{ver}/grsecurity
 %endif
-%{_prefix}/src/linux-%{ver}/init
-%{_prefix}/src/linux-%{ver}/ipc
-%{_prefix}/src/linux-%{ver}/kernel
-%{_prefix}/src/linux-%{ver}/lib
-%{_prefix}/src/linux-%{ver}/mm
-%{_prefix}/src/linux-%{ver}/net
-%{_prefix}/src/linux-%{ver}/scripts/*
-%exclude %{_prefix}/src/linux-%{ver}/scripts/Kbuild.include
-%exclude %{_prefix}/src/linux-%{ver}/scripts/Makefile*
-%exclude %{_prefix}/src/linux-%{ver}/scripts/basic
-%exclude %{_prefix}/src/linux-%{ver}/scripts/kconfig
-%exclude %{_prefix}/src/linux-%{ver}/scripts/mkmakefile
-%exclude %{_prefix}/src/linux-%{ver}/scripts/mod
-%exclude %{_prefix}/src/linux-%{ver}/scripts/setlocalversion
-%exclude %{_prefix}/src/linux-%{ver}/scripts/*.c
-%exclude %{_prefix}/src/linux-%{ver}/scripts/*.sh
-%{_prefix}/src/linux-%{ver}/sound
-%{_prefix}/src/linux-%{ver}/security
-%{_prefix}/src/linux-%{ver}/usr
-%{_prefix}/src/linux-%{ver}/COPYING
-%{_prefix}/src/linux-%{ver}/CREDITS
-%{_prefix}/src/linux-%{ver}/MAINTAINERS
-%{_prefix}/src/linux-%{ver}/README
-%{_prefix}/src/linux-%{ver}/REPORTING-BUGS
+%{_kernelsrcdir}-%{ver}/init
+%{_kernelsrcdir}-%{ver}/ipc
+%{_kernelsrcdir}-%{ver}/kernel
+%{_kernelsrcdir}-%{ver}/lib
+%{_kernelsrcdir}-%{ver}/mm
+%{_kernelsrcdir}-%{ver}/net
+%{_kernelsrcdir}-%{ver}/scripts/*
+%exclude %{_kernelsrcdir}-%{ver}/scripts/Kbuild.include
+%exclude %{_kernelsrcdir}-%{ver}/scripts/Makefile*
+%exclude %{_kernelsrcdir}-%{ver}/scripts/basic
+%exclude %{_kernelsrcdir}-%{ver}/scripts/kconfig
+%exclude %{_kernelsrcdir}-%{ver}/scripts/mkmakefile
+%exclude %{_kernelsrcdir}-%{ver}/scripts/mod
+%exclude %{_kernelsrcdir}-%{ver}/scripts/setlocalversion
+%exclude %{_kernelsrcdir}-%{ver}/scripts/*.c
+%exclude %{_kernelsrcdir}-%{ver}/scripts/*.sh
+%{_kernelsrcdir}-%{ver}/sound
+%{_kernelsrcdir}-%{ver}/security
+%{_kernelsrcdir}-%{ver}%{_prefix}
+%{_kernelsrcdir}-%{ver}/COPYING
+%{_kernelsrcdir}-%{ver}/CREDITS
+%{_kernelsrcdir}-%{ver}/MAINTAINERS
+%{_kernelsrcdir}-%{ver}/README
+%{_kernelsrcdir}-%{ver}/REPORTING-BUGS
 %endif
