@@ -863,8 +863,8 @@ mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd-%{alt_kernel}.old 
 ln -sf initrd-%{ver_rel}.gz %{initrd_dir}/initrd-%{alt_kernel}
 
 if [ -x /sbin/new-kernel-pkg ]; then
-if [ -f %{_sysconfdir}/pld-release ]; then
-title=$(sed 's/^[0-9.]\+ //' < %{_sysconfdir}/pld-release)
+if [ -f /etc/pld-release ]; then
+	title=$(sed 's/^[0-9.]\+ //' < /etc/pld-release)
 	else
 		title='PLD Linux'
 	fi
@@ -931,8 +931,8 @@ mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd.old-%{alt_kernel} 
 ln -sf initrd-%{ver_rel}smp.gz %{initrd_dir}/initrd-%{alt_kernel}
 
 if [ -x /sbin/new-kernel-pkg ]; then
-if [ -f %{_sysconfdir}/pld-release ]; then
-title=$(sed 's/^[0-9.]\+ //' < %{_sysconfdir}/pld-release)
+if [ -f /etc/pld-release ]; then
+	title=$(sed 's/^[0-9.]\+ //' < /etc/pld-release)
 	else
 		title='PLD Linux'
 	fi
