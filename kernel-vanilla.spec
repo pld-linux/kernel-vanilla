@@ -565,6 +565,9 @@ sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
 
 sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 
+# remove unwanted files after patching (if any)
+find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
+
 %build
 TuneUpConfigForIX86 () {
 %ifarch %{ix86}
