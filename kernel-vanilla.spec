@@ -1,3 +1,21 @@
+# TODO
+# - unpackaged
+#  /usr/src/linux-2.6.20_vanilla/arch/arm/mach-realview/clock.c
+#  /usr/src/linux-2.6.20_vanilla/arch/ia64/ia32/audit.c
+#  /usr/src/linux-2.6.20_vanilla/arch/sh/boards/mpc1211/led.c
+#  /usr/src/linux-2.6.20_vanilla/aux_files
+#  /usr/src/linux-2.6.20_vanilla/aux_files_exc
+#  /usr/src/linux-2.6.20_vanilla/drivers/infiniband/hw/ipath/ipath_common.h
+#  /usr/src/linux-2.6.20_vanilla/drivers/mfd/Makefile
+#  /usr/src/linux-2.6.20_vanilla/drivers/scsi/megaraid/Makefile
+#  /usr/src/linux-2.6.20_vanilla/fs/ncpfs/Makefile
+#  /usr/src/linux-2.6.20_vanilla/net/sctp/associola.c
+# - verify:
+#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4/kernel/drivers/media/radio/miropcm20*.ko*
+#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4/kernel/drivers/media/radio/miropcm20*.ko*
+#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4smp/kernel/drivers/media/radio/miropcm20*.ko*
+#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4smp/kernel/drivers/media/radio/miropcm20*.ko*
+
 #
 # Conditional build:
 %bcond_without	smp		# don't build SMP kernel
@@ -51,26 +69,35 @@
 %define		alt_kernel	vanilla
 
 %define		_basever	2.6.19
-%define		_postver	.1
-%define		_rel		2
-%define		_rc	%{nil}
+%define		_postver	%{nil}
+%define		_rel		0.1
+
+# for rc kernels basever is the version patch (source1) should be applied to
+%define		_ver		2.6.20
+%define		_rc			rc4
+# for non rc-kernels these should be %{nil}
+#define		_ver		%{nil}
+#define		_rc			%{nil}
+
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
 Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
-Version:	%{_basever}%{_postver}
-Release:	%{_rel}
+Version:	%{?_ver}%{!?_ver:%{_basever}%{_postver}}
+Release:	%{?_rc:%{_rc}.}%{_rel}
 Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
-#define		_rc	-rc6
-#Source0:	ftp://ftp.kernel.org/pub/linux/kernel/v2.6/testing/linux-%{_basever}%{_rc}.tar.bz2
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	443c265b57e87eadc0c677c3acc37e20
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	899a0932373a5299b69b9579fceb099e
+# Source1-md5:	9b325c6086ad2a3fcde643f01a4c4640
+%endif
+%if "%{_ver}" != "%{nil}"
+Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
+# Source1-md5:	9b325c6086ad2a3fcde643f01a4c4640
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
@@ -554,9 +581,9 @@ Pakiet zawiera dokumentacjê do j±dra Linuksa pochodz±c± z katalogu
 Documentation.
 
 %prep
-%setup -q -n linux-%{_basever}%{_rc}
+%setup -q -n linux-%{_basever}
 
-%if "%{_postver}" != "%{nil}"
+%if "%{_postver}" != "%{nil}" || "%{_ver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
 %endif
 
@@ -564,6 +591,9 @@ Documentation.
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
 
 sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
+
+# remove unwanted files after patching (if any)
+find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %build
 TuneUpConfigForIX86 () {
@@ -1005,9 +1035,9 @@ fi
 %ifnarch sparc
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/char/drm
 %endif
-%if %{have_oss} && %{have_isa}
-%exclude /lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
-%endif
+#%if %{have_oss} && %{have_isa}
+#%exclude /lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
+#%endif
 /lib/modules/%{kernel_release}/kernel/fs
 /lib/modules/%{kernel_release}/kernel/kernel
 /lib/modules/%{kernel_release}/kernel/lib
@@ -1085,9 +1115,9 @@ fi
 %files sound-oss
 %defattr(644,root,root,755)
 /lib/modules/%{kernel_release}/kernel/sound/oss
-%if %{have_isa}
-/lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
-%endif
+#%if %{have_isa}
+#/lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
+#%endif
 %endif			# %{have_oss}
 %endif			# %{have_sound}
 %endif			# %%{with up}
@@ -1110,9 +1140,9 @@ fi
 %ifnarch sparc
 %exclude /lib/modules/%{kernel_release}smp/kernel/drivers/char/drm
 %endif
-%if %{have_oss} && %{have_isa}
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/media/radio/miropcm20*.ko*
-%endif
+#%if %{have_oss} && %{have_isa}
+#%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/media/radio/miropcm20*.ko*
+#%endif
 /lib/modules/%{kernel_release}smp/kernel/fs
 /lib/modules/%{kernel_release}smp/kernel/kernel
 /lib/modules/%{kernel_release}smp/kernel/lib
@@ -1190,9 +1220,9 @@ fi
 %files smp-sound-oss
 %defattr(644,root,root,755)
 /lib/modules/%{kernel_release}smp/kernel/sound/oss
-%if %{have_isa}
-/lib/modules/%{kernel_release}smp/kernel/drivers/media/radio/miropcm20*.ko*
-%endif
+#%if %{have_isa}
+#/lib/modules/%{kernel_release}smp/kernel/drivers/media/radio/miropcm20*.ko*
+#%endif
 %endif			# %{have_oss}
 %endif			# %{have_sound}
 %endif			# %{with_smp}
