@@ -80,9 +80,9 @@
 #define		_rc			%{nil}
 
 Summary:	The Linux kernel (the core of the Linux operating system)
-Summary(de.UTF-8):   Der Linux-Kernel (Kern des Linux-Betriebssystems)
-Summary(fr.UTF-8):   Le Kernel-Linux (La partie centrale du systeme)
-Summary(pl.UTF-8):   Jądro Linuksa
+Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
+Summary(fr.UTF-8):	Le Kernel-Linux (La partie centrale du systeme)
+Summary(pl.UTF-8):	Jądro Linuksa
 Name:		kernel-%{alt_kernel}
 Version:	%{?_ver}%{!?_ver:%{_basever}%{_postver}}
 Release:	%{?_rc:%{_rc}.}%{_rel}
@@ -236,8 +236,8 @@ się w komputerze, takiego jak sterowniki dysków itp.
 
 %package vmlinux
 Summary:	vmlinux - uncompressed kernel image
-Summary(de.UTF-8):   vmlinux - dekompressiertes Kernel Bild
-Summary(pl.UTF-8):   vmlinux - rozpakowany obraz jądra
+Summary(de.UTF-8):	vmlinux - dekompressiertes Kernel Bild
+Summary(pl.UTF-8):	vmlinux - rozpakowany obraz jądra
 Group:		Base/Kernel
 
 %description vmlinux
@@ -251,8 +251,8 @@ vmlinux - rozpakowany obraz jądra.
 
 %package drm
 Summary:	DRM kernel modules
-Summary(de.UTF-8):   DRM Kernel Treiber
-Summary(pl.UTF-8):   Sterowniki DRM
+Summary(de.UTF-8):	DRM Kernel Treiber
+Summary(pl.UTF-8):	Sterowniki DRM
 Group:		Base/Kernel
 Requires(postun):	%{name}-up = %{epoch}:%{version}-%{release}
 Requires:	%{name}-up = %{epoch}:%{version}-%{release}
@@ -270,8 +270,8 @@ Sterowniki DRM (%{drm_xfree_version}).
 
 %package pcmcia
 Summary:	PCMCIA modules
-Summary(de.UTF-8):   PCMCIA Module
-Summary(pl.UTF-8):   Moduły PCMCIA
+Summary(de.UTF-8):	PCMCIA Module
+Summary(pl.UTF-8):	Moduły PCMCIA
 Group:		Base/Kernel
 Requires(postun):	%{name}-up = %{epoch}:%{version}-%{release}
 Requires:	%{name}-up = %{epoch}:%{version}-%{release}
@@ -292,8 +292,8 @@ Moduły PCMCIA (%{pcmcia_version}).
 
 %package sound-alsa
 Summary:	ALSA kernel modules
-Summary(de.UTF-8):   ALSA Kernel Module
-Summary(pl.UTF-8):   Sterowniki dźwięku ALSA
+Summary(de.UTF-8):	ALSA Kernel Module
+Summary(pl.UTF-8):	Sterowniki dźwięku ALSA
 Group:		Base/Kernel
 Requires(postun):	%{name}-up = %{epoch}:%{version}-%{release}
 Requires:	%{name}-up = %{epoch}:%{version}-%{release}
@@ -310,8 +310,8 @@ Sterowniki dźwięku ALSA (Advanced Linux Sound Architecture).
 
 %package sound-oss
 Summary:	OSS kernel modules
-Summary(de.UTF-8):   OSS Kernel Module
-Summary(pl.UTF-8):   Sterowniki dźwięku OSS
+Summary(de.UTF-8):	OSS Kernel Module
+Summary(pl.UTF-8):	Sterowniki dźwięku OSS
 Group:		Base/Kernel
 Requires(postun):	%{name}-up = %{epoch}:%{version}-%{release}
 Requires:	%{name}-up = %{epoch}:%{version}-%{release}
@@ -328,9 +328,9 @@ Sterowniki dźwięku OSS (Open Sound System).
 
 %package smp
 Summary:	Kernel version %{version} compiled for SMP machines
-Summary(de.UTF-8):   Kernel Version %{version} für Multiprozessor-Maschinen
-Summary(fr.UTF-8):   Kernel version %{version} compiler pour les machine Multi-Processeur
-Summary(pl.UTF-8):   Jądro Linuksa w wersji %{version} dla maszyn wieloprocesorowych
+Summary(de.UTF-8):	Kernel Version %{version} für Multiprozessor-Maschinen
+Summary(fr.UTF-8):	Kernel version %{version} compiler pour les machine Multi-Processeur
+Summary(pl.UTF-8):	Jądro Linuksa w wersji %{version} dla maszyn wieloprocesorowych
 Group:		Base/Kernel
 Requires:	coreutils
 Requires:	geninitrd >= 2.26
@@ -388,8 +388,8 @@ Powinno również dobrze działać na maszynach z jednym procesorem.
 
 %package smp-vmlinux
 Summary:	vmlinux - uncompressed SMP kernel image
-Summary(de.UTF-8):   vmlinux - dekompressiertes SMP Kernel Bild
-Summary(pl.UTF-8):   vmlinux - rozpakowany obraz jądra SMP
+Summary(de.UTF-8):	vmlinux - dekompressiertes SMP Kernel Bild
+Summary(pl.UTF-8):	vmlinux - rozpakowany obraz jądra SMP
 Group:		Base/Kernel
 
 %description smp-vmlinux
@@ -403,8 +403,8 @@ vmlinux - rozpakowany obraz jądra SMP.
 
 %package smp-drm
 Summary:	DRM SMP kernel modules
-Summary(de.UTF-8):   DRM SMP Kernel Module
-Summary(pl.UTF-8):   Sterowniki DRM dla maszyn wieloprocesorowych
+Summary(de.UTF-8):	DRM SMP Kernel Module
+Summary(pl.UTF-8):	Sterowniki DRM dla maszyn wieloprocesorowych
 Group:		Base/Kernel
 Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
 Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
@@ -422,8 +422,8 @@ Sterowniki DRM dla maszyn wieloprocesorowych (%{drm_xfree_version}).
 
 %package smp-pcmcia
 Summary:	PCMCIA modules for SMP kernel
-Summary(de.UTF-8):   PCMCIA Module für SMP Kernel
-Summary(pl.UTF-8):   Moduły PCMCIA dla maszyn SMP
+Summary(de.UTF-8):	PCMCIA Module für SMP Kernel
+Summary(pl.UTF-8):	Moduły PCMCIA dla maszyn SMP
 Group:		Base/Kernel
 Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
 Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
@@ -444,8 +444,8 @@ Moduły PCMCIA dla maszyn SMP (%{pcmcia_version}).
 
 %package smp-sound-alsa
 Summary:	ALSA SMP kernel modules
-Summary(de.UTF-8):   ALSA SMP Kernel Module
-Summary(pl.UTF-8):   Sterowniki dźwięku ALSA dla maszyn wieloprocesorowych
+Summary(de.UTF-8):	ALSA SMP Kernel Module
+Summary(pl.UTF-8):	Sterowniki dźwięku ALSA dla maszyn wieloprocesorowych
 Group:		Base/Kernel
 Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
 Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
@@ -463,8 +463,8 @@ wieloprocesorowych.
 
 %package smp-sound-oss
 Summary:	OSS SMP kernel modules
-Summary(de.UTF-8):   OSS SMP Kernel Module
-Summary(pl.UTF-8):   Sterowniki dźwięku OSS dla maszyn wieloprocesorowych
+Summary(de.UTF-8):	OSS SMP Kernel Module
+Summary(pl.UTF-8):	Sterowniki dźwięku OSS dla maszyn wieloprocesorowych
 Group:		Base/Kernel
 Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
 Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
@@ -481,8 +481,8 @@ Sterowniki OSS (Open Sound System) dla maszyn wieloprocesorowych.
 
 %package headers
 Summary:	Header files for the Linux kernel
-Summary(de.UTF-8):   Header Dateien für den Linux-Kernel
-Summary(pl.UTF-8):   Pliki nagłówkowe jądra Linuksa
+Summary(de.UTF-8):	Header Dateien für den Linux-Kernel
+Summary(pl.UTF-8):	Pliki nagłówkowe jądra Linuksa
 Group:		Development/Building
 Provides:	kernel-headers = %{epoch}:%{version}-%{release}
 Provides:	kernel-headers(agpgart) = %{version}
@@ -507,8 +507,8 @@ oraz budowania modułów jądra.
 
 %package module-build
 Summary:	Development files for building kernel modules
-Summary(de.UTF-8):   Development Dateien die beim Kernel Modul kompilationen gebraucht werden
-Summary(pl.UTF-8):   Pliki służące do budowania modułów jądra
+Summary(de.UTF-8):	Development Dateien die beim Kernel Modul kompilationen gebraucht werden
+Summary(pl.UTF-8):	Pliki służące do budowania modułów jądra
 Group:		Development/Building
 Requires:	%{name}-headers = %{epoch}:%{version}-%{release}
 Provides:	kernel-module-build = %{epoch}:%{version}-%{release}
@@ -528,8 +528,8 @@ Linuksa z zewnętrznych pakietów.
 
 %package source
 Summary:	Kernel source tree
-Summary(de.UTF-8):   Der Kernel Quelltext
-Summary(pl.UTF-8):   Kod źródłowy jądra Linuksa
+Summary(de.UTF-8):	Der Kernel Quelltext
+Summary(pl.UTF-8):	Kod źródłowy jądra Linuksa
 Group:		Development/Building
 Requires:	%{name}-module-build = %{epoch}:%{version}-%{release}
 Provides:	kernel-source = %{epoch}:%{version}-%{release}
@@ -562,8 +562,8 @@ Pakiet zawiera kod źródłowy jądra systemu.
 
 %package doc
 Summary:	Kernel documentation
-Summary(de.UTF-8):   Kernel Dokumentation
-Summary(pl.UTF-8):   Dokumentacja do jądra Linuksa
+Summary(de.UTF-8):	Kernel Dokumentation
+Summary(pl.UTF-8):	Dokumentacja do jądra Linuksa
 Group:		Documentation
 Provides:	kernel-doc = %{version}
 Autoreqprov:	no
