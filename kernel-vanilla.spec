@@ -68,29 +68,29 @@
 
 %define		alt_kernel	vanilla
 
-%define		_basever	2.6.19
+%define		_basever	2.6.20
 %define		_postver	%{nil}
 %define		_rel		0.1
 
 # for rc kernels basever is the version patch (source1) should be applied to
-%define		_ver		2.6.20
-%define		_rc			rc4
+#%define		_ver		2.6.20
+#%define		_rc			rc4
 # for non rc-kernels these should be %{nil}
-#define		_ver		%{nil}
-#define		_rc			%{nil}
+%define		_ver		%{nil}
+%define		_rc			%{nil}
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
 Summary(fr.UTF-8):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl.UTF-8):	Jądro Linuksa
 Name:		kernel-%{alt_kernel}
-Version:	%{?_ver}%{!?_ver:%{_basever}%{_postver}}
+Version:	%{?_ver:%{_ver}}%{_basever}%{_postver}
 Release:	%{?_rc:%{_rc}.}%{_rel}
 Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	443c265b57e87eadc0c677c3acc37e20
+# Source0-md5:	34b0f354819217e6a345f48ebbd8f13e
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	9b325c6086ad2a3fcde643f01a4c4640
