@@ -85,7 +85,7 @@ Summary(fr.UTF-8):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl.UTF-8):	Jądro Linuksa
 Name:		kernel-%{alt_kernel}
 Version:	%{?_ver:%{_ver}}%{_basever}%{_postver}
-Release:	%{?_rc:%{_rc}.}%{_rel}
+Release:	%{?_rc:%{_rc}}%{_rel}
 Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
