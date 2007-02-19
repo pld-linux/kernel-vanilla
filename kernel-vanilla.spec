@@ -51,7 +51,7 @@
 %define		alt_kernel	vanilla
 
 %define		_basever	2.6.19
-%define		_postver	.2
+%define		_postver	.3
 %define		_rel		1
 %define		_rc	%{nil}
 Summary:	The Linux kernel (the core of the Linux operating system)
@@ -70,7 +70,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	443c265b57e87eadc0c677c3acc37e20
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	e8a9a6dc65da3f7b192e7caa969f9a1b
+# Source1-md5:	ef8491f189893c250a61cea825de025c
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
