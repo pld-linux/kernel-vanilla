@@ -96,7 +96,7 @@ Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	9b325c6086ad2a3fcde643f01a4c4640
 %endif
 %if "%{_ver}" != "%{nil}"
-Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
+Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
 # Source1-md5:	9b325c6086ad2a3fcde643f01a4c4640
 %endif
 
@@ -583,8 +583,11 @@ Documentation.
 %prep
 %setup -q -n linux-%{_basever}
 
-%if "%{_postver}" != "%{nil}" || "%{_ver}" != "%{nil}"
+%if "%{_postver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
+%endif
+%if "%{_ver}" != "%{nil}"
+%{__bzip2} -dc %{SOURCE10} | %{__patch} -p1 -s
 %endif
 
 # Fix EXTRAVERSION in main Makefile
