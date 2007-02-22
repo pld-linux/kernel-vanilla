@@ -92,7 +92,7 @@ Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	34b0f354819217e6a345f48ebbd8f13e
 %if "%{_postver}" != "%{nil}"
-Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
+Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
 # Source1-md5:	5739512c396b37d9506bca2afe5aaa1d
 %endif
 %if "%{_ver}" != "%{nil}"
