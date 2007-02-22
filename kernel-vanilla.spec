@@ -97,7 +97,7 @@ Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 %endif
 %if "%{_ver}" != "%{nil}"
 Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
-# Source1-md5:	9b325c6086ad2a3fcde643f01a4c4640
+# Source10-md5:	9b325c6086ad2a3fcde643f01a4c4640
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
