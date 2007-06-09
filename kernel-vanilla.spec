@@ -69,7 +69,7 @@
 %define		alt_kernel	vanilla
 
 %define		_basever	2.6.21
-%define		_postver	.3
+%define		_postver	.4
 %define		_rel		1
 
 # for rc kernels basever is the version patch (source1) should be applied to
@@ -93,7 +93,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	1b515f588078dfa7f4bab2634bd17e80
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
-# Source1-md5:	f7057a8dff173a6665fd61b69ed54a12
+# Source1-md5:	3c06ba7eebc1e9ce0d58620154b7df6f
 %endif
 %if "%{_ver}" != "%{nil}"
 Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
