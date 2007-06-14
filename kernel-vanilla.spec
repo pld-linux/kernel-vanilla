@@ -594,7 +594,7 @@ Documentation.
 %endif
 
 %ifarch ppc ppc64
-%patch200 -p1
+%patch0 -p1
 %endif
 
 # Fix EXTRAVERSION in main Makefile
