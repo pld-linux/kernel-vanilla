@@ -121,9 +121,6 @@ Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
 Source42:	kernel-vanilla-netfilter.config
 
-# build fix for intel network drivers for PPC
-Patch0:		linux-2.6-ppc-ICE-hacks.patch
-
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
@@ -591,10 +588,6 @@ Documentation.
 %endif
 %if "%{_ver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE10} | %{__patch} -p1 -s
-%endif
-
-%ifarch ppc ppc64
-%patch0 -p1
 %endif
 
 # Fix EXTRAVERSION in main Makefile
