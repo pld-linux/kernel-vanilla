@@ -468,9 +468,9 @@ BuildConfig() {
 	rm -f include/linux/autoconf.h
 	%{__make} %{MakeOpts} include/linux/autoconf.h
 	install include/linux/autoconf.h \
-		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-${cfg}.h
+		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
 	install .config \
-		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-${cfg}
+		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
 	install .config arch/%{_target_base_arch}/defconfig
 }
 
@@ -492,7 +492,7 @@ BuildKernel() {
 
 PreInstallKernel() {
 	Config="%{_target_base_arch}"
-	KernelVer=%{kernel_release}$1
+	KernelVer=%{kernel_release}
 
 	mkdir -p $KERNEL_INSTALL_DIR/boot
 	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
@@ -512,7 +512,7 @@ PreInstallKernel() {
 		KERNELRELEASE=$KernelVer
 
 	install Module.symvers \
-		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/Module.symvers-${cfg}
+		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/Module.symvers-dist
 
 	echo "CHECKING DEPENDENCIES FOR KERNEL MODULES"
 	%if "%{_target_base_arch}" != "%{_arch}"
@@ -552,14 +552,12 @@ KERNEL_BUILD_DIR=`pwd`
 
 cp -a$l $KERNEL_BUILD_DIR/build-done/kernel/* $RPM_BUILD_ROOT
 
-for i in "" smp; do
 	if [ -e  $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i ] ; then
 		rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i/build
 		ln -sf %{_kernelsrcdir} \
 			$RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i/build
 		install -d $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i/{cluster,misc}
 	fi
-done
 
 find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$l "{}" "$RPM_BUILD_ROOT%{_kernelsrcdir}/" ";"
 
@@ -570,16 +568,18 @@ cd $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/include/linux/autoconf.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/include/linux/autoconf.h \
+if [ -e $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/autoconf-dist.h ]; then
+install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/autoconf-dist.h \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/config \
+install	$KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/config-dist \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}
 fi
 
-install $KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/include/linux/* \
+install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/* \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 
+install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/config-dist \
+	.config
 %{__make} %{MakeOpts} include/linux/version.h include/linux/utsrelease.h
 mv include/linux/version.h{,.save}
 mv include/linux/utsrelease.h{,.save}
@@ -681,9 +681,6 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%ifarch sparc sparc64
-/boot/vmlinux.aout-%{kernel_release}
-%endif
 /boot/vmlinuz-%{kernel_release}
 /boot/System.map-%{kernel_release}
 %ghost /boot/initrd-%{kernel_release}.gz
@@ -692,9 +689,6 @@ fi
 /lib/modules/%{kernel_release}/kernel/arch
 /lib/modules/%{kernel_release}/kernel/crypto
 /lib/modules/%{kernel_release}/kernel/drivers
-%ifnarch sparc
-%exclude /lib/modules/%{kernel_release}/kernel/drivers/char/drm
-%endif
 #%if %{have_oss} && %{have_isa}
 #%exclude /lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
 #%endif
@@ -732,12 +726,6 @@ fi
 %defattr(644,root,root,755)
 /boot/vmlinux-%{kernel_release}
 
-%ifnarch sparc
-%files drm
-%defattr(644,root,root,755)
-/lib/modules/%{kernel_release}/kernel/drivers/char/drm
-%endif
-
 %if %{have_pcmcia}
 %files pcmcia
 %defattr(644,root,root,755)
@@ -759,9 +747,6 @@ fi
 %files sound-alsa
 %defattr(644,root,root,755)
 /lib/modules/%{kernel_release}/kernel/sound
-%ifnarch sparc
-/lib/modules/%{kernel_release}/kernel/drivers/media/video/*/*-alsa.ko*
-%endif
 %exclude %dir /lib/modules/%{kernel_release}/kernel/sound
 %exclude /lib/modules/%{kernel_release}/kernel/sound/soundcore.*
 %if %{have_oss}
@@ -785,10 +770,8 @@ fi
 %defattr(644,root,root,755)
 %dir %{_kernelsrcdir}
 %{_kernelsrcdir}/include
-%{_kernelsrcdir}/config-smp
-%{?with_smp:%{_kernelsrcdir}/Module.symvers-smp}
-%{_kernelsrcdir}/config-up
-%{?with_up:%{_kernelsrcdir}/Module.symvers-up}
+%{_kernelsrcdir}/config-dist
+%{_kernelsrcdir}/Module.symvers-dist
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
