@@ -411,8 +411,14 @@ TuneUpConfigForIX86 () {
 	%if %{with pae}
 		pae=yes
 	%endif
+	%ifarch i386
+	sed -i 's:# CONFIG_M386 is not set:CONFIG_M386=y:' $1
+	%endif
 	%ifarch i486
 	sed -i 's:# CONFIG_M486 is not set:CONFIG_M486=y:' $1
+	%endif
+	%ifarch i586
+	sed -i 's:# CONFIG_M586 is not set:CONFIG_M586=y:' $1
 	%endif
 	%ifarch i686
 	sed -i 's:# CONFIG_M686 is not set:CONFIG_M686=y:' $1
@@ -441,9 +447,9 @@ rm -f .config
 BuildConfig() {
 	%{?debug:set -x}
 	Config="%{_target_base_arch}"
-	KernelVer=%{kernel_release}$1
+	KernelVer=%{kernel_release}
 
-	echo "Building config file [using $Config.conf] for KERNEL $1..."
+	echo "Building config file [using $Config.conf] ..."
 
 	echo "" > .config
 	cat %{SOURCE20} > .config
