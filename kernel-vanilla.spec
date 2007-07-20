@@ -79,11 +79,8 @@ Source3:	kernel-vanilla-config.h
 
 Source20:	kernel-vanilla-common.config
 Source21:	kernel-vanilla-i386.config
-Source22:	kernel-vanilla-i386-smp.config
 Source23:	kernel-vanilla-x86_64.config
-Source24:	kernel-vanilla-x86_64-smp.config
 Source25:	kernel-vanilla-ppc.config
-Source26:	kernel-vanilla-ppc-smp.config
 
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
