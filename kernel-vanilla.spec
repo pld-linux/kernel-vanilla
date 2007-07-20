@@ -550,7 +550,7 @@ fi
 
 KERNEL_BUILD_DIR=`pwd`
 
-cp -a$l $KERNEL_BUILD_DIR/build-done/kernel-*/* $RPM_BUILD_ROOT
+cp -a$l $KERNEL_BUILD_DIR/build-done/kernel/* $RPM_BUILD_ROOT
 
 for i in "" smp; do
 	if [ -e  $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i ] ; then
