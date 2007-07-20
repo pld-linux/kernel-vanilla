@@ -1,25 +1,5 @@
-# TODO
-# - unpackaged
-#  /usr/src/linux-2.6.20_vanilla/arch/arm/mach-realview/clock.c
-#  /usr/src/linux-2.6.20_vanilla/arch/ia64/ia32/audit.c
-#  /usr/src/linux-2.6.20_vanilla/arch/sh/boards/mpc1211/led.c
-#  /usr/src/linux-2.6.20_vanilla/aux_files
-#  /usr/src/linux-2.6.20_vanilla/aux_files_exc
-#  /usr/src/linux-2.6.20_vanilla/drivers/infiniband/hw/ipath/ipath_common.h
-#  /usr/src/linux-2.6.20_vanilla/drivers/mfd/Makefile
-#  /usr/src/linux-2.6.20_vanilla/drivers/scsi/megaraid/Makefile
-#  /usr/src/linux-2.6.20_vanilla/fs/ncpfs/Makefile
-#  /usr/src/linux-2.6.20_vanilla/net/sctp/associola.c
-# - verify:
-#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4/kernel/drivers/media/radio/miropcm20*.ko*
-#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4/kernel/drivers/media/radio/miropcm20*.ko*
-#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4smp/kernel/drivers/media/radio/miropcm20*.ko*
-#    File not found by glob: /home/glen/tmp/kernel-vanilla-2.6.20-root-glen/lib/modules/2.6.20_vanilla-0.1.rc4smp/kernel/drivers/media/radio/miropcm20*.ko*
-
 #
 # Conditional build:
-%bcond_without	smp		# don't build SMP kernel
-%bcond_without	up		# don't build UP kernel
 %bcond_without	source		# don't build kernel-source package
 
 %bcond_with	verbose		# verbose build (V=1)
@@ -38,14 +18,8 @@
 %define		have_isa	0
 %endif
 
-%ifarch sparc sparc64
-%define		have_pcmcia	0
-%define		have_oss	0
-%else
 %define		have_pcmcia	1
 %define		have_oss	1
-%endif
-
 %define		have_sound	1
 
 ## Program required by kernel to work.
@@ -68,8 +42,8 @@
 
 %define		alt_kernel	vanilla
 
-%define		_basever	2.6.20
-%define		_postver	.4
+%define		_basever	2.6.22
+%define		_postver	.1
 %define		_rel		1
 
 # for rc kernels basever is the version patch (source1) should be applied to
@@ -90,10 +64,10 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	34b0f354819217e6a345f48ebbd8f13e
+# Source0-md5:	2e230d005c002fb3d38a3ca07c0200d0
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
-# Source1-md5:	5653a8ff0d117e89c6c1cf519a113f83
+# Source1-md5:	a29ac92cd688d591afd3fec48905e329
 %endif
 %if "%{_ver}" != "%{nil}"
 Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
@@ -110,12 +84,6 @@ Source23:	kernel-vanilla-x86_64.config
 Source24:	kernel-vanilla-x86_64-smp.config
 Source25:	kernel-vanilla-ppc.config
 Source26:	kernel-vanilla-ppc-smp.config
-Source27:	kernel-vanilla-alpha.config
-Source28:	kernel-vanilla-alpha-smp.config
-Source29:	kernel-vanilla-sparc64.config
-Source30:	kernel-vanilla-sparc64-smp.config
-Source31:	kernel-vanilla-sparc.config
-Source32:	kernel-vanilla-sparc-smp.config
 
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
@@ -131,7 +99,7 @@ BuildRequires:	module-init-tools
 # for hostname command
 BuildRequires:	net-tools
 BuildRequires:	perl-base
-BuildRequires:	rpmbuild(macros) >= 1.217
+BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
 Autoreqprov:	no
 Requires:	coreutils
@@ -159,7 +127,7 @@ Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
 Conflicts:	udev < %{_udev_ver}
 Conflicts:	util-linux < %{_util_linux_ver}
 Conflicts:	xfsprogs < %{_xfsprogs_ver}
-ExclusiveArch:	%{ix86} alpha %{x8664} ppc sparc sparc64
+ExclusiveArch:	%{ix86} %{x8664} ppc
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -179,13 +147,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %if "%{_target_base_arch}" != "%{_arch}"
 	%define	MakeOpts %{CommonOpts} ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
 	%define	DepMod /bin/true
-
-	%if "%{_arch}" == "sparc" && "%{_target_base_arch}" == "sparc64"
-	%undefine CommonOpts
-	%define MakeOpts ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
-	%define	DepMod /sbin/depmod
-	%endif
-
 
 	%if "%{_arch}" == "x86_64" && "%{_target_base_arch}" == "i386"
 	%define	MakeOpts %{CommonOpts} CC="%{__cc}" ARCH=%{_target_base_arch}
@@ -326,159 +287,6 @@ OSS (Open Sound System) Treiber.
 %description sound-oss -l pl.UTF-8
 Sterowniki dźwięku OSS (Open Sound System).
 
-%package smp
-Summary:	Kernel version %{version} compiled for SMP machines
-Summary(de.UTF-8):	Kernel Version %{version} für Multiprozessor-Maschinen
-Summary(fr.UTF-8):	Kernel version %{version} compiler pour les machine Multi-Processeur
-Summary(pl.UTF-8):	Jądro Linuksa w wersji %{version} dla maszyn wieloprocesorowych
-Group:		Base/Kernel
-Requires:	coreutils
-Requires:	geninitrd >= 2.26
-Requires:	module-init-tools >= 0.9.9
-Provides:	kernel = %{epoch}:%{version}-%{release}
-Provides:	kernel(realtime-lsm) = 0.1.1
-Provides:	kernel-smp-misc-fuse
-Provides:	kernel-smp-net-hostap = 0.4.4
-Provides:	kernel-smp-net-ieee80211
-Provides:	kernel-smp-net-ipw2100 = 1.1.3
-Provides:	kernel-smp-net-ipw2200 = 1.0.8
-Provides:	module-info
-Conflicts:	e2fsprogs < %{_e2fsprogs_ver}
-Conflicts:	isdn4k-utils < %{_isdn4k_utils_ver}
-Conflicts:	jfsutils < %{_jfsutils_ver}
-Conflicts:	module-init-tool < %{_module_init_tool_ver}
-Conflicts:	nfs-utils < %{_nfs_utils_ver}
-Conflicts:	oprofile < %{_oprofile_ver}
-Conflicts:	ppp < %{_ppp_ver}
-Conflicts:	procps < %{_procps_ver}
-Conflicts:	quota-tools < %{_quota_tools_ver}
-Conflicts:	reiserfsprogs < %{_reiserfsprogs_ver}
-Conflicts:	util-linux < %{_util_linux_ver}
-Conflicts:	xfsprogs < %{_xfsprogs_ver}
-Autoreqprov:	no
-
-%description smp
-This package includes a SMP version of the Linux %{version} kernel. It
-is required only on machines with two or more CPUs, although it should
-work fine on single-CPU boxes.
-
-%{Features_smp}
-
-%description smp -l de.UTF-8
-Dieses Packet enthält eine SMP (Multiprozessor)-Version vom
-Linux-Kernel %{version}. Es wird für Maschinen mit zwei oder mehr
-Prozessoren gebraucht, sollte aber auch auf Komputern mit nur einer
-CPU laufen.
-
-%{Features_smp}
-
-%description smp -l fr.UTF-8
-Ce package inclu une version SMP du noyau de Linux version {version}.
-Il et nécessaire seulement pour les machine avec deux processeurs ou
-plus, il peut quand même fonctionner pour les système mono-processeur.
-
-%{Features_smp}
-
-%description smp -l pl.UTF-8
-Pakiet zawiera jądro SMP Linuksa w wersji %{version}. Jest ono
-wymagane przez komputery zawierające dwa lub więcej procesorów.
-Powinno również dobrze działać na maszynach z jednym procesorem.
-
-%{Features_smp}
-
-%package smp-vmlinux
-Summary:	vmlinux - uncompressed SMP kernel image
-Summary(de.UTF-8):	vmlinux - dekompressiertes SMP Kernel Bild
-Summary(pl.UTF-8):	vmlinux - rozpakowany obraz jądra SMP
-Group:		Base/Kernel
-
-%description smp-vmlinux
-vmlinux - uncompressed SMP kernel image.
-
-%description smp-vmlinux -l de.UTF-8
-vmlinux - dekompressiertes SMP Kernel Bild.
-
-%description smp-vmlinux -l pl.UTF-8
-vmlinux - rozpakowany obraz jądra SMP.
-
-%package smp-drm
-Summary:	DRM SMP kernel modules
-Summary(de.UTF-8):	DRM SMP Kernel Module
-Summary(pl.UTF-8):	Sterowniki DRM dla maszyn wieloprocesorowych
-Group:		Base/Kernel
-Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
-Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
-Provides:	kernel-drm = %{drm_xfree_version}
-Autoreqprov:	no
-
-%description smp-drm
-DRM SMP kernel modules (%{drm_xfree_version}).
-
-%description smp-drm -l de.UTF-8
-DRM SMP Kernel Module (%{drm_xfree_version}).
-
-%description smp-drm -l pl.UTF-8
-Sterowniki DRM dla maszyn wieloprocesorowych (%{drm_xfree_version}).
-
-%package smp-pcmcia
-Summary:	PCMCIA modules for SMP kernel
-Summary(de.UTF-8):	PCMCIA Module für SMP Kernel
-Summary(pl.UTF-8):	Moduły PCMCIA dla maszyn SMP
-Group:		Base/Kernel
-Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
-Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
-Provides:	kernel(pcmcia)
-Provides:	kernel-pcmcia = %{pcmcia_version}
-Conflicts:	pcmcia-cs < %{_pcmcia_cs_ver}
-Conflicts:	pcmciautils < %{_pcmciautils_ver}
-Autoreqprov:	no
-
-%description smp-pcmcia
-PCMCIA modules for SMP kernel (%{pcmcia_version}).
-
-%description smp-pcmcia -l de.UTF-8
-PCMCIA Module für SMP Kernel (%{pcmcia_version}).
-
-%description smp-pcmcia -l pl.UTF-8
-Moduły PCMCIA dla maszyn SMP (%{pcmcia_version}).
-
-%package smp-sound-alsa
-Summary:	ALSA SMP kernel modules
-Summary(de.UTF-8):	ALSA SMP Kernel Module
-Summary(pl.UTF-8):	Sterowniki dźwięku ALSA dla maszyn wieloprocesorowych
-Group:		Base/Kernel
-Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
-Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
-Autoreqprov:	no
-
-%description smp-sound-alsa
-ALSA (Advanced Linux Sound Architecture) SMP sound drivers.
-
-%description smp-sound-alsa -l de.UTF-8
-ALSA (Advanced Linux Sound Architecture) SMP Sound-Treiber.
-
-%description smp-sound-alsa -l pl.UTF-8
-Sterowniki dźwięku ALSA (Advanced Linux Sound Architecture) dla maszyn
-wieloprocesorowych.
-
-%package smp-sound-oss
-Summary:	OSS SMP kernel modules
-Summary(de.UTF-8):	OSS SMP Kernel Module
-Summary(pl.UTF-8):	Sterowniki dźwięku OSS dla maszyn wieloprocesorowych
-Group:		Base/Kernel
-Requires(postun):	%{name}-smp = %{epoch}:%{version}-%{release}
-Requires:	%{name}-smp = %{epoch}:%{version}-%{release}
-Autoreqprov:	no
-
-%description smp-sound-oss
-OSS (Open Sound System) SMP sound drivers.
-
-%description smp-sound-oss -l de.UTF-8
-OSS (Open Sound System) SMP Sound-Treiber.
-
-%description smp-sound-oss -l pl.UTF-8
-Sterowniki OSS (Open Sound System) dla maszyn wieloprocesorowych.
-
 %package headers
 Summary:	Header files for the Linux kernel
 Summary(de.UTF-8):	Header Dateien für den Linux-Kernel
@@ -602,18 +410,12 @@ find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xarg
 TuneUpConfigForIX86 () {
 %ifarch %{ix86}
 	pae=
-	[ "$2" = "smp" ] && pae=yes
+	[ "$2" = "yes" ] && pae=yes
 	%if %{with pae}
 		pae=yes
 	%endif
-	%ifnarch i386
-	sed -i 's:CONFIG_M386=y:# CONFIG_M386 is not set:' $1
-	%endif
 	%ifarch i486
 	sed -i 's:# CONFIG_M486 is not set:CONFIG_M486=y:' $1
-	%endif
-	%ifarch i586
-	sed -i 's:# CONFIG_M586 is not set:CONFIG_M586=y:' $1
 	%endif
 	%ifarch i686
 	sed -i 's:# CONFIG_M686 is not set:CONFIG_M686=y:' $1
@@ -641,28 +443,17 @@ TuneUpConfigForIX86 () {
 rm -f .config
 BuildConfig() {
 	%{?debug:set -x}
-	# is this a special kernel we want to build?
-	smp=
-	cfg="up"
-	[ "$1" = "smp" -o "$2" = "smp" ] && smp="smp"
-	if [ "$smp" = "smp" ]; then
-		cfg="smp"
-		Config="%{_target_base_arch}-smp"
-	else
-		Config="%{_target_base_arch}"
-	fi
+	Config="%{_target_base_arch}"
 	KernelVer=%{kernel_release}$1
 
 	echo "Building config file [using $Config.conf] for KERNEL $1..."
 
 	echo "" > .config
-	%ifnarch alpha sparc sparc64
 	cat %{SOURCE20} > .config
-	%endif
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
-	echo "CONFIG_LOCALVERSION=\"-%{_localversion}$smp\"" >> .config
+	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> .config
 
-	TuneUpConfigForIX86 .config "$smp"
+	TuneUpConfigForIX86 .config
 
 	%if %{with preempt-nort}
 		cat %{SOURCE40} >> .config
@@ -698,54 +489,18 @@ BuildKernel() {
 
 	%{__make} %{MakeOpts} include/linux/version.h \
 		%{?with_verbose:V=1}
-
-%ifarch sparc sparc64
-%ifarch sparc64
-	%{__make} %{MakeOpts} image \
-		%{?with_verbose:V=1}
-
-	%{__make} %{MakeOpts} modules \
-		%{?with_verbose:V=1}
-%else
-	sparc %{__make} \
-		%{?with_verbose:V=1}
-%endif
-%else
 	%{__make} %{MakeOpts} \
 		%{?with_verbose:V=1}
-%endif
 }
 
 PreInstallKernel() {
-	smp=
-	cfg="up"
-	[ "$1" = "smp" -o "$2" = "smp" ] && smp=smp
-	if [ "$smp" = "smp" ]; then
-		cfg="smp"
-		Config="%{_target_base_arch}-smp"
-	else
-		Config="%{_target_base_arch}"
-	fi
+	Config="%{_target_base_arch}"
 	KernelVer=%{kernel_release}$1
 
 	mkdir -p $KERNEL_INSTALL_DIR/boot
 	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
 %ifarch %{ix86} %{x8664}
 	install arch/%{_target_base_arch}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
-%endif
-
-%ifarch alpha sparc sparc64
-	gzip -cfv vmlinux > vmlinuz
-	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinux-$KernelVer
-	install vmlinuz $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
-%ifarch sparc
-	elftoaout arch/sparc/boot/image -o vmlinux.aout
-	install vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-$KernelVer
-%endif
-%ifarch sparc64
-	elftoaout arch/sparc64/boot/image -o vmlinux.aout
-	install vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-$KernelVer
-%endif
 %endif
 
 %ifarch ppc
@@ -775,23 +530,12 @@ PreInstallKernel() {
 
 KERNEL_BUILD_DIR=`pwd`
 
-# UP KERNEL
-KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel-UP"
+# SMP KERNEL
+KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel"
 rm -rf $KERNEL_INSTALL_DIR
-%if %{with up}
 BuildConfig
 BuildKernel
 PreInstallKernel
-%endif
-
-# SMP KERNEL
-KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel-SMP"
-rm -rf $KERNEL_INSTALL_DIR
-%if %{with smp}
-BuildConfig smp
-BuildKernel smp
-PreInstallKernel smp
-%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -799,7 +543,7 @@ umask 022
 export DEPMOD=%{DepMod}
 
 install -d $RPM_BUILD_ROOT%{_kernelsrcdir}
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}{,smp}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
 
 # test if we can hardlink -- %{_builddir} and $RPM_BUILD_ROOT on same partition
 if cp -al COPYING $RPM_BUILD_ROOT/COPYING 2>/dev/null; then
@@ -809,9 +553,7 @@ fi
 
 KERNEL_BUILD_DIR=`pwd`
 
-%if %{with up} || %{with smp}
 cp -a$l $KERNEL_BUILD_DIR/build-done/kernel-*/* $RPM_BUILD_ROOT
-%endif
 
 for i in "" smp; do
 	if [ -e  $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i ] ; then
@@ -831,28 +573,16 @@ cd $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}/include/linux/autoconf-up.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}/include/linux/autoconf-up.h \
+if [ -e $KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/include/linux/autoconf.h ]; then
+install $KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/include/linux/autoconf.h \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}/config-up \
+install	$KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/config \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}
 fi
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_kernelsrcdir}/include/linux/autoconf-smp.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel-SMP%{_kernelsrcdir}/include/linux/autoconf-smp.h \
-	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel-SMP%{_kernelsrcdir}/config-smp \
-	$RPM_BUILD_ROOT%{_kernelsrcdir}
-fi
-
-%if %{with up} || %{with smp}
-# UP or SMP
 install $KERNEL_BUILD_DIR/build-done/kernel-*%{_kernelsrcdir}/include/linux/* \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-%endif
 
-install $KERNEL_BUILD_DIR/build-done/kernel-UP%{_kernelsrcdir}/config-up \
-	.config
 %{__make} %{MakeOpts} include/linux/version.h include/linux/utsrelease.h
 mv include/linux/version.h{,.save}
 mv include/linux/utsrelease.h{,.save}
@@ -865,10 +595,8 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 # collect module-build files and directories
 %{__perl} %{SOURCE2} %{_kernelsrcdir} $KERNEL_BUILD_DIR
 
-%if %{with up} || %{with smp}
 # ghosted initrd
-touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}{,smp}.gz
-%endif
+touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}.gz
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -941,74 +669,6 @@ ln -sf vmlinux-%{kernel_release} /boot/vmlinux-%{alt_kernel}
 %postun sound-oss
 %depmod %{kernel_release}
 
-%preun smp
-rm -f /lib/modules/%{kernel_release}smp/modules.*
-if [ -x /sbin/new-kernel-pkg ]; then
-	/sbin/new-kernel-pkg --remove %{kernel_release}smp
-fi
-
-%post smp
-mv -f /boot/vmlinuz-%{alt_kernel} /boot/vmlinuz.old-%{alt_kernel} 2> /dev/null > /dev/null
-mv -f /boot/System.map-%{alt_kernel} /boot/System.map.old-%{alt_kernel} 2> /dev/null > /dev/null
-ln -sf vmlinuz-%{kernel_release}smp /boot/vmlinuz-%{alt_kernel}
-ln -sf System.map-%{kernel_release}smp /boot/System.map-%{alt_kernel}
-if [ ! -e /boot/vmlinuz ]; then
-	mv -f /boot/vmlinuz /boot/vmlinuz.old 2> /dev/null > /dev/null
-	mv -f /boot/System.map /boot/System.map.old 2> /dev/null > /dev/null
-	ln -sf vmlinuz-%{kernel_release} /boot/vmlinuz
-	ln -sf System.map-%{kernel_release} /boot/System.map
-	mv -f %{initrd_dir}/initrd %{initrd_dir}/initrd.old 2> /dev/null > /dev/null
-	ln -sf initrd-%{alt_kernel} %{initrd_dir}/initrd
-fi
-
-%depmod %{kernel_release}smp
-
-/sbin/geninitrd -f --initrdfs=rom %{initrd_dir}/initrd-%{kernel_release}smp.gz %{kernel_release}smp
-mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd.old-%{alt_kernel} 2> /dev/null > /dev/null
-ln -sf initrd-%{kernel_release}smp.gz %{initrd_dir}/initrd-%{alt_kernel}
-
-if [ -x /sbin/new-kernel-pkg ]; then
-	if [ -f /etc/pld-release ]; then
-		title=$(sed 's/^[0-9.]\+ //' < /etc/pld-release)
-	else
-		title='PLD Linux'
-	fi
-
-	title="$title %{alt_kernel}"
-
-	/sbin/new-kernel-pkg --initrdfile=%{initrd_dir}/initrd-%{kernel_release}smp.gz --install %{kernel_release}smp --banner "$title"
-elif [ -x /sbin/rc-boot ]; then
-	/sbin/rc-boot 1>&2 || :
-fi
-
-%post smp-vmlinux
-mv -f /boot/vmlinux-%{alt_kernel} /boot/vmlinux.old-%{alt_kernel} 2> /dev/null > /dev/null
-ln -sf vmlinux-%{kernel_release}smp /boot/vmlinux-%{alt_kernel}
-
-%post smp-drm
-%depmod %{kernel_release}smp
-
-%postun smp-drm
-%depmod %{kernel_release}smp
-
-%post smp-pcmcia
-%depmod %{kernel_release}smp
-
-%postun smp-pcmcia
-%depmod %{kernel_release}smp
-
-%post smp-sound-alsa
-%depmod %{kernel_release}smp
-
-%postun smp-sound-alsa
-%depmod %{kernel_release}smp
-
-%post smp-sound-oss
-%depmod %{kernel_release}smp
-
-%postun smp-sound-oss
-%depmod %{kernel_release}smp
-
 %post headers
 rm -f %{_prefix}/src/linux-%{alt_kernel}
 ln -snf %{basename:%{_kernelsrcdir}} %{_prefix}/src/linux-%{alt_kernel}
@@ -1022,7 +682,6 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
-%if %{with up}
 %files
 %defattr(644,root,root,755)
 %ifarch sparc sparc64
@@ -1124,112 +783,6 @@ fi
 #%endif
 %endif			# %{have_oss}
 %endif			# %{have_sound}
-%endif			# %%{with up}
-
-%if %{with smp}
-%files smp
-%defattr(644,root,root,755)
-#doc FAQ-pl
-%ifarch sparc sparc64
-/boot/vmlinux.aout-%{kernel_release}smp
-%endif
-/boot/vmlinuz-%{kernel_release}smp
-/boot/System.map-%{kernel_release}smp
-%ghost /boot/initrd-%{kernel_release}smp.gz
-%dir /lib/modules/%{kernel_release}smp
-%dir /lib/modules/%{kernel_release}smp/kernel
-/lib/modules/%{kernel_release}smp/kernel/arch
-/lib/modules/%{kernel_release}smp/kernel/crypto
-/lib/modules/%{kernel_release}smp/kernel/drivers
-%ifnarch sparc
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/char/drm
-%endif
-#%if %{have_oss} && %{have_isa}
-#%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/media/radio/miropcm20*.ko*
-#%endif
-/lib/modules/%{kernel_release}smp/kernel/fs
-/lib/modules/%{kernel_release}smp/kernel/kernel
-/lib/modules/%{kernel_release}smp/kernel/lib
-/lib/modules/%{kernel_release}smp/kernel/net
-/lib/modules/%{kernel_release}smp/kernel/security
-%dir /lib/modules/%{kernel_release}smp/kernel/sound
-/lib/modules/%{kernel_release}smp/kernel/sound/soundcore.*
-%if %{have_sound}
-%ifnarch sparc
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/media/video/*/*-alsa.ko*
-%endif
-%endif
-%dir /lib/modules/%{kernel_release}smp/misc
-%if %{have_pcmcia}
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/pcmcia
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/*/pcmcia
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/bluetooth/*_cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/ide/legacy/ide-cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/net/wireless/*_cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/net/wireless/hostap/hostap_cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/parport/parport_cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/serial/serial_cs.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/telephony/ixj_pcmcia.ko*
-%exclude /lib/modules/%{kernel_release}smp/kernel/drivers/usb/host/sl811_cs.ko*
-%endif
-/lib/modules/%{kernel_release}smp/build
-%ghost /lib/modules/%{kernel_release}smp/modules.*
-%dir %{_sysconfdir}/modprobe.d/%{kernel_release}smp
-
-%files smp-vmlinux
-%defattr(644,root,root,755)
-/boot/vmlinux-%{kernel_release}smp
-
-%ifnarch sparc
-%files smp-drm
-%defattr(644,root,root,755)
-/lib/modules/%{kernel_release}smp/kernel/drivers/char/drm
-%endif
-
-%if %{have_pcmcia}
-%files smp-pcmcia
-%defattr(644,root,root,755)
-/lib/modules/%{kernel_release}smp/kernel/drivers/pcmcia
-/lib/modules/%{kernel_release}smp/kernel/drivers/*/pcmcia
-/lib/modules/%{kernel_release}smp/kernel/drivers/bluetooth/*_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/ide/legacy/ide-cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/net/wireless/*_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/net/wireless/hostap/hostap_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/parport/parport_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/serial/serial_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/telephony/ixj_pcmcia.ko*
-/lib/modules/%{kernel_release}smp/kernel/drivers/usb/host/sl811_cs.ko*
-/lib/modules/%{kernel_release}smp/kernel/sound/pcmcia
-%endif
-
-%if %{have_sound}
-%files smp-sound-alsa
-%defattr(644,root,root,755)
-/lib/modules/%{kernel_release}smp/kernel/sound
-%ifnarch sparc
-/lib/modules/%{kernel_release}smp/kernel/drivers/media/video/*/*-alsa.ko*
-%endif
-%exclude %dir /lib/modules/%{kernel_release}smp/kernel/sound
-%exclude /lib/modules/%{kernel_release}smp/kernel/sound/soundcore.*
-%if %{have_oss}
-%exclude /lib/modules/%{kernel_release}smp/kernel/sound/oss
-%endif
-%if %{have_pcmcia}
-%exclude /lib/modules/%{kernel_release}smp/kernel/sound/pcmcia
-%endif
-
-%if %{have_oss}
-%files smp-sound-oss
-%defattr(644,root,root,755)
-/lib/modules/%{kernel_release}smp/kernel/sound/oss
-#%if %{have_isa}
-#/lib/modules/%{kernel_release}smp/kernel/drivers/media/radio/miropcm20*.ko*
-#%endif
-%endif			# %{have_oss}
-%endif			# %{have_sound}
-%endif			# %{with_smp}
 
 %files headers
 %defattr(644,root,root,755)
