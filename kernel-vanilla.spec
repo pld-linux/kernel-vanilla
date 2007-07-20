@@ -577,7 +577,7 @@ install	$KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/config \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}
 fi
 
-install $KERNEL_BUILD_DIR/build-done/kernel-*%{_kernelsrcdir}/include/linux/* \
+install $KERNEL_BUILD_DIR/build-done/kernel-%{_kernelsrcdir}/include/linux/* \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 
 %{__make} %{MakeOpts} include/linux/version.h include/linux/utsrelease.h
