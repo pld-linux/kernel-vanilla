@@ -63,14 +63,14 @@ Release:	%{?_rc:%{_rc}}%{_rel}
 Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
-Source0:	http://www.eu.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
+Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	2e230d005c002fb3d38a3ca07c0200d0
 %if "%{_postver}" != "%{nil}"
-Source1:	http://www.eu.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
+Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
 # Source1-md5:	a29ac92cd688d591afd3fec48905e329
 %endif
 %if "%{_ver}" != "%{nil}"
-Source10:	http://www.eu.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
+Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
 # Source10-md5:	9b325c6086ad2a3fcde643f01a4c4640
 %endif
 
