@@ -411,8 +411,8 @@ TuneUpConfigForIX86 () {
 	%if %{with pae}
 		pae=yes
 	%endif
-	%ifarch i386
-	sed -i 's:# CONFIG_M386 is not set:CONFIG_M386=y:' $1
+	%ifnarch i386
+	sed -i 's:CONFIG_M386=y:# CONFIG_M386 is not set:' $1
 	%endif
 	%ifarch i486
 	sed -i 's:# CONFIG_M486 is not set:CONFIG_M486=y:' $1
