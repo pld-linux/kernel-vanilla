@@ -1,7 +1,6 @@
 #
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
-
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
 %bcond_with	preempt-nort	# build preemptable no realtime kernel
@@ -78,10 +77,6 @@ Source3:	kernel-vanilla-config.h
 
 Source20:	kernel-vanilla-i386.config
 Source21:	kernel-vanilla-x86_64.config
-
-Source40:	kernel-vanilla-preempt-nort.config
-Source41:	kernel-vanilla-no-preempt-nort.config
-Source42:	kernel-vanilla-netfilter.config
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
@@ -447,11 +442,10 @@ BuildConfig() {
 	TuneUpConfigForIX86 .config
 
 	%if %{with preempt-nort}
-		cat %{SOURCE40} >> .config
-	%else
-		cat %{SOURCE41} >> .config
+	    sed -i "s:CONFIG_PREEMPT_NONE=y:# CONFIG_PREEMPT_NONE is not set:" .config
+	    sed -i "s:# CONFIG_PREEMPT is not set:CONFIG_PREEMPT=y:" .config
+	    sed -i "s:# CONFIG_PREEMPT_BKL is not set:CONFIG_PREEMPT_BKL=y:" .config
 	%endif
-	cat %{SOURCE42} >> .config
 
 %{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" .config}
 %{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" .config}
