@@ -760,7 +760,7 @@ fi
 %dir %{_kernelsrcdir}
 %{_kernelsrcdir}/include
 %{_kernelsrcdir}/config-dist
-%{?with_smp:%{_kernelsrcdir}/Module.symvers-dist}
+%{_kernelsrcdir}/Module.symvers-dist
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
