@@ -42,7 +42,7 @@
 
 %define		_basever	2.6.23
 %define		_postver	.1
-%define		_rel		1
+%define		_rel		2
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -431,9 +431,9 @@ rm -f .config
 BuildConfig() {
 	%{?debug:set -x}
 	Config="%{_target_base_arch}"
-	KernelVer=%{kernel_release}$1
+	KernelVer=%{kernel_release}
 
-	echo "Building config file [using $Config.conf] for KERNEL $1..."
+	echo "Building config file [using $Config.conf] for KERNEL ..."
 
 	echo "" > .config
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
@@ -464,7 +464,7 @@ BuildConfig() {
 
 BuildKernel() {
 	%{?debug:set -x}
-	echo "Building kernel $1 ..."
+	echo "Building kernel ..."
 	%{__make} %{MakeOpts} mrproper \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
 	install arch/%{_target_base_arch}/defconfig .config
