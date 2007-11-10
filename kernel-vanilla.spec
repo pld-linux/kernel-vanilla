@@ -3,7 +3,7 @@
 %bcond_without	source		# don't build kernel-source package
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
-%bcond_with	preempt-nort	# build preemptable no realtime kernel
+%bcond_with	preempt		# build preemptable no realtime kernel
 
 %{?debug:%define with_verbose 1}
 
@@ -437,11 +437,12 @@ BuildConfig() {
 
 	echo "" > .config
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
-	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> .config
+	echo "CONFIG_LOCALVERSION=\"-%{_localversion}\"" >> .config
 
 	TuneUpConfigForIX86 .config
 
-	%if %{with preempt-nort}
+	%if %{with preempt}
+	    echo "# CONFIG_DEBUG_PREEMPT is not set" >> .config
 	    sed -i "s:CONFIG_PREEMPT_NONE=y:# CONFIG_PREEMPT_NONE is not set:" .config
 	    sed -i "s:# CONFIG_PREEMPT is not set:CONFIG_PREEMPT=y:" .config
 	    sed -i "s:# CONFIG_PREEMPT_BKL is not set:CONFIG_PREEMPT_BKL=y:" .config
