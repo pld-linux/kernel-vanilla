@@ -152,7 +152,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define __features Enabled features:\
 %{?debug: - DEBUG}\
 %define Features %(echo "%{__features}" | sed '/^$/d')
-%{?with_pae: - PAE (HIGHMEM64G) support}" | sed '/^$/d')
 # vim: "
 
 %description
