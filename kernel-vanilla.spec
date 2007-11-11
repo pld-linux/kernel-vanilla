@@ -328,8 +328,8 @@ Provides:	kernel-source = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description source
-This is the source code for the Linux kernel. You can build a custom kernel
-that is better tuned to your particular hardware.
+This is the source code for the Linux kernel. You can build a custom
+kernel that is better tuned to your particular hardware.
 
 %description source -l de
 Das Kernel-Source-Packet enthält den source code (C/Assembler-Code)
@@ -442,10 +442,10 @@ BuildConfig() {
 	TuneUpConfigForIX86 .config
 
 	%if %{with preempt}
-	    echo "# CONFIG_DEBUG_PREEMPT is not set" >> .config
-	    sed -i "s:CONFIG_PREEMPT_NONE=y:# CONFIG_PREEMPT_NONE is not set:" .config
-	    sed -i "s:# CONFIG_PREEMPT is not set:CONFIG_PREEMPT=y:" .config
-	    sed -i "s:# CONFIG_PREEMPT_BKL is not set:CONFIG_PREEMPT_BKL=y:" .config
+		echo "# CONFIG_DEBUG_PREEMPT is not set" >> .config
+		sed -i "s:CONFIG_PREEMPT_NONE=y:# CONFIG_PREEMPT_NONE is not set:" .config
+		sed -i "s:# CONFIG_PREEMPT is not set:CONFIG_PREEMPT=y:" .config
+		sed -i "s:# CONFIG_PREEMPT_BKL is not set:CONFIG_PREEMPT_BKL=y:" .config
 	%endif
 
 %{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" .config}
