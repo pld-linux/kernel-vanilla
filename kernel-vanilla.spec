@@ -130,9 +130,9 @@ ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{ix86} %{x8664}
-%define		target_base_arch_dir		x86
+%define		target_arch_dir		x86
 %else
-%define		target_base_arch_dir		%{_target_base_arch}
+%define		target_arch_dir		%{_target_base_arch}
 %endif
 
 # No ELF objects there to strip (skips processing 27k files)
@@ -461,36 +461,36 @@ BuildConfig() {
 
 	echo "Building config file [using $Config.conf] ..."
 
-	> arch/%{target_base_arch_dir}/defconfig
+	> arch/%{target_arch_dir}/defconfig
 
 	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf \
-		arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+		arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 
-	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> arch/%{target_base_arch_dir}/defconfig
+	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> arch/%{target_arch_dir}/defconfig
 
-	TuneUpConfigForIX86 arch/%{target_base_arch_dir}/defconfig
+	TuneUpConfigForIX86 arch/%{target_arch_dir}/defconfig
 
 	%if %{with preempt-nort}
 		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config \
-			arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+			arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 	%else
 		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
-			arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+			arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 	%endif
 	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-netfilter.config \
-		arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+		arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 
-%{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_base_arch_dir}/defconfig}
-%{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" arch/%{target_base_arch_dir}/defconfig}
-%{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" arch/%{target_base_arch_dir}/defconfig}
+%{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_arch_dir}/defconfig}
+%{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" arch/%{target_arch_dir}/defconfig}
+%{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" arch/%{target_arch_dir}/defconfig}
 
-	ln -sf arch/%{target_base_arch_dir}/defconfig .config
+	ln -sf arch/%{target_arch_dir}/defconfig .config
 	install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux
 	rm -f include/linux/autoconf.h
 	%{__make} %{MakeOpts} include/linux/autoconf.h
 	install include/linux/autoconf.h \
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
-	install arch/%{target_base_arch_dir}/defconfig \
+	install arch/%{target_arch_dir}/defconfig \
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
 }
 
@@ -499,7 +499,7 @@ BuildKernel() {
 	echo "Building kernel $1 ..."
 	%{__make} %{MakeOpts} mrproper \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
-	ln -sf arch/%{target_base_arch_dir}/defconfig .config
+	ln -sf arch/%{target_arch_dir}/defconfig .config
 
 	%{__make} %{MakeOpts} clean \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
@@ -517,7 +517,7 @@ PreInstallKernel() {
 	mkdir -p $KERNEL_INSTALL_DIR/boot
 	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
 %ifarch %{ix86} %{x8664}
-	install arch/%{target_base_arch_dir}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
+	install arch/%{target_arch_dir}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
 %endif
 
 %ifarch ppc
