@@ -406,7 +406,6 @@ sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
 
 ln -s %{SOURCE6} kernel-config.py
-chmod a+rx kernel-config.py
 
 %build
 TuneUpConfigForIX86 () {
@@ -459,7 +458,7 @@ BuildConfig() {
 
 	> arch/%{target_arch_dir}/defconfig
 
-	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf \
+	python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf \
 		arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 
 	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> arch/%{target_arch_dir}/defconfig
@@ -467,13 +466,13 @@ BuildConfig() {
 	TuneUpConfigForIX86 arch/%{target_arch_dir}/defconfig
 
 	%if %{with preempt-nort}
-		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config \
+		python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config \
 			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 	%else
-		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
+		python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
 			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 	%endif
-	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-netfilter.config \
+	python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-netfilter.config \
 		arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 
 %{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_arch_dir}/defconfig}
