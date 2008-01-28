@@ -77,6 +77,7 @@ Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_r
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-vanilla-config.h
 Source6:	kernel-config.py
+Source7:	kernel-config-update.py
 
 Source19:	kernel-vanilla-multiarch.conf
 
@@ -406,6 +407,7 @@ sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
 
 ln -s %{SOURCE6} kernel-config.py
+ln -s %{SOURCE7} kernel-config-update.py
 
 %build
 TuneUpConfigForIX86 () {
@@ -485,6 +487,10 @@ BuildConfig() {
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
 	install arch/%{target_arch_dir}/defconfig \
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
+
+	# produce new kernel config
+	%{__make} %{MakeOpts} silentoldconfig
+	python kernel-config-update.py $Config kernel-vanilla-multiarch.conf .config > .config.conf
 }
 
 BuildKernel() {
