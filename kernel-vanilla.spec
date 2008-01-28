@@ -75,7 +75,7 @@ Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_r
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-vanilla-config.h
 
-Source20:	kernel-vanilla-i386.config
+Source20:	kernel-vanilla-x86.config
 Source21:	kernel-vanilla-x86_64.config
 
 URL:		http://www.kernel.org/
