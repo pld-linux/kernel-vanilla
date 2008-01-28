@@ -42,7 +42,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	%{nil}
-%define		_rel		0.1
+%define		_rel		1
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -496,7 +496,7 @@ PreInstallKernel() {
 	mkdir -p $KERNEL_INSTALL_DIR/boot
 	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
 %ifarch %{ix86} %{x8664}
-	install arch/%%{x86_target_base_arch}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
+	install arch/%{x86_target_base_arch}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
 %endif
 
 	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinux-$KernelVer
