@@ -76,8 +76,9 @@ Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_r
 
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-vanilla-config.h
+Source6:	kernel-config.py
 
-Source20:	kernel-vanilla-common.config
+Source19:	kernel-vanilla-multiarch.conf
 Source21:	kernel-vanilla-i386.config
 Source23:	kernel-vanilla-x86_64.config
 Source25:	kernel-vanilla-ppc.config
@@ -408,8 +409,12 @@ sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 # remove unwanted files after patching (if any)
 find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
 
+ln -s %{SOURCE6} kernel-config.py
+chmod a+rx kernel-config.py
+
 %build
 TuneUpConfigForIX86 () {
+	set -x
 %ifarch %{ix86}
 	pae=
 	[ "$2" = "yes" ] && pae=yes
@@ -450,39 +455,43 @@ TuneUpConfigForIX86 () {
 
 rm -f .config
 BuildConfig() {
-	%{?debug:set -x}
+	set -x
 	Config="%{_target_base_arch}"
 	KernelVer=%{kernel_release}
 
 	echo "Building config file [using $Config.conf] ..."
 
-	echo "" > .config
-	cat %{SOURCE20} > .config
-	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
-	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> .config
+	> arch/%{target_base_arch_dir}/defconfig
 
-	TuneUpConfigForIX86 .config
+	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf \
+		arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+
+	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> arch/%{target_base_arch_dir}/defconfig
+
+	TuneUpConfigForIX86 arch/%{target_base_arch_dir}/defconfig
 
 	%if %{with preempt-nort}
-		cat %{SOURCE40} >> .config
+		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config \
+			arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 	%else
-		cat %{SOURCE41} >> .config
+		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
+			arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 	%endif
-	cat %{SOURCE42} >> .config
+	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-netfilter.config \
+		arch/%{target_base_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
 
-%{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" .config}
-%{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" .config}
-%{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" .config}
+%{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_base_arch_dir}/defconfig}
+%{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" arch/%{target_base_arch_dir}/defconfig}
+%{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" arch/%{target_base_arch_dir}/defconfig}
 
-	install .config arch/%{target_base_arch_dir}/defconfig
+	ln -sf arch/%{target_base_arch_dir}/defconfig .config
 	install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux
 	rm -f include/linux/autoconf.h
 	%{__make} %{MakeOpts} include/linux/autoconf.h
 	install include/linux/autoconf.h \
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
-	install .config \
+	install arch/%{target_base_arch_dir}/defconfig \
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
-	install .config arch/%{target_base_arch_dir}/defconfig
 }
 
 BuildKernel() {
@@ -490,7 +499,7 @@ BuildKernel() {
 	echo "Building kernel $1 ..."
 	%{__make} %{MakeOpts} mrproper \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
-	install arch/%{target_base_arch_dir}/defconfig .config
+	ln -sf arch/%{target_base_arch_dir}/defconfig .config
 
 	%{__make} %{MakeOpts} clean \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
