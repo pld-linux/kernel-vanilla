@@ -490,7 +490,7 @@ BuildConfig() {
 
 	# produce new kernel config
 	%{__make} %{MakeOpts} silentoldconfig
-	python kernel-config-update.py $Config kernel-vanilla-multiarch.conf .config > .config.conf
+	python kernel-config-update.py $Config $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf .config > .config.conf
 }
 
 BuildKernel() {
