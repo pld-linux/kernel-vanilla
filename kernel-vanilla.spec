@@ -79,10 +79,6 @@ Source3:	kernel-vanilla-config.h
 Source6:	kernel-config.py
 
 Source19:	kernel-vanilla-multiarch.conf
-Source21:	kernel-vanilla-i386.config
-Source23:	kernel-vanilla-x86_64.config
-Source25:	kernel-vanilla-ppc.config
-
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
 Source42:	kernel-vanilla-netfilter.config
