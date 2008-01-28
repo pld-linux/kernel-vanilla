@@ -79,9 +79,9 @@ Source3:	kernel-vanilla-config.h
 Source6:	kernel-config.py
 
 Source19:	kernel-vanilla-multiarch.conf
+
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
-Source42:	kernel-vanilla-netfilter.config
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
@@ -472,8 +472,6 @@ BuildConfig() {
 		python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
 			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 	%endif
-	python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-netfilter.config \
-		arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 
 %{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_arch_dir}/defconfig}
 %{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" arch/%{target_arch_dir}/defconfig}
