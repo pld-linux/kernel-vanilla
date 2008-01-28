@@ -120,7 +120,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # No ELF objects there to strip (skips processing 27k files)
 %define		_noautostrip	.*%{_kernelsrcdir}/.*
 
-%define		initrd_dir	/boot
+%define		target_base_arch_dir	x86
+%define		initrd_dir		/boot
 
 # kernel release (used in filesystem and eventually in uname -r)
 # modules will be looked from /lib/modules/%{kernel_release}
@@ -452,7 +453,7 @@ BuildConfig() {
 %{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" .config}
 %{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" .config}
 
-	install .config arch/%{_target_base_arch}/defconfig
+	install .config arch/%{target_base_arch_dir}/defconfig
 	install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux
 	rm -f include/linux/autoconf.h
 	%{__make} %{MakeOpts} include/linux/autoconf.h
@@ -460,7 +461,7 @@ BuildConfig() {
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
 	install .config \
 		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
-	install .config arch/%{_target_base_arch}/defconfig
+	install .config arch/%{target_base_arch_dir}/defconfig
 }
 
 BuildKernel() {
@@ -468,7 +469,7 @@ BuildKernel() {
 	echo "Building kernel ..."
 	%{__make} %{MakeOpts} mrproper \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
-	install arch/%{_target_base_arch}/defconfig .config
+	install arch/%{target_base_arch_dir}/defconfig .config
 
 	%{__make} %{MakeOpts} clean \
 		RCS_FIND_IGNORE='-name build-done -prune -o'
@@ -487,7 +488,7 @@ PreInstallKernel() {
 	mkdir -p $KERNEL_INSTALL_DIR/boot
 	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
 %ifarch %{ix86} %{x8664}
-	install arch/%{_target_base_arch}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
+	install arch/%%{target_base_arch_dir}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
 %endif
 
 	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinux-$KernelVer
