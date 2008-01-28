@@ -464,7 +464,7 @@ BuildConfig() {
 	> arch/%{target_arch_dir}/defconfig
 
 	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf \
-		arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+		arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 
 	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> arch/%{target_arch_dir}/defconfig
 
@@ -472,13 +472,13 @@ BuildConfig() {
 
 	%if %{with preempt-nort}
 		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config \
-			arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 	%else
 		./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
-			arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 	%endif
 	./kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-netfilter.config \
-		arch/%{target_arch_dir}/defconfig arch/%{target_base_arch_dir}/defconfig
+		arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
 
 %{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_arch_dir}/defconfig}
 %{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" arch/%{target_arch_dir}/defconfig}
