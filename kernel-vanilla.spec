@@ -551,6 +551,7 @@ fileoutdir=$(pwd)
 cd $RPM_BUILD_ROOT%{_kernelsrcdir}
 ./scripts/kernel-module-build.pl %{_kernelsrcdir} $fileoutdir
 cd -
+rm -f $RPM_BUILD_ROOT%{_kernelsrcdir}/aux_files*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -745,7 +746,6 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
-%exclude %{_kernelsrcdir}/aux_files*
 
 %files doc
 %defattr(644,root,root,755)
