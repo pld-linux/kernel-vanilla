@@ -510,13 +510,15 @@ KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel"
 rm -rf $KERNEL_INSTALL_DIR
 
 # build config
-if [ ! -f arch/%{target_arch_dir}/defconfig.conf ]; then
-	pykconfig > .defconfig.tmp.conf
-	mv .defconfig.tmp.conf arch/%{target_arch_dir}/defconfig.conf
+pykconfig > .defconfig.tmp.conf
+o=arch/%{target_arch_dir}/defconfig.conf
+if [ -f $o ] && cmp -s .defconfig.tmp.conf $o; then
+	rm -f .defconfig.tmp.conf
+else
+	mv .defconfig.tmp.conf $o
 fi
 chmod +x scripts/kernel-config.py
 %{__make} %{MakeOpts} pykconfig
-
 
 # build kernel
 %{__make} %{MakeOpts} \
