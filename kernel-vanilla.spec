@@ -84,6 +84,8 @@ Source19:	kernel-vanilla-multiarch.conf
 Source40:	kernel-vanilla-preempt-nort.config
 Source41:	kernel-vanilla-no-preempt-nort.config
 
+Patch0:		kernel-pykconfig.patch
+
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
@@ -398,8 +400,13 @@ Documentation.
 %{__bzip2} -dc %{SOURCE10} | %{__patch} -p1 -s
 %endif
 
+# if we really want to have vanilla kernel we should create copy from Makefile
+#cp Makefile{,.vanilla}
+
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
+
+%patch0 -p1
 
 sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 
