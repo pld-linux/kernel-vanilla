@@ -26,7 +26,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	%{nil}
-%define		_rel		0.1
+%define		_rel		0.2
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -489,6 +489,7 @@ if cp -al COPYING $RPM_BUILD_ROOT/COPYING 2>/dev/null; then
 	l=l
 	rm -f $RPM_BUILD_ROOT/COPYING
 fi
+rm -f aux_files*
 dirs=$(find -maxdepth 1 ! -name '.*' ! -name '*~' ! -name '*.orig')
 cp -a$l $dirs $RPM_BUILD_ROOT%{_kernelsrcdir}
 
@@ -496,9 +497,8 @@ cp -a$l $dirs $RPM_BUILD_ROOT%{_kernelsrcdir}
 	-C $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 find $RPM_BUILD_ROOT%{_kernelsrcdir} '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -fv
-rm -f $RPM_BUILD_ROOT%{_kernelsrcdir}/aux_files*
-rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
-rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
+ln -nfs %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
+ln -nfs %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
 
 cp -a Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
 cp -a .config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
@@ -633,8 +633,8 @@ fi
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/telephony/ixj_pcmcia.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/usb/host/sl811_cs.ko*
 %endif
-/lib/modules/%{kernel_release}/build
 %ghost /lib/modules/%{kernel_release}/modules.*
+
 %dir %{_sysconfdir}/modprobe.d/%{kernel_release}
 
 %files vmlinux
@@ -704,6 +704,8 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
+/lib/modules/%{kernel_release}/build
+/lib/modules/%{kernel_release}/source
 
 %files doc
 %defattr(644,root,root,755)
@@ -730,6 +732,7 @@ fi
 %{_kernelsrcdir}/mm
 %{_kernelsrcdir}/net
 %{_kernelsrcdir}/scripts/*
+%{_kernelsrcdir}/samples
 %exclude %{_kernelsrcdir}/scripts/Kbuild.include
 %exclude %{_kernelsrcdir}/scripts/Makefile*
 %exclude %{_kernelsrcdir}/scripts/basic
