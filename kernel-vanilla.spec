@@ -140,9 +140,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		initrd_dir	/boot
 
 # kernel release (used in filesystem and eventually in uname -r)
-# modules will be looked from /lib/modules/%{kernel_release}%{?smp}
+# modules will be looked from /lib/modules/%{kernel_release}smp
 # _localversion is just that without version for "> localversion"
-%define		_localversion %{release}
+%define		_localversion %{release}smp
 %define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
@@ -415,6 +415,7 @@ find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xarg
 
 ln -s %{SOURCE6} scripts/kernel-config.py
 ln -s %{SOURCE7} scripts/kernel-config-update.py
+ln -s %{SOURCE2} scripts/kernel-module-build.pl
 
 %build
 TuneUpConfigForIX86 () {
@@ -434,7 +435,7 @@ pykconfig() {
 	%endif
 
 	echo '# %{name}.spec overrides'
-	echo 'LOCALVERSION="-%{_localversion}smp"'
+	echo 'LOCALVERSION="-%{_localversion}"'
 
 	echo '# debug options'
 	%{?debug:echo 'DEBUG_SLAB=y'}
@@ -475,47 +476,6 @@ pykconfig() {
 %endif
 }
 
-PreInstallKernel() {
-	Config="%{_target_base_arch}"
-	KernelVer=%{kernel_release}
-
-	mkdir -p $KERNEL_INSTALL_DIR/boot
-	install System.map $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer
-%ifarch %{ix86} %{x8664}
-	install arch/%{target_arch_dir}/boot/bzImage $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
-%endif
-
-%ifarch ppc
-	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinuz-$KernelVer
-%endif
-	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinux-$KernelVer
-
-	%{__make} %{MakeOpts} modules_install \
-		%{?with_verbose:V=1} \
-		DEPMOD=%{DepMod} \
-		INSTALL_MOD_PATH=$KERNEL_INSTALL_DIR \
-		KERNELRELEASE=$KernelVer
-
-	install Module.symvers \
-		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/Module.symvers-dist
-
-	echo "CHECKING DEPENDENCIES FOR KERNEL MODULES"
-	%if "%{_target_base_arch}" != "%{_arch}"
-		touch $KERNEL_INSTALL_DIR/lib/modules/$KernelVer/modules.dep
-	%else
-		/sbin/depmod --basedir $KERNEL_INSTALL_DIR -ae \
-			-F $KERNEL_INSTALL_DIR/boot/System.map-$KernelVer -r $KernelVer \
-			|| echo
-	%endif
-	echo "KERNEL RELEASE $KernelVer DONE"
-}
-
-KERNEL_BUILD_DIR=`pwd`
-
-# SMP KERNEL
-KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel"
-rm -rf $KERNEL_INSTALL_DIR
-
 # build config
 pykconfig > .defconfig.tmp.conf
 o=arch/%{target_arch_dir}/defconfig.conf
@@ -528,71 +488,69 @@ chmod +x scripts/kernel-config.py
 %{__make} %{MakeOpts} pykconfig
 
 # build kernel
-%{__make} %{MakeOpts} \
-	RCS_FIND_IGNORE='-name build-done -prune -o'
-
-PreInstallKernel
+%{__make} %{MakeOpts}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-umask 022
-export DEPMOD=%{DepMod}
 
-install -d $RPM_BUILD_ROOT%{_kernelsrcdir}
+# /lib/modules
+%{__make} %{MakeOpts} %{!?with_verbose:-s} modules_install \
+	%{?with_verbose:V=1} \
+	DEPMOD=%{DepMod} \
+	INSTALL_MOD_PATH=$RPM_BUILD_ROOT
+	KERNELRELEASE=%{kernel_release}
+
+ln -snf %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
+ln -snf %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
+mkdir $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/misc
+
+# /boot
+install -d $RPM_BUILD_ROOT/boot
+install System.map $RPM_BUILD_ROOT/boot/System.map-%{kernel_release}
+%ifarch %{ix86} %{x8664}
+install arch/%{target_arch_dir}/boot/bzImage $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
+%endif
+%ifarch ppc
+install vmlinux $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
+%endif
+install vmlinux $RPM_BUILD_ROOT/boot/vmlinux-%{kernel_release}
+
+# for initrd
+touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}.gz
+
+%if "%{_target_base_arch}" != "%{_arch}"
+touch $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/modules.dep
+%endif
+
+# /etc/modrobe.d
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
+
+# /usr/src/linux
+install -d $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 # test if we can hardlink -- %{_builddir} and $RPM_BUILD_ROOT on same partition
 if cp -al COPYING $RPM_BUILD_ROOT/COPYING 2>/dev/null; then
 	l=l
 	rm -f $RPM_BUILD_ROOT/COPYING
 fi
-
-KERNEL_BUILD_DIR=`pwd`
-
-cp -a$l $KERNEL_BUILD_DIR/build-done/kernel/* $RPM_BUILD_ROOT
-
-	if [ -e  $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i ] ; then
-		rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i/build
-		ln -sf %{_kernelsrcdir} \
-			$RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i/build
-		install -d $RPM_BUILD_ROOT/lib/modules/%{kernel_release}$i/{cluster,misc}
-	fi
-
-find . -maxdepth 1 ! -name "build-done" ! -name "." -exec cp -a$l "{}" "$RPM_BUILD_ROOT%{_kernelsrcdir}/" ";"
-
-cd $RPM_BUILD_ROOT%{_kernelsrcdir}
+dirs=$(find -maxdepth 1 ! -name '.*' ! -name '*~' ! -name '*.orig')
+cp -a$l $dirs $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 %{__make} %{MakeOpts} mrproper \
-	RCS_FIND_IGNORE='-name build-done -prune -o'
+	-C $RPM_BUILD_ROOT%{_kernelsrcdir}
 
-find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+find $RPM_BUILD_ROOT%{_kernelsrcdir} '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -fv
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/autoconf-dist.h ]; then
-install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/autoconf-dist.h \
-	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-install	$KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/config-dist \
-	$RPM_BUILD_ROOT%{_kernelsrcdir}
-fi
-
-install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/* \
-	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-
-install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/config-dist \
-	.config
-%{__make} %{MakeOpts} include/linux/version.h include/linux/utsrelease.h
-mv include/linux/version.h{,.save}
-mv include/linux/utsrelease.h{,.save}
-%{__make} %{MakeOpts} mrproper
-mv include/linux/version.h{.save,}
-mv include/linux/utsrelease.h{.save,}
-#install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf.h
-install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
+cp -a Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
+cp -a .config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 
 # collect module-build files and directories
-%{__perl} %{SOURCE2} %{_kernelsrcdir} $KERNEL_BUILD_DIR
-
-# ghosted initrd
-touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}.gz
+# Usage: kernel-module-build.pl $rpmdir $fileoutdir
+fileoutdir=$(pwd)
+cd $RPM_BUILD_ROOT%{_kernelsrcdir}
+./scripts/kernel-module-build.pl %{_kernelsrcdir} $fileoutdir
+cd -
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -695,7 +653,6 @@ fi
 /lib/modules/%{kernel_release}/kernel/kernel
 /lib/modules/%{kernel_release}/kernel/lib
 /lib/modules/%{kernel_release}/kernel/net
-/lib/modules/%{kernel_release}/kernel/security
 %dir /lib/modules/%{kernel_release}/kernel/sound
 /lib/modules/%{kernel_release}/kernel/sound/soundcore.*
 %if %{have_sound}
@@ -788,6 +745,7 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
+%exclude %{_kernelsrcdir}/aux_files*
 
 %files doc
 %defattr(644,root,root,755)
