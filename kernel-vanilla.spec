@@ -42,7 +42,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	%{nil}
-%define		_rel		1
+%define		_rel		2
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -692,7 +692,7 @@ fi
 /lib/modules/%{kernel_release}/kernel/kernel
 /lib/modules/%{kernel_release}/kernel/lib
 /lib/modules/%{kernel_release}/kernel/net
-/lib/modules/%{kernel_release}/kernel/security
+#/lib/modules/%{kernel_release}/kernel/security
 %dir /lib/modules/%{kernel_release}/kernel/sound
 /lib/modules/%{kernel_release}/kernel/sound/soundcore.*
 %if %{have_sound}
