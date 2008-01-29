@@ -42,7 +42,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	%{nil}
-%define		_rel		2
+%define		_rel		3
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -385,6 +385,11 @@ Documentation.
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
 
 sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
+
+# Kill creating obsolete arch/{i386,x86_64}/boot directories
+# and bzImage symlinks, breaks rpm directory deps
+sed -i -e '/\/arch\/i386\/boot/d' arch/x86/Makefile_32
+sed -i -e '/\/arch\/x86_64\/boot/d' arch/x86/Makefile_64
 
 # remove unwanted files after patching (if any)
 find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
@@ -813,6 +818,7 @@ fi
 %{_kernelsrcdir}/lib
 %{_kernelsrcdir}/mm
 %{_kernelsrcdir}/net
+%{_kernelsrcdir}/samples
 %{_kernelsrcdir}/scripts/*
 %exclude %{_kernelsrcdir}/scripts/Kbuild.include
 %exclude %{_kernelsrcdir}/scripts/Makefile*
