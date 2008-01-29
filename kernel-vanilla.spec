@@ -406,107 +406,66 @@ sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 # remove unwanted files after patching (if any)
 find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
 
-ln -s %{SOURCE6} kernel-config.py
-ln -s %{SOURCE7} kernel-config-update.py
+ln -s %{SOURCE6} scripts/kernel-config.py
+ln -s %{SOURCE7} scripts/kernel-config-update.py
 
 %build
 TuneUpConfigForIX86 () {
 	set -x
-%ifarch %{ix86}
-	pae=
-	[ "$2" = "yes" ] && pae=yes
-	%if %{with pae}
-		pae=yes
+}
+
+# produce kernel-config.py format config for arch/ARCH/defconfig.conf
+pykconfig() {
+	set -x
+	cat $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf
+
+	echo '# preempt config'
+	%if %{with preempt-nort}
+	cat $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config
+	%else
+	cat $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config
 	%endif
+
+	echo '# %{name}.spec overrides'
+	echo 'LOCALVERSION="-%{_localversion}smp"'
+
+	echo '# debug options'
+	%{?debug:echo 'DEBUG_SLAB=y'}
+	%{?debug:echo 'DEBUG_PREEMPT=y'}
+	%{?debug:echo 'RT_DEADLOCK_DETECT=y'}
+
+%ifarch %{ix86}
+	echo '# x86 tuneup'
 	%ifnarch i386
-	sed -i 's:CONFIG_M386=y:# CONFIG_M386 is not set:' $1
+	echo 'M386=n'
 	%endif
 	%ifarch i486
-	sed -i 's:# CONFIG_M486 is not set:CONFIG_M486=y:' $1
+	echo 'M486=y'
 	%endif
 	%ifarch i586
-	sed -i 's:# CONFIG_M586 is not set:CONFIG_M586=y:' $1
+	echo 'M586=y'
 	%endif
 	%ifarch i686
-	sed -i 's:# CONFIG_M686 is not set:CONFIG_M686=y:' $1
+	echo 'M686=y'
 	%endif
 	%ifarch pentium3
-	sed -i 's:# CONFIG_MPENTIUMIII is not set:CONFIG_MPENTIUMIII=y:' $1
+	echo 'MPENTIUMIII=y'
 	%endif
 	%ifarch pentium4
-	sed -i 's:# CONFIG_MPENTIUM4 is not set:CONFIG_MPENTIUM4=y:' $1
+	echo 'MPENTIUM4=y'
 	%endif
 	%ifarch athlon
-	sed -i 's:# CONFIG_MK7 is not set:CONFIG_MK7=y:' $1
+	echo 'MK7=y'
 	%endif
 	%ifarch i686 athlon pentium3 pentium4
-	if [ "$pae" = "yes" ]; then
-		sed -i "s:CONFIG_HIGHMEM4G=y:# CONFIG_HIGHMEM4G is not set:" $1
-		sed -i "s:# CONFIG_HIGHMEM64G is not set:CONFIG_HIGHMEM64G=y\nCONFIG_X86_PAE=y:" $1
-	fi
-	sed -i 's:CONFIG_MATH_EMULATION=y:# CONFIG_MATH_EMULATION is not set:' $1
+	%if %{with pae}
+		echo 'HIGHMEM4G=n'
+		echo 'HIGHMEM64G=y'
+		echo 'X86_PAE=y'
 	%endif
-	return 0
+	echo 'MATH_EMULATION=n'
+	%endif
 %endif
-}
-
-rm -f .config
-BuildConfig() {
-	set -x
-	Config="%{_target_base_arch}"
-	KernelVer=%{kernel_release}
-
-	echo "Building config file [using $Config.conf] ..."
-
-	> arch/%{target_arch_dir}/defconfig
-
-	python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf \
-		arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
-
-	echo "CONFIG_LOCALVERSION=\"-%{_localversion}smp\"" >> arch/%{target_arch_dir}/defconfig
-
-	TuneUpConfigForIX86 arch/%{target_arch_dir}/defconfig
-
-	%if %{with preempt-nort}
-		python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-preempt-nort.config \
-			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
-	%else
-		python kernel-config.py %{_target_base_arch} $RPM_SOURCE_DIR/kernel-vanilla-no-preempt-nort.config \
-			arch/%{target_arch_dir}/defconfig arch/%{target_arch_dir}/defconfig
-	%endif
-
-%{?debug:sed -i "s:# CONFIG_DEBUG_SLAB is not set:CONFIG_DEBUG_SLAB=y:" arch/%{target_arch_dir}/defconfig}
-%{?debug:sed -i "s:# CONFIG_DEBUG_PREEMPT is not set:CONFIG_DEBUG_PREEMPT=y:" arch/%{target_arch_dir}/defconfig}
-%{?debug:sed -i "s:# CONFIG_RT_DEADLOCK_DETECT is not set:CONFIG_RT_DEADLOCK_DETECT=y:" arch/%{target_arch_dir}/defconfig}
-
-	ln -sf arch/%{target_arch_dir}/defconfig .config
-	install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux
-	rm -f include/linux/autoconf.h
-	%{__make} %{MakeOpts} include/linux/autoconf.h
-	install include/linux/autoconf.h \
-		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
-	install arch/%{target_arch_dir}/defconfig \
-		$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
-
-	# produce new kernel config
-	%{__make} %{MakeOpts} silentoldconfig
-	python kernel-config-update.py $Config $RPM_SOURCE_DIR/kernel-vanilla-multiarch.conf .config > .config.conf
-}
-
-BuildKernel() {
-	%{?debug:set -x}
-	echo "Building kernel $1 ..."
-	%{__make} %{MakeOpts} mrproper \
-		RCS_FIND_IGNORE='-name build-done -prune -o'
-	ln -sf arch/%{target_arch_dir}/defconfig .config
-
-	%{__make} %{MakeOpts} clean \
-		RCS_FIND_IGNORE='-name build-done -prune -o'
-
-	%{__make} %{MakeOpts} include/linux/version.h \
-		%{?with_verbose:V=1}
-	%{__make} %{MakeOpts} \
-		%{?with_verbose:V=1}
 }
 
 PreInstallKernel() {
@@ -549,8 +508,20 @@ KERNEL_BUILD_DIR=`pwd`
 # SMP KERNEL
 KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel"
 rm -rf $KERNEL_INSTALL_DIR
-BuildConfig
-BuildKernel
+
+# build config
+if [ ! -f arch/%{target_arch_dir}/defconfig.conf ]; then
+	pykconfig > .defconfig.tmp.conf
+	mv .defconfig.tmp.conf arch/%{target_arch_dir}/defconfig.conf
+fi
+chmod +x scripts/kernel-config.py
+%{__make} %{MakeOpts} pykconfig
+
+
+# build kernel
+%{__make} %{MakeOpts} \
+	RCS_FIND_IGNORE='-name build-done -prune -o'
+
 PreInstallKernel
 
 %install
