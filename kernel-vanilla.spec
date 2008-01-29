@@ -500,8 +500,6 @@ rm -rf $RPM_BUILD_ROOT
 	INSTALL_MOD_PATH=$RPM_BUILD_ROOT
 	KERNELRELEASE=%{kernel_release}
 
-ln -snf %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
-ln -snf %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
 mkdir $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/misc
 
 # /boot
@@ -540,6 +538,9 @@ cp -a$l $dirs $RPM_BUILD_ROOT%{_kernelsrcdir}
 	-C $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 find $RPM_BUILD_ROOT%{_kernelsrcdir} '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -fv
+rm -f $RPM_BUILD_ROOT%{_kernelsrcdir}/aux_files*
+rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
+rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
 
 cp -a Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
 cp -a .config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
@@ -551,7 +552,6 @@ fileoutdir=$(pwd)
 cd $RPM_BUILD_ROOT%{_kernelsrcdir}
 ./scripts/kernel-module-build.pl %{_kernelsrcdir} $fileoutdir
 cd -
-rm -f $RPM_BUILD_ROOT%{_kernelsrcdir}/aux_files*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
