@@ -26,7 +26,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	%{nil}
-%define		_rel		0.2
+%define		_rel		0.3
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -119,7 +119,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define	CommonOpts	HOSTCC="%{__cc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer"
+# where compiled objects go
+%define	objdir	%{_builddir}/%{name}-%{version}/o
+
+%define	CommonOpts	HOSTCC="%{__cc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer" O=%{objdir}
 %if "%{_target_base_arch}" != "%{_arch}"
 	%define	MakeOpts %{CommonOpts} ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
 	%define	DepMod /bin/true
@@ -349,7 +352,8 @@ Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 Documentation.
 
 %prep
-%setup -q -n linux-%{_basever}
+%setup -qc
+cd linux-%{_basever}
 
 %if "%{_postver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
@@ -376,9 +380,8 @@ ln -s %{SOURCE7} scripts/kernel-config-update.py
 ln -s %{SOURCE2} scripts/kernel-module-build.pl
 
 %build
-TuneUpConfigForIX86 () {
-	set -x
-}
+cd linux-%{_basever}
+install -d %{objdir}
 
 # produce kernel-config.py format config for arch/ARCH/defconfig.conf
 pykconfig() {
@@ -450,6 +453,7 @@ chmod +x scripts/kernel-config.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd linux-%{_basever}
 
 # /lib/modules
 %{__make} %{MakeOpts} %{!?with_verbose:-s} modules_install \
