@@ -1,0 +1,26 @@
+--- linux-2.6.24/Makefile~	2008-01-29 16:00:55.238618116 +0200
++++ linux-2.6.24/Makefile	2008-01-29 16:01:58.498281056 +0200
+@@ -207,6 +207,23 @@
+ 
+ KCONFIG_CONFIG	?= .config
+ 
++# PLD Linux pykconfig addon
++pykconfig: .config.conf
++	@echo 'pykconfig is up to date'
++
++.config.conf: arch/$(SRCARCH)/defconfig
++	@echo '  kernel-config-update.py $(ARCH) arch/$(SRCARCH)/defconfig.conf $< > $@'
++	$(Q)$(srctree)/scripts/kernel-config-update.py $(ARCH) arch/$(SRCARCH)/defconfig.conf $< > .config.conf.tmp
++	$(Q)mv .config.conf.tmp $@
++
++arch/$(SRCARCH)/defconfig: arch/$(SRCARCH)/defconfig.conf
++	@echo '  kernel-config.py $(ARCH) arch/$(SRCARCH)/defconfig.conf arch/$(SRCARCH)/defconfig'
++	$(Q)> .defconfig.tmp
++	$(Q)$(srctree)/scripts/kernel-config.py $(ARCH) arch/$(SRCARCH)/defconfig.conf .defconfig.tmp
++	$(Q)mv .defconfig.tmp arch/$(SRCARCH)/defconfig
++	@echo '  ln -sf arch/$(SRCARCH)/defconfig .config'
++	$(Q)ln -sf arch/$(SRCARCH)/defconfig .config
++
+ # SHELL used by kbuild
+ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+ 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
