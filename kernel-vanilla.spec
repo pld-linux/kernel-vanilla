@@ -119,8 +119,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-# where compiled objects go
-%define	objdir	%{_builddir}/%{name}-%{version}/o
+%define		topdir	%{_builddir}/%{name}-%{version}
+%define		srcdir	%{topdir}/linux-%{_basever}
+%define		objdir	%{topdir}/o
 
 %define	CommonOpts	HOSTCC="%{__cc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer" O=%{objdir}
 %if "%{_target_base_arch}" != "%{_arch}"
@@ -453,27 +454,27 @@ chmod +x scripts/kernel-config.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd linux-%{_basever}
 
 # /lib/modules
 %{__make} %{MakeOpts} %{!?with_verbose:-s} modules_install \
+	-C %{objdir} \
 	%{?with_verbose:V=1} \
 	DEPMOD=%{DepMod} \
-	INSTALL_MOD_PATH=$RPM_BUILD_ROOT
+	INSTALL_MOD_PATH=$RPM_BUILD_ROOT \
 	KERNELRELEASE=%{kernel_release}
 
 mkdir $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/misc
 
 # /boot
 install -d $RPM_BUILD_ROOT/boot
-install System.map $RPM_BUILD_ROOT/boot/System.map-%{kernel_release}
+install %{objdir}/System.map $RPM_BUILD_ROOT/boot/System.map-%{kernel_release}
 %ifarch %{ix86} %{x8664}
-install arch/%{target_arch_dir}/boot/bzImage $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
+install %{objdir}/arch/%{target_arch_dir}/boot/bzImage $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 %endif
 %ifarch ppc
-install vmlinux $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
+install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 %endif
-install vmlinux $RPM_BUILD_ROOT/boot/vmlinux-%{kernel_release}
+install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinux-%{kernel_release}
 
 # for initrd
 touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}.gz
@@ -489,23 +490,17 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
 install -d $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 # test if we can hardlink -- %{_builddir} and $RPM_BUILD_ROOT on same partition
-if cp -al COPYING $RPM_BUILD_ROOT/COPYING 2>/dev/null; then
+if cp -al %{srcdir}/COPYING $RPM_BUILD_ROOT/COPYING 2>/dev/null; then
 	l=l
 	rm -f $RPM_BUILD_ROOT/COPYING
 fi
-rm -f aux_files*
-dirs=$(find -maxdepth 1 ! -name '.*' ! -name '*~' ! -name '*.orig')
-cp -a$l $dirs $RPM_BUILD_ROOT%{_kernelsrcdir}
+cp -a$l %{srcdir}/* $RPM_BUILD_ROOT%{_kernelsrcdir}
 
-%{__make} %{MakeOpts} mrproper \
-	-C $RPM_BUILD_ROOT%{_kernelsrcdir}
-
-find $RPM_BUILD_ROOT%{_kernelsrcdir} '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -fv
 ln -nfs %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
 ln -nfs %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
 
-cp -a Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
-cp -a .config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
+cp -a %{objdir}/Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
+cp -a %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 
 # collect module-build files and directories
