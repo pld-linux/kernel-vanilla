@@ -107,6 +107,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # No ELF objects there to strip (skips processing 27k files)
 %define		_noautostrip	.*%{_kernelsrcdir}/.*
+%define		_noautochrpath	.*%{_kernelsrcdir}/.*
 
 %define		initrd_dir	/boot
 
