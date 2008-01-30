@@ -26,7 +26,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	%{nil}
-%define		_rel		0.3
+%define		_rel		0.4
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -404,17 +404,17 @@ $(objtree)/.config.conf: $(srctree)/arch/$(SRCARCH)/defconfig
 	$(Q)mv .config.conf.tmp $@
 
 $(srctree)/arch/$(SRCARCH)/defconfig: $(srctree)/arch/$(SRCARCH)/defconfig.conf
-	@echo '  kernel-config.py $(ARCH) arch/$(SRCARCH)/defconfig.conf arch/$(SRCARCH)/defconfig'
+	@echo '  kernel-config.py $(ARCH) $< $@'
 	$(Q)> .defconfig.tmp
-	$(Q)$(objtree)/scripts/kernel-config.py $(ARCH) $(srctree)/arch/$(SRCARCH)/defconfig.conf .defconfig.tmp
-	$(Q)mv .defconfig.tmp $(srctree)/arch/$(SRCARCH)/defconfig
-	$(Q)ln -sf $(srctree)/arch/$(SRCARCH)/defconfig .config
+	$(Q)$(objtree)/scripts/kernel-config.py $(ARCH) $< .defconfig.tmp
+	$(Q)mv .defconfig.tmp $@
+	$(Q)ln -sf $@ $(objtree)/.config
 
 $(srctree)/arch/$(SRCARCH)/defconfig.conf: $(CONFIGS) $(objtree)/defconfig-nodep.conf
 	$(Q)cat $^ > $@
 
 $(objtree)/defconfig-nodep.conf: $(CONFIG_NODEP)
-	$(Q)if [ -f $@ ] && cmp -s $< $@; then \
+	$(Q)if [ ! -f $@ ] || ! cmp -s $< $@; then \
 		echo '  cat $< > $@'; \
 		cat $< > $@; \
 	fi
