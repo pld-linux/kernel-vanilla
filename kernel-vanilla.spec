@@ -713,7 +713,7 @@ fi
 %files module-build -f aux_files
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/Kbuild
-%{_kernelsrcdir}/arch/*/kernel/asm-offsets.*
+%{_kernelsrcdir}/arch/*/kernel/asm-offsets*
 %{_kernelsrcdir}/arch/*/kernel/sigframe.h
 %dir %{_kernelsrcdir}/scripts
 %dir %{_kernelsrcdir}/scripts/kconfig
@@ -738,7 +738,7 @@ fi
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/arch/*/[!Mk]*
 %{_kernelsrcdir}/arch/*/kernel/[!M]*
-%exclude %{_kernelsrcdir}/arch/*/kernel/asm-offsets.*
+%exclude %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
 %exclude %{_kernelsrcdir}/arch/*/kernel/sigframe.h
 %{_kernelsrcdir}/block
 %{_kernelsrcdir}/crypto
