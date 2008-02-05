@@ -396,7 +396,7 @@ CONFIGS += %{_sourcedir}/kernel-vanilla-no-preempt-nort.config
 %endif
 
 # config where we ignore timestamps
-CONFIG_NODEP += %{objdir}/pykconfig.conf
+CONFIG_NODEP += %{objdir}/.kernel-autogen.conf
 EOF
 
 # update config at spec time
@@ -445,8 +445,8 @@ pykconfig() {
 %endif
 }
 
-# generate .config and .config.conf
-pykconfig > %{objdir}/pykconfig.conf
+# generate .config and kernel.conf
+pykconfig > %{objdir}/.kernel-autogen.conf
 %{__make} pykconfig
 
 # build kernel
