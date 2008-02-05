@@ -101,9 +101,9 @@ ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{ix86} %{x8664}
-%define		target_arch_dir		x86
+%define		target_arch_dir	x86
 %else
-%define		target_arch_dir		%{_target_base_arch}
+%define		target_arch_dir	%{_target_base_arch}
 %endif
 
 # No ELF objects there to strip (skips processing 27k files)
