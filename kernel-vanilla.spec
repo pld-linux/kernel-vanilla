@@ -96,7 +96,7 @@ Conflicts:	reiserfsprogs < 3.6.3
 Conflicts:	udev < 1:071
 Conflicts:	util-linux < 2.10o
 Conflicts:	xfsprogs < 2.6.0
-ExclusiveArch:	%{ix86} %{x8664} ppc alpha
+ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -442,6 +442,129 @@ pykconfig() {
 	echo 'MATH_EMULATION=n'
 	%endif
 %endif
+
+awk '{printf("%s=\n", $NF)}' >/dev/null <<'EOF'
+.config:3:warning: trying to assign nonexistent symbol GENERIC_TIME
+.config:4:warning: trying to assign nonexistent symbol GENERIC_CMOS_UPDATE
+.config:5:warning: trying to assign nonexistent symbol GENERIC_CLOCKEVENTS
+.config:19:warning: trying to assign nonexistent symbol GENERIC_TIME_VSYSCALL
+.config:21:warning: trying to assign nonexistent symbol ARCH_POPULATES_NODE_MAP
+.config:108:warning: trying to assign nonexistent symbol GENERIC_CLOCKEVENTS_BUILD
+.config:110:warning: trying to assign nonexistent symbol SCHED_NO_NO_OMIT_FRAME_POINTER
+.config:112:warning: trying to assign nonexistent symbol NODES_SHIFT
+.config:131:warning: trying to assign nonexistent symbol HZ_100
+.config:132:warning: trying to assign nonexistent symbol HZ_250
+.config:133:warning: trying to assign nonexistent symbol HZ_300
+.config:134:warning: trying to assign nonexistent symbol HZ_1000
+.config:135:warning: trying to assign nonexistent symbol HZ
+.config:138:warning: trying to assign nonexistent symbol PM_LEGACY
+.config:139:warning: trying to assign nonexistent symbol PM_DEBUG
+.config:140:warning: trying to assign nonexistent symbol PM_SLEEP_SMP
+.config:141:warning: trying to assign nonexistent symbol PM_SLEEP
+.config:142:warning: trying to assign nonexistent symbol SUSPEND_SMP_POSSIBLE
+.config:143:warning: trying to assign nonexistent symbol SUSPEND
+.config:144:warning: trying to assign nonexistent symbol HIBERNATION_SMP_POSSIBLE
+.config:146:warning: trying to assign nonexistent symbol PM_STD_PARTITION
+.config:147:warning: trying to assign nonexistent symbol CPU_FREQ_DEFAULT_GOV_ONDEMAND
+.config:148:warning: trying to assign nonexistent symbol CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
+.config:150:warning: trying to assign nonexistent symbol PCIEPORTBUS
+.config:151:warning: trying to assign nonexistent symbol HOTPLUG_PCI_PCIE
+.config:158:warning: trying to assign nonexistent symbol PCCARD
+.config:159:warning: trying to assign nonexistent symbol PCMCIA_DEBUG
+.config:161:warning: trying to assign nonexistent symbol PCMCIA_LOAD_CIS
+.config:162:warning: trying to assign nonexistent symbol PCMCIA_IOCTL
+.config:164:warning: trying to assign nonexistent symbol YENTA
+.config:165:warning: trying to assign nonexistent symbol YENTA_O2
+.config:166:warning: trying to assign nonexistent symbol YENTA_RICOH
+.config:167:warning: trying to assign nonexistent symbol YENTA_TI
+.config:168:warning: trying to assign nonexistent symbol YENTA_ENE_TUNE
+.config:169:warning: trying to assign nonexistent symbol YENTA_TOSHIBA
+.config:170:warning: trying to assign nonexistent symbol PD6729
+.config:171:warning: trying to assign nonexistent symbol I82092
+.config:172:warning: trying to assign nonexistent symbol I82365
+.config:173:warning: trying to assign nonexistent symbol TCIC
+.config:174:warning: trying to assign nonexistent symbol PCMCIA_PROBE
+.config:175:warning: trying to assign nonexistent symbol PCCARD_NONSTATIC
+.config:176:warning: trying to assign nonexistent symbol HOTPLUG_PCI
+.config:177:warning: trying to assign nonexistent symbol HOTPLUG_PCI_FAKE
+.config:178:warning: trying to assign nonexistent symbol HOTPLUG_PCI_COMPAQ
+.config:179:warning: trying to assign nonexistent symbol HOTPLUG_PCI_COMPAQ_NVRAM
+.config:180:warning: trying to assign nonexistent symbol HOTPLUG_PCI_IBM
+.config:181:warning: trying to assign nonexistent symbol HOTPLUG_PCI_ACPI
+.config:182:warning: trying to assign nonexistent symbol HOTPLUG_PCI_ACPI_IBM
+.config:183:warning: trying to assign nonexistent symbol HOTPLUG_PCI_CPCI
+.config:184:warning: trying to assign nonexistent symbol HOTPLUG_PCI_CPCI_ZT5550
+.config:185:warning: trying to assign nonexistent symbol HOTPLUG_PCI_CPCI_GENERIC
+.config:186:warning: trying to assign nonexistent symbol HOTPLUG_PCI_SHPC
+.config:3179:warning: trying to assign nonexistent symbol RELAYFS_FS
+.config:3181:warning: trying to assign nonexistent symbol INPUT_TSDEV
+.config:3183:warning: trying to assign nonexistent symbol NET_SCH_ESFQ
+.config:3185:warning: trying to assign nonexistent symbol IMQ_BEHAVIOR_BA
+.config:3186:warning: trying to assign nonexistent symbol MTD_OBSOLETE_CHIPS
+.config:3187:warning: trying to assign nonexistent symbol TIPAR
+.config:3188:warning: trying to assign nonexistent symbol IP_ROUTE_FWMARK
+.config:3190:warning: trying to assign nonexistent symbol NET_DIVERT
+.config:3191:warning: trying to assign nonexistent symbol CC_ALIGN_LOOPS
+.config:3192:warning: trying to assign nonexistent symbol IMQ
+.config:3193:warning: trying to assign nonexistent symbol ATM_DD
+.config:3194:warning: trying to assign nonexistent symbol IP_DCCP_UNLOAD_HACK
+.config:3196:warning: trying to assign nonexistent symbol RAMFS
+.config:3197:warning: trying to assign nonexistent symbol INPUT_TSDEV_SCREEN_Y
+.config:3198:warning: trying to assign nonexistent symbol INPUT_TSDEV_SCREEN_X
+.config:3200:warning: trying to assign nonexistent symbol DLCI_COUNT
+.config:3201:warning: trying to assign nonexistent symbol SOUND_TVMIXER
+.config:3202:warning: trying to assign nonexistent symbol SCSI_SATA
+.config:3206:warning: trying to assign nonexistent symbol DVB
+.config:3207:warning: trying to assign nonexistent symbol CC_ALIGN_FUNCTIONS
+.config:3208:warning: trying to assign nonexistent symbol NET_ESTIMATOR
+.config:3210:warning: trying to assign nonexistent symbol SENSORS_RTC8564
+.config:3211:warning: trying to assign nonexistent symbol JFFS_PROC_FS
+.config:3212:warning: trying to assign nonexistent symbol ZISOFS_FS
+.config:3220:warning: trying to assign nonexistent symbol NETDEBUG
+.config:3221:warning: trying to assign nonexistent symbol REISER4_DEBUG
+.config:3222:warning: trying to assign nonexistent symbol BACKLIGHT_DEVICE
+.config:3223:warning: trying to assign nonexistent symbol CC_ALIGN_JUMPS
+.config:3225:warning: trying to assign nonexistent symbol SYNCLINK_SYNCPPP
+.config:3228:warning: trying to assign nonexistent symbol CC_ALIGN_LABELS
+.config:3230:warning: trying to assign nonexistent symbol IMQ_NUM_DEVS
+.config:3232:warning: trying to assign nonexistent symbol SECURITY_SECLVL
+.config:3233:warning: trying to assign nonexistent symbol NETPOLL_RX
+.config:3237:warning: trying to assign nonexistent symbol LCD_DEVICE
+.config:3238:warning: trying to assign nonexistent symbol SOFTWARE_SUSPEND
+.config:3239:warning: trying to assign nonexistent symbol RTC_X1205_I2C
+.config:3242:warning: trying to assign nonexistent symbol RXRPC
+.config:3245:warning: trying to assign nonexistent symbol JFFS_FS_VERBOSE
+.config:3246:warning: trying to assign nonexistent symbol OBSOLETE_MODPARM
+.config:3248:warning: trying to assign nonexistent symbol NET_WIRELESS_RTNETLINK
+.config:3249:warning: trying to assign nonexistent symbol IMQ_BEHAVIOR_AB
+.config:3250:warning: trying to assign nonexistent symbol IMQ_BEHAVIOR_AA
+.config:3251:warning: trying to assign nonexistent symbol I2C_ISA
+.config:3252:warning: trying to assign nonexistent symbol NET_SCH_CLK_JIFFIES
+.config:3254:warning: trying to assign nonexistent symbol NET_SCH_CLK_GETTIMEOFDAY
+.config:3256:warning: trying to assign nonexistent symbol DEBUG_RWSEMS
+.config:3257:warning: trying to assign nonexistent symbol IP_ROUTE_MULTIPATH_CACHED
+.config:3258:warning: trying to assign nonexistent symbol MTD_BLKMTD
+.config:3261:warning: trying to assign nonexistent symbol OBSOLETE_INTERMODULE
+.config:3264:warning: trying to assign nonexistent symbol JFFS_FS
+.config:3269:warning: trying to assign nonexistent symbol IP_ROUTE_MULTIPATH_DRR
+.config:3270:warning: trying to assign nonexistent symbol IP_ROUTE_MULTIPATH_RR
+.config:3271:warning: trying to assign nonexistent symbol DECNET_ROUTE_FWMARK
+.config:3274:warning: trying to assign nonexistent symbol IMQ_BEHAVIOR_BB
+.config:3277:warning: trying to assign nonexistent symbol OSS_OBSOLETE_DRIVER
+.config:3279:warning: trying to assign nonexistent symbol IP_ROUTE_MULTIPATH_WRANDOM
+.config:3280:warning: trying to assign nonexistent symbol IP_ROUTE_MULTIPATH_RANDOM
+.config:3282:warning: trying to assign nonexistent symbol REISER4_FS
+.config:3284:warning: trying to assign nonexistent symbol FB_SPLASH
+.config:3286:warning: trying to assign nonexistent symbol UNWIND_INFO
+.config:3288:warning: trying to assign nonexistent symbol NET_RADIO
+.config:3289:warning: trying to assign nonexistent symbol NET_SCH_CLK_CPU
+.config:3291:warning: trying to assign nonexistent symbol UTS_NS
+.config:3292:warning: trying to assign nonexistent symbol IPC_NS
+.config:3294:warning: trying to assign nonexistent symbol IPV6_ROUTE_FWMARK
+.config:3298:warning: trying to assign nonexistent symbol PREEMPT_NONE
+.config:3299:warning: trying to assign nonexistent symbol PREEMPT_VOLUNTARY
+.config:3301:warning: trying to assign nonexistent symbol PREEMPT_BKL
+EOF
 }
 
 # generate .config and .config.conf
