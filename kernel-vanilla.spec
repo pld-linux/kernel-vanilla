@@ -472,14 +472,26 @@ mkdir $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/misc
 
 # /boot
 install -d $RPM_BUILD_ROOT/boot
-install %{objdir}/System.map $RPM_BUILD_ROOT/boot/System.map-%{kernel_release}
+cp -a %{objdir}/System.map $RPM_BUILD_ROOT/boot/System.map-%{kernel_release}
+install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinux-%{kernel_release}
 %ifarch %{ix86} %{x8664}
-install %{objdir}/arch/%{target_arch_dir}/boot/bzImage $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
+cp -a %{objdir}/arch/%{target_arch_dir}/boot/bzImage $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 %endif
-%ifarch ppc
+%ifarch ppc ppc64
 install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 %endif
-install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinux-%{kernel_release}
+%ifarch alpha sparc sparc64
+	%{__gzip} -cfv %{objdir}/vmlinux > %{objdir}/vmlinuz
+	cp -a %{objdir}/vmlinuz $KERNEL_INSTALL_DIR/boot/vmlinuz-%{kernel_release}
+%ifarch sparc
+	elftoaout %{objdir}/arch/sparc/boot/image -o %{objdir}/vmlinux.aout
+	install %{objdir}/vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-%{kernel_release}
+%endif
+%ifarch sparc64
+	elftoaout %{objdir}/arch/sparc64/boot/image -o %{objdir}/vmlinux.aout
+	install %{objdir}/vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-%{kernel_release}
+%endif
+%endif
 
 # for initrd
 touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}.gz
