@@ -612,6 +612,9 @@ fi
 
 %files
 %defattr(644,root,root,755)
+%ifarch sparc sparc64
+/boot/vmlinux.aout-%{kernel_release}
+%endif
 /boot/vmlinuz-%{kernel_release}
 /boot/System.map-%{kernel_release}
 %ghost /boot/initrd-%{kernel_release}.gz
