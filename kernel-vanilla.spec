@@ -482,14 +482,14 @@ install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 %endif
 %ifarch alpha sparc sparc64
 	%{__gzip} -cfv %{objdir}/vmlinux > %{objdir}/vmlinuz
-	cp -a %{objdir}/vmlinuz $KERNEL_INSTALL_DIR/boot/vmlinuz-%{kernel_release}
+	cp -a %{objdir}/vmlinuz $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 %ifarch sparc
 	elftoaout %{objdir}/arch/sparc/boot/image -o %{objdir}/vmlinux.aout
-	install %{objdir}/vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-%{kernel_release}
+	install %{objdir}/vmlinux.aout $RPM_BUILD_ROOT/boot/vmlinux.aout-%{kernel_release}
 %endif
 %ifarch sparc64
 	elftoaout %{objdir}/arch/sparc64/boot/image -o %{objdir}/vmlinux.aout
-	install %{objdir}/vmlinux.aout $KERNEL_INSTALL_DIR/boot/vmlinux.aout-%{kernel_release}
+	install %{objdir}/vmlinux.aout $RPM_BUILD_ROOT/boot/vmlinux.aout-%{kernel_release}
 %endif
 %endif
 
