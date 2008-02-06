@@ -633,7 +633,9 @@ fi
 %dir /lib/modules/%{kernel_release}/kernel/sound
 /lib/modules/%{kernel_release}/kernel/sound/soundcore.*
 %if %{have_sound}
+%ifnarch sparc sparc64
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/media/video/*/*-alsa.ko*
+%endif
 %endif
 %dir /lib/modules/%{kernel_release}/misc
 %if %{have_pcmcia}
