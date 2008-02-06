@@ -12,19 +12,19 @@
 %undefine	with_pae
 %endif
 
-%ifarch %{ix86} alpha ppc
 %define		have_isa	1
-%else
+%define		have_oss	1
+%define		have_pcmcia	1
+%define		have_sound	1
+%define		have_drm	1
+
+%ifnarch %{ix86} alpha ppc
 %define		have_isa	0
 %endif
 %ifarch sparc sparc64
-%define		have_pcmcia	0
 %define		have_drm	0
 %define		have_oss	0
-%else
-%define		have_pcmcia	1
-%define		have_oss	1
-%define		have_sound	1
+%define		have_pcmcia	0
 %endif
 
 %define		alt_kernel	vanilla
