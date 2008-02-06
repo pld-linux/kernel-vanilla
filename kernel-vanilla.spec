@@ -608,9 +608,9 @@ fi
 /lib/modules/%{kernel_release}/kernel/arch
 /lib/modules/%{kernel_release}/kernel/crypto
 /lib/modules/%{kernel_release}/kernel/drivers
-#%if %{have_oss} && %{have_isa}
-#%exclude /lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
-#%endif
+%if %{have_drm}
+%exclude /lib/modules/%{kernel_release}/kernel/drivers/char/drm
+%endif
 /lib/modules/%{kernel_release}/kernel/fs
 /lib/modules/%{kernel_release}/kernel/kernel
 /lib/modules/%{kernel_release}/kernel/lib
@@ -638,9 +638,17 @@ fi
 
 %dir %{_sysconfdir}/modprobe.d/%{kernel_release}
 
+%ifarch alpha %{ix86} %{x8664} ppc ppc64 sparc sparc64
 %files vmlinux
 %defattr(644,root,root,755)
 /boot/vmlinux-%{kernel_release}
+%endif
+
+%if %{have_drm}
+%files drm
+%defattr(644,root,root,755)
+/lib/modules/%{kernel_release}/kernel/drivers/char/drm
+%endif
 
 %if %{have_pcmcia}
 %files pcmcia
@@ -676,9 +684,6 @@ fi
 %files sound-oss
 %defattr(644,root,root,755)
 /lib/modules/%{kernel_release}/kernel/sound/oss
-#%if %{have_isa}
-#/lib/modules/%{kernel_release}/kernel/drivers/media/radio/miropcm20*.ko*
-#%endif
 %endif			# %{have_oss}
 %endif			# %{have_sound}
 
@@ -723,9 +728,6 @@ fi
 %{_kernelsrcdir}/crypto
 %{_kernelsrcdir}/drivers
 %{_kernelsrcdir}/fs
-%if %{with grsec_minimal}
-%{_kernelsrcdir}/grsecurity
-%endif
 %{_kernelsrcdir}/init
 %{_kernelsrcdir}/ipc
 %{_kernelsrcdir}/kernel
