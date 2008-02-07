@@ -53,26 +53,16 @@ License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	3f23ad4b69d0a552042d1ed0f4399857
-%if "%{_postver}" != "%{nil}"
-Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
+#Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
 # Source1-md5:	8dc6d14fb270d13e8ef670d23387b418
-%endif
-%if "%{_ver}" != "%{nil}"
-Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
-# Source10-md5:	9b325c6086ad2a3fcde643f01a4c4640
-%endif
-
 Source2:	kernel-vanilla-module-build.pl
-Source3:	kernel-vanilla-config.h
-Source6:	kernel-config.py
-Source7:	kernel-config-update.py
-Source8:	kernel-multiarch.make
-
-Source19:	kernel-vanilla-multiarch.conf
-
-Source40:	kernel-vanilla-preempt-nort.config
-Source41:	kernel-vanilla-no-preempt-nort.config
-
+Source3:	kernel-config.py
+Source4:	kernel-config-update.py
+Source5:	kernel-multiarch.make
+Source6:	kernel-vanilla-config.h
+Source7:	kernel-vanilla-multiarch.conf
+Source8:	kernel-vanilla-preempt-nort.config
+Source9:	kernel-vanilla-no-preempt-nort.config
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
@@ -372,17 +362,14 @@ Documentation.
 %prep
 %setup -qc
 install -d o/scripts
-ln -s %{SOURCE6} o/scripts/kernel-config.py
-ln -s %{SOURCE7} o/scripts/kernel-config-update.py
 ln -s %{SOURCE2} o/scripts/kernel-module-build.pl
-ln -s %{SOURCE8} Makefile
+ln -s %{SOURCE3} o/scripts/kernel-config.py
+ln -s %{SOURCE4} o/scripts/kernel-config-update.py
+ln -s %{SOURCE5} Makefile
 
 cd linux-%{_basever}
 %if "%{_postver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
-%endif
-%if "%{_ver}" != "%{nil}"
-%{__bzip2} -dc %{SOURCE10} | %{__patch} -p1 -s
 %endif
 
 # if we really want to have vanilla kernel we should create copy from Makefile
@@ -530,7 +517,7 @@ ln -nfs %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
 
 cp -a %{objdir}/Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
 cp -a %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
-cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
+cp -a %{SOURCE6} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 
 # collect module-build files and directories
 # Usage: kernel-module-build.pl $rpmdir $fileoutdir
