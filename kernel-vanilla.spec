@@ -5,6 +5,7 @@
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
 %bcond_with	preempt-nort	# build preemptable no realtime kernel
+%bcond_with	gcc4		# use gcc4 package for compiling
 
 %{?debug:%define with_verbose 1}
 
@@ -77,7 +78,11 @@ BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
 BuildRequires:	elftoaout
 %endif
+%if %{with gcc4}
+BuildRequires:	gcc >= 5:4.1
+%else
 BuildRequires:	gcc >= 5:3.2
+%endif
 BuildRequires:	module-init-tools
 # for hostname command
 BuildRequires:	net-tools
@@ -104,6 +109,13 @@ Conflicts:	xfsprogs < 2.6.0
 ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc
 ExclusiveOS:	Linux
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%if %{with gcc4}
+# add suffix, but allow ccache, etc in ~/.rpmmacros
+%{expand:%%define	__cc	%(echo '%__cc' | sed -e 's,-gcc,-gcc4,')}
+%{expand:%%define	__cxx	%(echo '%__cxx' | sed -e 's,-g++,-g++4,')}
+%{expand:%%define	__cpp	%(echo '%__cpp' | sed -e 's,-gcc,-gcc4,')}
+%endif
 
 %ifarch %{ix86} %{x8664}
 %define		target_arch_dir	x86
