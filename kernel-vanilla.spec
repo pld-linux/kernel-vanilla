@@ -68,8 +68,8 @@ BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
 BuildRequires:	elftoaout
 %endif
-%if %{with gcc4}
-BuildRequires:	gcc >= 5:4.1
+%ifarch ppc ppc64
+BuildRequires:	gcc >= 5:3.4
 %else
 BuildRequires:	gcc >= 5:3.2
 %endif
