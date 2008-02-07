@@ -69,9 +69,9 @@ BuildRequires:	binutils >= 3:2.14.90.0.7
 BuildRequires:	elftoaout
 %endif
 %ifarch ppc ppc64
-BuildRequires:	gcc >= 5:3.4
+BuildRequires:	%{kgcc_package} >= 5:3.4
 %else
-BuildRequires:	gcc >= 5:3.2
+BuildRequires:	%{kgcc_package} >= 5:3.2
 %endif
 BuildRequires:	module-init-tools
 # for hostname command
@@ -103,8 +103,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %if %{with gcc4}
 # add suffix, but allow ccache, etc in ~/.rpmmacros
 %{expand:%%define	__cc	%(echo '%__cc' | sed -e 's,-gcc,-gcc4,')}
-%{expand:%%define	__cxx	%(echo '%__cxx' | sed -e 's,-g++,-g++4,')}
-%{expand:%%define	__cpp	%(echo '%__cpp' | sed -e 's,-gcc,-gcc4,')}
 %endif
 
 %ifarch %{ix86} %{x8664}
@@ -130,18 +128,18 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		srcdir	%{topdir}/linux-%{_basever}
 %define		objdir	%{topdir}/o
 
-%define		CommonOpts	HOSTCC="%{__cc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer" O=%{objdir}
+%define		CommonOpts	HOSTCC="%{kgcc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer" O=%{objdir}
 %if "%{_target_base_arch}" != "%{_arch}"
 	%define	MakeOpts %{CommonOpts} ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
 	%define	DepMod /bin/true
 
 	%if "%{_arch}" == "x86_64" && "%{_target_base_arch}" == "i386"
-	%define	MakeOpts %{CommonOpts} CC="%{__cc}" ARCH=%{_target_base_arch}
+	%define	MakeOpts %{CommonOpts} CC="%{kgcc}" ARCH=%{_target_base_arch}
 	%define	DepMod /sbin/depmod
 	%endif
 
 %else
-	%define MakeOpts %{CommonOpts} CC="%{__cc}"
+	%define MakeOpts %{CommonOpts} CC="%{kgcc}"
 	%define	DepMod /sbin/depmod
 %endif
 
