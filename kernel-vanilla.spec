@@ -1,7 +1,6 @@
 #
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
-
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
 %bcond_with	preempt-nort	# build preemptable no realtime kernel
@@ -420,9 +419,11 @@ pykconfig() {
 	echo '# x86 tuneup'
 	%ifarch i386
 	echo 'M386=y'
+	echo 'X86_F00F_BUG=y'
 	%endif
 	%ifarch i486
 	echo 'M486=y'
+	echo 'X86_F00F_BUG=y'
 	%endif
 	%ifarch i586
 	echo 'M586=y'
