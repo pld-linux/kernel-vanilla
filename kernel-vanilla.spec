@@ -411,7 +411,7 @@ pykconfig() {
 	echo '# %{name}.spec overrides'
 	echo 'LOCALVERSION="-%{_localversion}"'
 
-	echo '# debug options'
+	%{?debug:echo '# debug options'}
 	%{?debug:echo 'DEBUG_SLAB=y'}
 	%{?debug:echo 'DEBUG_PREEMPT=y'}
 	%{?debug:echo 'RT_DEADLOCK_DETECT=y'}
@@ -438,6 +438,8 @@ pykconfig() {
 	%endif
 	%ifarch athlon
 	echo 'MK7=y'
+	echo 'X86_PPRO_FENCE='
+	echo 'X86_USE_3DNOW=y'
 	%endif
 	%ifarch i686 athlon pentium3 pentium4
 	%if %{with pae}
