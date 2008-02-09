@@ -426,6 +426,7 @@ pykconfig() {
 	%endif
 	%ifarch i586
 	echo 'M586=y'
+	echo 'X86_F00F_BUG=y'
 	%endif
 	%ifarch i686
 	echo 'M686=y'
