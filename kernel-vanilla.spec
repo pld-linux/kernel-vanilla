@@ -418,8 +418,8 @@ pykconfig() {
 
 %ifarch %{ix86}
 	echo '# x86 tuneup'
-	%ifnarch i386
-	echo 'M386=n'
+	%ifarch i386
+	echo 'M386=y'
 	%endif
 	%ifarch i486
 	echo 'M486=y'
