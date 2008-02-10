@@ -42,7 +42,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	.1
-%define		_rel		1
+%define		_rel		2
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -77,6 +77,9 @@ Source3:	kernel-vanilla-config.h
 
 Source20:	kernel-vanilla-x86.config
 Source21:	kernel-vanilla-x86_64.config
+
+# security fix
+Patch10:	kernel-vanilla-vmsplice.patch
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
@@ -380,6 +383,8 @@ Documentation.
 %if "%{_ver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE10} | %{__patch} -p1 -s
 %endif
+
+%patch10 -p1
 
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
