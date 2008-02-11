@@ -41,8 +41,8 @@
 %define		alt_kernel	vanilla
 
 %define		_basever	2.6.24
-%define		_postver	.1
-%define		_rel		2
+%define		_postver	.2
+%define		_rel		1
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -65,7 +65,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	3f23ad4b69d0a552042d1ed0f4399857
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
-# Source1-md5:	86d55d5080217b2e79e0fff227218cd1
+# Source1-md5:	5e7fb6b61bd5af063ddd50b548355e94
 %endif
 %if "%{_ver}" != "%{nil}"
 Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
@@ -77,9 +77,6 @@ Source3:	kernel-vanilla-config.h
 
 Source20:	kernel-vanilla-x86.config
 Source21:	kernel-vanilla-x86_64.config
-
-# security fix
-Patch10:	kernel-vanilla-vmsplice.patch
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
@@ -383,8 +380,6 @@ Documentation.
 %if "%{_ver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE10} | %{__patch} -p1 -s
 %endif
-
-%patch10 -p1
 
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}_%{alt_kernel}#g' Makefile
