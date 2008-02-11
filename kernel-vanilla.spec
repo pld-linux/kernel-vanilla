@@ -254,6 +254,14 @@ OSS (Open Sound System) Treiber.
 %description sound-oss -l pl.UTF-8
 Sterowniki dźwięku OSS (Open Sound System).
 
+%package config
+Summary:	Kernel config and module symvers
+Group:		Development/Building
+Autoreqprov:	no
+
+%description module-build
+Kernel config and module symvers.
+
 %package headers
 Summary:	Header files for the Linux kernel
 Summary(de.UTF-8):	Header Dateien für den Linux-Kernel
@@ -281,6 +289,7 @@ Summary(de.UTF-8):	Development Dateien die beim Kernel Modul kompilationen gebra
 Summary(pl.UTF-8):	Pliki służące do budowania modułów jądra
 Group:		Development/Building
 Requires:	%{name}-headers = %{epoch}:%{version}-%{release}
+Requires:	%{name}-config = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description module-build
@@ -698,6 +707,11 @@ fi
 %endif			# %{have_oss}
 %endif			# %{have_sound}
 
+%files config
+%defattr(644,root,root,755)
+%{_kernelsrcdir}/config-dist
+%{_kernelsrcdir}/Module.symvers-dist
+
 %files headers
 %defattr(644,root,root,755)
 %dir %{_kernelsrcdir}
@@ -719,8 +733,6 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
-%{_kernelsrcdir}/config-dist
-%{_kernelsrcdir}/Module.symvers-dist
 /lib/modules/%{kernel_release}/build
 /lib/modules/%{kernel_release}/source
 
