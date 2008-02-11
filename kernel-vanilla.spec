@@ -29,8 +29,8 @@
 %define		alt_kernel	vanilla
 
 %define		_basever	2.6.24
-%define		_postver	.1
-%define		_rel		0.4
+%define		_postver	.2
+%define		_rel		0.1
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -52,7 +52,7 @@ Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	3f23ad4b69d0a552042d1ed0f4399857
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
-# Source1-md5:	86d55d5080217b2e79e0fff227218cd1
+# Source1-md5:	5e7fb6b61bd5af063ddd50b548355e94
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
 Source4:	kernel-config-update.py
