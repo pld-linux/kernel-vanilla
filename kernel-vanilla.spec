@@ -538,8 +538,7 @@ fi
 cp -a$l %{srcdir}/* $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 install -d $RPM_BUILD_ROOT/lib/modules/%{kernel_release}
-ln -s %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
-ln -s %{_kernelsrcdir} $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
+touch $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/{build,source}
 cp -a %{SOURCE6} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 %endif # arch independant
 
@@ -633,6 +632,10 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
+%triggerin -n %{pname}-module-build -- %{pname} = %{epoch}:%{version}-%{release}
+ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/build
+ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/source
+
 %if %{without noarch}
 %files
 %defattr(644,root,root,755)
@@ -676,6 +679,8 @@ fi
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/usb/host/sl811_cs.ko*
 %endif
 %ghost /lib/modules/%{kernel_release}/modules.*
+%ghost /lib/modules/%{kernel_release}/build
+%ghost /lib/modules/%{kernel_release}/source
 
 %dir %{_sysconfdir}/modprobe.d/%{kernel_release}
 
@@ -758,8 +763,6 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
-/lib/modules/%{kernel_release}/build
-/lib/modules/%{kernel_release}/source
 
 %files -n %{pname}-doc
 %defattr(644,root,root,755)
