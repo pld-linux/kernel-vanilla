@@ -702,8 +702,6 @@ fi
 %defattr(644,root,root,755)
 %dir %{_kernelsrcdir}
 %{_kernelsrcdir}/include
-%{_kernelsrcdir}/config-dist
-%{_kernelsrcdir}/Module.symvers-dist
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
@@ -721,6 +719,8 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
+%{_kernelsrcdir}/config-dist
+%{_kernelsrcdir}/Module.symvers-dist
 /lib/modules/%{kernel_release}/build
 /lib/modules/%{kernel_release}/source
 
