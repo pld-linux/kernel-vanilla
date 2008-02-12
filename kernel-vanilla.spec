@@ -32,6 +32,17 @@
 
 %define		alt_kernel	vanilla
 
+# Our Kernel ABI, increase this when you want out of source modules being rebuilt
+%define		KABI		1
+# Module.symvers: e05892f5d4e6f21d9456f4cdf02e6021
+
+# kernel release (used in filesystem and eventually in uname -r)
+# modules will be looked from /lib/modules/%{kernel_release}
+# _localversion is just that without version for "> localversion"
+%define		_localversion %{KABI}
+%define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
+%define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
+
 %define		_basever	2.6.24
 %define		_postver	.2
 %define		_rel		0.4
@@ -83,6 +94,7 @@ Requires:	/sbin/depmod
 Requires:	coreutils
 Requires:	geninitrd >= 2.57
 Requires:	module-init-tools >= 0.9.9
+Provides:	%{name}(vermagic) = %{kernel_release}
 Conflicts:	e2fsprogs < 1.29
 Conflicts:	isdn4k-utils < 3.1pre1
 Conflicts:	jfsutils < 1.1.3
@@ -112,13 +124,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautochrpath	.*%{_kernelsrcdir}/.*
 
 %define		initrd_dir	/boot
-
-# kernel release (used in filesystem and eventually in uname -r)
-# modules will be looked from /lib/modules/%{kernel_release}smp
-# _localversion is just that without version for "> localversion"
-%define		_localversion %{release}smp
-%define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
-%define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
 %define		topdir	%{_builddir}/%{name}-%{version}
 %define		srcdir	%{topdir}/linux-%{_basever}
@@ -274,6 +279,7 @@ Summary:	Header files for the Linux kernel
 Summary(de.UTF-8):	Header Dateien für den Linux-Kernel
 Summary(pl.UTF-8):	Pliki nagłówkowe jądra Linuksa
 Group:		Development/Building
+Requires:	%{name}-config = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description headers
@@ -295,7 +301,6 @@ Summary:	Development files for building kernel modules
 Summary(de.UTF-8):	Development Dateien die beim Kernel Modul kompilationen gebraucht werden
 Summary(pl.UTF-8):	Pliki służące do budowania modułów jądra
 Group:		Development/Building
-Requires:	%{name}-config = %{epoch}:%{version}-%{release}
 Requires:	%{name}-headers = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
@@ -523,7 +528,7 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
 # /usr/src/linux
 # maybe package these to -module-build, then -headers could be noarch
 cp -a %{objdir}/Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
-cp -a %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
+cp -aL %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
 cp -a %{objdir}/include/linux/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
 cp -a %{objdir}/include/linux/{utsrelease,version}.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 %endif # arch dependant
