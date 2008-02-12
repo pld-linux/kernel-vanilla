@@ -264,6 +264,7 @@ Sterowniki dźwięku OSS (Open Sound System).
 Summary:	Kernel config and module symvers
 Group:		Development/Building
 Autoreqprov:	no
+Conflicts:	rpmbuild(macros) < 1.433
 
 %description config
 Kernel config and module symvers.
@@ -472,7 +473,7 @@ pykconfig > %{objdir}/.kernel-autogen.conf
 rm -rf $RPM_BUILD_ROOT
 # touch for noarch build (exclude list)
 install -d $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-touch $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
+touch $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/{utsrelease,version,autoconf-dist}.h
 
 %if %{without noarch}
 %{__make} %{MakeOpts} %{!?with_verbose:-s} modules_install \
@@ -524,6 +525,7 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
 cp -a %{objdir}/Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
 cp -a %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
 cp -a %{objdir}/include/linux/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
+cp -a %{objdir}/include/linux/{utsrelease,version}.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 %endif # arch dependant
 
 %if %{with noarch}
@@ -739,6 +741,8 @@ fi
 %{_kernelsrcdir}/config-dist
 %{_kernelsrcdir}/Module.symvers-dist
 %{_kernelsrcdir}/include/linux/autoconf-dist.h
+%{_kernelsrcdir}/include/linux/utsrelease.h
+%{_kernelsrcdir}/include/linux/version.h
 %endif # noarch package
 
 %if %{with noarch}
@@ -747,6 +751,8 @@ fi
 %dir %{_kernelsrcdir}
 %{_kernelsrcdir}/include
 %exclude %{_kernelsrcdir}/include/linux/autoconf-dist.h
+%exclude %{_kernelsrcdir}/include/linux/utsrelease.h
+%exclude %{_kernelsrcdir}/include/linux/version.h
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
