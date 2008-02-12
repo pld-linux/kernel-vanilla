@@ -79,6 +79,7 @@ BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
 Autoreqprov:	no
+Requires:	/sbin/depmod
 Requires:	coreutils
 Requires:	geninitrd >= 2.57
 Requires:	module-init-tools >= 0.9.9
@@ -96,8 +97,8 @@ Conflicts:	udev < 1:071
 Conflicts:	util-linux < 2.10o
 Conflicts:	xfsprogs < 2.6.0
 ExclusiveOS:	Linux
-ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc noarch
 %{?with_noarch:BuildArch:	noarch}
+ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{ix86} %{x8664}
@@ -293,8 +294,8 @@ Summary:	Development files for building kernel modules
 Summary(de.UTF-8):	Development Dateien die beim Kernel Modul kompilationen gebraucht werden
 Summary(pl.UTF-8):	Pliki służące do budowania modułów jądra
 Group:		Development/Building
-Requires:	%{name}-headers = %{epoch}:%{version}-%{release}
 Requires:	%{name}-config = %{epoch}:%{version}-%{release}
+Requires:	%{name}-headers = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description module-build
