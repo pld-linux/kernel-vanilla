@@ -34,7 +34,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	.2
-%define		_rel		0.2
+%define		_rel		0.3
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -43,12 +43,11 @@
 %define		_ver		%{nil}
 %define		_rc			%{nil}
 
-%define		pname	kernel-%{alt_kernel}
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
 Summary(fr.UTF-8):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl.UTF-8):	Jądro Linuksa
-Name:		%{pname}%{?with_noarch:-noarch}
+Name:		kernel-%{alt_kernel}
 Version:	%{?_ver:%{_ver}}%{_basever}%{_postver}
 Release:	%{?_rc:%{_rc}}%{_rel}
 Epoch:		3
@@ -124,7 +123,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		topdir	%{_builddir}/%{pname}-%{version}
+%define		topdir	%{_builddir}/%{name}-%{version}
 %define		srcdir	%{topdir}/linux-%{_basever}
 %define		objdir	%{topdir}/o
 
@@ -199,7 +198,7 @@ Summary:	DRM kernel modules
 Summary(de.UTF-8):	DRM Kernel Treiber
 Summary(pl.UTF-8):	Sterowniki DRM
 Group:		Base/Kernel
-Requires:	%{pname} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description drm
@@ -216,7 +215,7 @@ Summary:	PCMCIA modules
 Summary(de.UTF-8):	PCMCIA Module
 Summary(pl.UTF-8):	Moduły PCMCIA
 Group:		Base/Kernel
-Requires:	%{pname} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Conflicts:	pcmcia-cs < 3.1.21
 Conflicts:	pcmciautils < 004
 Autoreqprov:	no
@@ -235,7 +234,7 @@ Summary:	ALSA kernel modules
 Summary(de.UTF-8):	ALSA Kernel Module
 Summary(pl.UTF-8):	Sterowniki dźwięku ALSA
 Group:		Base/Kernel
-Requires:	%{pname} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description sound-alsa
@@ -252,7 +251,7 @@ Summary:	OSS kernel modules
 Summary(de.UTF-8):	OSS Kernel Module
 Summary(pl.UTF-8):	Sterowniki dźwięku OSS
 Group:		Base/Kernel
-Requires:	%{pname} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description sound-oss
@@ -272,63 +271,63 @@ Autoreqprov:	no
 %description config
 Kernel config and module symvers.
 
-%package -n %{pname}-headers
+%package headers
 Summary:	Header files for the Linux kernel
 Summary(de.UTF-8):	Header Dateien für den Linux-Kernel
 Summary(pl.UTF-8):	Pliki nagłówkowe jądra Linuksa
 Group:		Development/Building
 Autoreqprov:	no
 
-%description -n %{pname}-headers
+%description headers
 These are the C header files for the Linux kernel, which define
 structures and constants that are needed when rebuilding the kernel or
 building kernel modules.
 
-%description -n %{pname}-headers -l de.UTF-8
+%description headers -l de.UTF-8
 Dies sind die C Header Dateien für den Linux-Kernel, die definierte
 Strukturen und Konstante beinhalten die beim rekompilieren des Kernels
 oder bei Kernel Modul kompilationen gebraucht werden.
 
-%description -n %{pname}-headers -l pl.UTF-8
+%description headers -l pl.UTF-8
 Pakiet zawiera pliki nagłówkowe jądra, niezbędne do rekompilacji jądra
 oraz budowania modułów jądra.
 
-%package -n %{pname}-module-build
+%package module-build
 Summary:	Development files for building kernel modules
 Summary(de.UTF-8):	Development Dateien die beim Kernel Modul kompilationen gebraucht werden
 Summary(pl.UTF-8):	Pliki służące do budowania modułów jądra
 Group:		Development/Building
-Requires:	%{pname}-headers = %{epoch}:%{version}-%{release}
-Requires:	%{pname}-config = %{epoch}:%{version}-%{release}
+Requires:	%{name}-headers = %{epoch}:%{version}-%{release}
+Requires:	%{name}-config = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
-%description -n %{pname}-module-build
+%description module-build
 Development files from kernel source tree needed to build Linux kernel
 modules from external packages.
 
-%description -n %{pname}-module-build -l de.UTF-8
+%description module-build -l de.UTF-8
 Development Dateien des Linux-Kernels die beim kompilieren externer
 Kernel Module gebraucht werden.
 
-%description -n %{pname}-module-build -l pl.UTF-8
+%description module-build -l pl.UTF-8
 Pliki ze drzewa źródeł jądra potrzebne do budowania modułów jądra
 Linuksa z zewnętrznych pakietów.
 
-%package -n %{pname}-source
+%package source
 Summary:	Kernel source tree
 Summary(de.UTF-8):	Der Kernel Quelltext
 Summary(pl.UTF-8):	Kod źródłowy jądra Linuksa
 Group:		Development/Building
-Requires:	%{pname}-module-build = %{epoch}:%{version}-%{release}
+Requires:	%{name}-module-build = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
-%description -n %{pname}-source
+%description source
 This is the source code for the Linux kernel. It is required to build
 most C programs as they depend on constants defined in here. You can
 also build a custom kernel that is better tuned to your particular
 hardware.
 
-%description -n %{pname}-source -l de.UTF-8
+%description source -l de.UTF-8
 Das Kernel-Source-Packet enthält den source code (C/Assembler-Code)
 des Linux-Kernels. Die Source-Dateien werden gebraucht, um viele
 C-Programme zu kompilieren, da sie auf Konstanten zurückgreifen, die
@@ -336,7 +335,7 @@ im Kernel-Source definiert sind. Die Source-Dateien können auch
 benutzt werden, um einen Kernel zu kompilieren, der besser auf Ihre
 Hardware ausgerichtet ist.
 
-%description -n %{pname}-source -l fr.UTF-8
+%description source -l fr.UTF-8
 Le package pour le kernel-source contient le code source pour le noyau
 linux. Ces sources sont nécessaires pour compiler la plupart des
 programmes C, car il dépend de constantes définies dans le code
@@ -344,30 +343,30 @@ source. Les sources peuvent être aussi utilisée pour compiler un noyau
 personnalisé pour avoir de meilleures performances sur des matériels
 particuliers.
 
-%description -n %{pname}-source -l pl.UTF-8
+%description source -l pl.UTF-8
 Pakiet zawiera kod źródłowy jądra systemu.
 
-%package -n %{pname}-doc
+%package doc
 Summary:	Kernel documentation
 Summary(de.UTF-8):	Kernel Dokumentation
 Summary(pl.UTF-8):	Dokumentacja do jądra Linuksa
 Group:		Documentation
 Autoreqprov:	no
 
-%description -n %{pname}-doc
+%description doc
 This is the documentation for the Linux kernel, as found in
 Documentation directory.
 
-%description -n %{pname}-doc -l de.UTF-8
+%description doc -l de.UTF-8
 Dies ist die Kernel Dokumentation wie sie im 'Documentation'
 Verzeichniss vorgefunden werden kann.
 
-%description -n %{pname}-doc -l pl.UTF-8
+%description doc -l pl.UTF-8
 Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 Documentation.
 
 %prep
-%setup -qc -n %{pname}-%{version}
+%setup -qc
 install -d o/scripts
 ln -s %{SOURCE2} o/scripts/kernel-module-build.pl
 ln -s %{SOURCE3} o/scripts/kernel-config.py
@@ -619,11 +618,11 @@ ln -sf vmlinux-%{kernel_release} /boot/vmlinux-%{alt_kernel}
 %postun sound-oss
 %depmod %{kernel_release}
 
-%post -n %{pname}-headers
+%post headers
 rm -f %{_prefix}/src/linux-%{alt_kernel}
 ln -snf %{basename:%{_kernelsrcdir}} %{_prefix}/src/linux-%{alt_kernel}
 
-%postun -n %{pname}-headers
+%postun headers
 if [ "$1" = "0" ]; then
 	if [ -L %{_prefix}/src/linux-%{alt_kernel} ]; then
 		if [ "$(readlink %{_prefix}/src/linux-%{alt_kernel})" = "linux-%{version}_%{alt_kernel}" ]; then
@@ -632,7 +631,7 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
-%triggerin -n %{pname}-module-build -- %{pname} = %{epoch}:%{version}-%{release}
+%triggerin module-build -- %{name} = %{epoch}:%{version}-%{release}
 ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/build
 ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/source
 
@@ -741,13 +740,13 @@ ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/source
 %endif # noarch package
 
 %if %{with noarch}
-%files -n %{pname}-headers
+%files headers
 %defattr(644,root,root,755)
 %dir %{_kernelsrcdir}
 %{_kernelsrcdir}/include
 %exclude %{_kernelsrcdir}/include/linux/autoconf-dist.h
 
-%files -n %{pname}-module-build -f aux_files
+%files module-build -f aux_files
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/Kbuild
 %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
@@ -764,11 +763,11 @@ ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/source
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
 
-%files -n %{pname}-doc
+%files doc
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/Documentation
 
-%files -n %{pname}-source -f aux_files_exc
+%files source -f aux_files_exc
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/arch/*/[!Mk]*
 %{_kernelsrcdir}/arch/*/kernel/[!M]*
