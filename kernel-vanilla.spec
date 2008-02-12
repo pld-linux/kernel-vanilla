@@ -631,6 +631,11 @@ fi
 ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/build
 ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/source
 
+%triggerun module-build -- %{name} = %{epoch}:%{version}-%{release}
+if [ "$1" = 0 ]; then
+	rm -f /lib/modules/%{kernel_release}/{build,source}
+fi
+
 %if %{without noarch}
 %files
 %defattr(644,root,root,755)
