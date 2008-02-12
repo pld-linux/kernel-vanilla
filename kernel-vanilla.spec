@@ -34,7 +34,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	.2
-%define		_rel		0.3
+%define		_rel		0.4
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -96,12 +96,8 @@ Conflicts:	udev < 1:071
 Conflicts:	util-linux < 2.10o
 Conflicts:	xfsprogs < 2.6.0
 ExclusiveOS:	Linux
-%if %{with noarch}
-BuildArch:	noarch
-ExclusiveArch:	noarch
-%else
-ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc
-%endif
+ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc noarch
+%{?with_noarch:BuildArch:	noarch}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{ix86} %{x8664}
@@ -469,13 +465,13 @@ pykconfig > %{objdir}/.kernel-autogen.conf
 
 # build kernel
 %{__make} all
-%endif # noarch
+%endif # arch build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-# needed for arch and noarch builds (exclude list)
+# touch for noarch build (exclude list)
 install -d $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-cp -a %{objdir}/include/linux/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
+touch $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
 
 %if %{without noarch}
 %{__make} %{MakeOpts} %{!?with_verbose:-s} modules_install \
@@ -486,8 +482,8 @@ cp -a %{objdir}/include/linux/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include
 	KERNELRELEASE=%{kernel_release}
 
 mkdir $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/misc
-rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/build
-rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/source
+rm -f $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/{build,source}
+touch $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/{build,source}
 
 # /boot
 install -d $RPM_BUILD_ROOT/boot
@@ -526,6 +522,7 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
 # maybe package these to -module-build, then -headers could be noarch
 cp -a %{objdir}/Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
 cp -a %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
+cp -a %{objdir}/include/linux/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
 %endif # arch dependant
 
 %if %{with noarch}
@@ -537,7 +534,6 @@ fi
 cp -a$l %{srcdir}/* $RPM_BUILD_ROOT%{_kernelsrcdir}
 
 install -d $RPM_BUILD_ROOT/lib/modules/%{kernel_release}
-touch $RPM_BUILD_ROOT/lib/modules/%{kernel_release}/{build,source}
 cp -a %{SOURCE6} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 %endif # arch independant
 
