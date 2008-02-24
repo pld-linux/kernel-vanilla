@@ -45,7 +45,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	.2
-%define		_rel		0.4
+%define		_rel		0.5
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -743,8 +743,11 @@ fi
 
 %files config
 %defattr(644,root,root,755)
+%dir %{_kernelsrcdir}
 %{_kernelsrcdir}/config-dist
 %{_kernelsrcdir}/Module.symvers-dist
+%dir %{_kernelsrcdir}/include
+%dir %{_kernelsrcdir}/include/linux
 %{_kernelsrcdir}/include/linux/autoconf-dist.h
 %{_kernelsrcdir}/include/linux/utsrelease.h
 %{_kernelsrcdir}/include/linux/version.h
@@ -753,8 +756,8 @@ fi
 %if %{with noarch}
 %files headers
 %defattr(644,root,root,755)
-%dir %{_kernelsrcdir}
-%{_kernelsrcdir}/include
+%{_kernelsrcdir}/include/*
+%exclude %dir %{_kernelsrcdir}/include/linux
 %exclude %{_kernelsrcdir}/include/linux/autoconf-dist.h
 %exclude %{_kernelsrcdir}/include/linux/utsrelease.h
 %exclude %{_kernelsrcdir}/include/linux/version.h
