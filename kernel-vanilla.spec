@@ -45,7 +45,7 @@
 
 %define		_basever	2.6.24
 %define		_postver	.3
-%define		_rel		1
+%define		_rel		2
 
 # for rc kernels basever is the version patch (source1) should be applied to
 #%define		_ver		2.6.20
@@ -767,6 +767,7 @@ fi
 %{_kernelsrcdir}/Kbuild
 %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
 %{_kernelsrcdir}/arch/*/kernel/sigframe.h
+%{_kernelsrcdir}/arch/x86/kernel/sigframe_32.h
 %dir %{_kernelsrcdir}/scripts
 %dir %{_kernelsrcdir}/scripts/kconfig
 %{_kernelsrcdir}/scripts/Kbuild.include
@@ -789,6 +790,7 @@ fi
 %{_kernelsrcdir}/arch/*/kernel/[!M]*
 %exclude %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
 %exclude %{_kernelsrcdir}/arch/*/kernel/sigframe.h
+%exclude %{_kernelsrcdir}/arch/x86/kernel/sigframe_32.h
 %{_kernelsrcdir}/block
 %{_kernelsrcdir}/crypto
 %{_kernelsrcdir}/drivers
