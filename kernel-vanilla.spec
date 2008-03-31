@@ -472,6 +472,10 @@ pykconfig > %{objdir}/.kernel-autogen.conf
 
 # build kernel
 %{__make} all
+
+# build reverse config and show diff
+%{__make} pykconfig
+diff -u %{_sourcedir}/kernel-vanilla-multiarch.conf %{objdir}/kernel.conf || :
 %endif # arch build
 
 %install
