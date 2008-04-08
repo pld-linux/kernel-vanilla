@@ -56,6 +56,7 @@
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
+Summary(et.UTF-8):	Linuxi kernel (ehk operatsioonisüsteemi tuum)
 Summary(fr.UTF-8):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl.UTF-8):	Jądro Linuksa
 Name:		kernel-%{alt_kernel}
@@ -204,13 +205,13 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description drm
-DRM kernel modules
+DRM kernel modules.
 
 %description drm -l de.UTF-8
-DRM Kernel Treiber
+DRM Kernel Treiber.
 
 %description drm -l pl.UTF-8
-Sterowniki DRM
+Sterowniki DRM.
 
 %package pcmcia
 Summary:	PCMCIA modules
@@ -223,13 +224,13 @@ Conflicts:	pcmciautils < 004
 Autoreqprov:	no
 
 %description pcmcia
-PCMCIA modules
+PCMCIA modules.
 
 %description pcmcia -l de.UTF-8
-PCMCIA Module
+PCMCIA Module.
 
 %description pcmcia -l pl.UTF-8
-Moduły PCMCIA
+Moduły PCMCIA.
 
 %package sound-alsa
 Summary:	ALSA kernel modules
@@ -325,10 +326,8 @@ Requires:	%{name}-module-build = %{epoch}:%{version}-%{release}
 Autoreqprov:	no
 
 %description source
-This is the source code for the Linux kernel. It is required to build
-most C programs as they depend on constants defined in here. You can
-also build a custom kernel that is better tuned to your particular
-hardware.
+This is the source code for the Linux kernel. You can build a custom
+kernel that is better tuned to your particular hardware.
 
 %description source -l de.UTF-8
 Das Kernel-Source-Packet enthält den source code (C/Assembler-Code)
@@ -565,23 +564,23 @@ if [ -x /sbin/new-kernel-pkg ]; then
 fi
 
 %post
-mv -f /boot/vmlinuz-%{alt_kernel} /boot/vmlinuz-%{alt_kernel}.old 2> /dev/null > /dev/null
-mv -f /boot/System.map-%{alt_kernel} /boot/System.map-%{alt_kernel}.old 2> /dev/null > /dev/null
+mv -f /boot/vmlinuz-%{alt_kernel} /boot/vmlinuz-%{alt_kernel}.old 2>/dev/null > /dev/null
+mv -f /boot/System.map-%{alt_kernel} /boot/System.map-%{alt_kernel}.old 2>/dev/null > /dev/null
 ln -sf vmlinuz-%{kernel_release} /boot/vmlinuz-%{alt_kernel}
 ln -sf System.map-%{kernel_release} /boot/System.map-%{alt_kernel}
 if [ ! -e /boot/vmlinuz ]; then
-	mv -f /boot/vmlinuz /boot/vmlinuz.old 2> /dev/null > /dev/null
-	mv -f /boot/System.map /boot/System.map.old 2> /dev/null > /dev/null
-	ln -sf vmlinuz-%{kernel_release} /boot/vmlinuz
+	mv -f /boot/vmlinuz /boot/vmlinuz.old 2>/dev/null
+	mv -f /boot/System.map /boot/System.map.old 2>/dev/null
+	ln -sf vmlinuz-%{alt_kernel} /boot/vmlinuz
 	ln -sf System.map-%{alt_kernel} /boot/System.map
-	mv -f %{initrd_dir}/initrd %{initrd_dir}/initrd.old 2> /dev/null > /dev/null
+	mv -f %{initrd_dir}/initrd %{initrd_dir}/initrd.old 2>/dev/null
 	ln -sf initrd-%{alt_kernel} %{initrd_dir}/initrd
 fi
 
 %depmod %{kernel_release}
 
-/sbin/geninitrd -f --initrdfs=rom %{initrd_dir}/initrd-%{kernel_release}.gz %{kernel_release}
-mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd-%{alt_kernel}.old 2> /dev/null > /dev/null
+/sbin/geninitrd -f --initrdfs=initramfs  %{initrd_dir}/initrd-%{kernel_release}.gz %{kernel_release}
+mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd-%{alt_kernel}.old 2>/dev/null
 ln -sf initrd-%{kernel_release}.gz %{initrd_dir}/initrd-%{alt_kernel}
 
 if [ -x /sbin/new-kernel-pkg ]; then
@@ -599,7 +598,7 @@ elif [ -x /sbin/rc-boot ]; then
 fi
 
 %post vmlinux
-mv -f /boot/vmlinux-%{alt_kernel} /boot/vmlinux-%{alt_kernel}.old 2> /dev/null > /dev/null
+mv -f /boot/vmlinux-%{alt_kernel} /boot/vmlinux-%{alt_kernel}.old 2>/dev/null
 ln -sf vmlinux-%{kernel_release} /boot/vmlinux-%{alt_kernel}
 
 %post drm
