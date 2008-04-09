@@ -99,7 +99,7 @@ Provides:	%{name}(vermagic) = %{kernel_release}
 Conflicts:	e2fsprogs < 1.29
 Conflicts:	isdn4k-utils < 3.1pre1
 Conflicts:	jfsutils < 1.1.3
-Conflicts:	module-init-tool < 0.9.10
+Conflicts:	module-init-tools < 0.9.10
 Conflicts:	nfs-utils < 1.0.5
 Conflicts:	oprofile < 0.9
 Conflicts:	ppp < 1:2.4.0
