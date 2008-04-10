@@ -1,5 +1,6 @@
 #
 # Conditional build:
+%bcond_without	source		# don't build kernel-source package
 %bcond_with	noarch		# build noarch packages
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
@@ -67,7 +68,7 @@ License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	3f23ad4b69d0a552042d1ed0f4399857
-Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
+Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	508f5aaa99dead9836ff490496a61581
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
@@ -130,7 +131,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		srcdir	%{topdir}/linux-%{_basever}
 %define		objdir	%{topdir}/o
 
-%define		CommonOpts	HOSTCC="%{kgcc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer" O=%{objdir}
+%define		CommonOpts	HOSTCC="%{kgcc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer"
 %if "%{_target_base_arch}" != "%{_arch}"
 	%define	MakeOpts %{CommonOpts} ARCH=%{_target_base_arch} CROSS_COMPILE=%{_target_cpu}-pld-linux-
 	%define	DepMod /bin/true
@@ -290,7 +291,7 @@ building kernel modules.
 
 %description headers -l de.UTF-8
 Dies sind die C Header Dateien für den Linux-Kernel, die definierte
-Strukturen und Konstante beinhalten die beim rekompilieren des Kernels
+Strukturen und Konstante beinhalten, die beim rekompilieren des Kernels
 oder bei Kernel Modul kompilationen gebraucht werden.
 
 %description headers -l pl.UTF-8
@@ -357,7 +358,7 @@ Autoreqprov:	no
 
 %description doc
 This is the documentation for the Linux kernel, as found in
-Documentation directory.
+/usr/src/linux/Documentation directory.
 
 %description doc -l de.UTF-8
 Dies ist die Kernel Dokumentation wie sie im 'Documentation'
@@ -365,7 +366,7 @@ Verzeichniss vorgefunden werden kann.
 
 %description doc -l pl.UTF-8
 Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
-Documentation.
+/usr/src/linux/Documentation.
 
 %prep
 %setup -qc
@@ -787,6 +788,7 @@ fi
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/Documentation
 
+%if %{with source}
 %files source -f aux_files_exc
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/arch/*/[!Mk]*
@@ -823,4 +825,5 @@ fi
 %{_kernelsrcdir}/MAINTAINERS
 %{_kernelsrcdir}/README
 %{_kernelsrcdir}/REPORTING-BUGS
+%endif
 %endif
