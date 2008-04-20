@@ -19,7 +19,7 @@
 
 %define		_basever	2.6.25
 %define		_postver	%{nil}
-%define		_rel		0.1
+%define		_rel		0.2
 
 #%define		_ver		2.6.20
 #%define		_rc		rc4
@@ -101,8 +101,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # modules will be looked from /lib/modules/%{kernel_release}
 # _localversion is just that without version for "> localversion"
 %define		_localversion %{release}
-%define		kernel_release %{alt_kernel}-%{version}-%{_localversion}
-%define		_kernelsrcdir	/usr/src/linux-%{alt_kernel}-%{version}
+%define		kernel_release %{version}-%{alt_kernel}-%{_localversion}
+%define		_kernelsrcdir	/usr/src/linux-%{version}-%{alt_kernel}
 
 %define	CommonOpts	HOSTCC="%{__cc}" HOSTCFLAGS="-Wall -Wstrict-prototypes %{rpmcflags} -fomit-frame-pointer"
 %if "%{_target_base_arch}" != "%{_arch}"
@@ -634,7 +634,7 @@ ln -snf %{basename:%{_kernelsrcdir}} %{_prefix}/src/linux-%{alt_kernel}
 %postun headers
 if [ "$1" = "0" ]; then
 	if [ -L %{_prefix}/src/linux-%{alt_kernel} ]; then
-		if [ "$(readlink %{_prefix}/src/linux-%{alt_kernel})" = "linux-%{alt_kernel}-%{version}" ]; then
+		if [ "$(readlink %{_prefix}/src/linux-%{alt_kernel})" = "linux-%{version}-%{alt_kernel}" ]; then
 			rm -f %{_prefix}/src/linux-%{alt_kernel}
 		fi
 	fi
