@@ -361,8 +361,7 @@ sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 
 # Kill creating obsolete arch/{i386,x86_64}/boot directories
 # and bzImage symlinks, breaks rpm directory deps
-sed -i -e '/\/arch\/i386\/boot/d' arch/x86/Makefile_32
-sed -i -e '/\/arch\/x86_64\/boot/d' arch/x86/Makefile_64
+sed -i -e '/\/arch\/\$(UTS_MACHINE)\/boot/d' arch/x86/Makefile
 
 # remove unwanted files after patching (if any)
 find . '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
