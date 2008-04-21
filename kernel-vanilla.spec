@@ -783,6 +783,7 @@ fi
 
 %files doc
 %defattr(644,root,root,755)
+%dir %{_kernelsrcdir}
 %{_kernelsrcdir}/Documentation
 
 %if %{with source}
