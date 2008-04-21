@@ -78,7 +78,6 @@ Source6:	kernel-vanilla-config.h
 Source7:	kernel-vanilla-multiarch.conf
 Source8:	kernel-vanilla-preempt-nort.config
 Source9:	kernel-vanilla-no-preempt-nort.config
-Patch0:		kernel-mcpu=440.patch
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
@@ -380,8 +379,6 @@ cd linux-%{_basever}
 %if "%{_postver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
 %endif
-
-%patch0 -p1
 
 # if we really want to have vanilla kernel we should create copy from Makefile
 #cp Makefile{,.vanilla}
