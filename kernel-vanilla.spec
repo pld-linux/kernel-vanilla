@@ -44,8 +44,8 @@
 %define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		_basever	2.6.24
-%define		_postver	.4
+%define		_basever	2.6.25
+%define		_postver	%{nil}
 %define		_rel		1
 
 # for rc kernels basever is the version patch (source1) should be applied to
@@ -67,9 +67,9 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	3f23ad4b69d0a552042d1ed0f4399857
-Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	508f5aaa99dead9836ff490496a61581
+# Source0-md5:	db95a49a656a3247d4995a797d333153
+#Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
+## Source1-md5:	508f5aaa99dead9836ff490496a61581
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
 Source4:	kernel-config-update.py
