@@ -555,7 +555,7 @@ cp -a %{SOURCE6} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 # Usage: kernel-module-build.pl $rpmdir $fileoutdir
 fileoutdir=$(pwd)
 cd $RPM_BUILD_ROOT%{_kernelsrcdir}
-%{objdir}/scripts/kernel-module-build.pl %{_kernelsrcdir} $fileoutdir
+%{topdir}/kernel-module-build.pl %{_kernelsrcdir} $fileoutdir
 cd -
 
 %clean
