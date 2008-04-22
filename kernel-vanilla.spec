@@ -1,4 +1,8 @@
 #
+#   This is the kernel built from vanilla sources. Let's make everything
+#   possible enabled in this kernel with maybe benefit of losing performance,
+#   so you can use this kernel to test the shiniest hardware.
+#
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
 %bcond_with	noarch		# build noarch packages
@@ -562,23 +566,17 @@ if [ -x /sbin/new-kernel-pkg ]; then
 fi
 
 %post
-mv -f /boot/vmlinuz-%{alt_kernel} /boot/vmlinuz-%{alt_kernel}.old 2>/dev/null > /dev/null
-mv -f /boot/System.map-%{alt_kernel} /boot/System.map-%{alt_kernel}.old 2>/dev/null > /dev/null
 ln -sf vmlinuz-%{kernel_release} /boot/vmlinuz-%{alt_kernel}
 ln -sf System.map-%{kernel_release} /boot/System.map-%{alt_kernel}
 if [ ! -e /boot/vmlinuz ]; then
-	mv -f /boot/vmlinuz /boot/vmlinuz.old 2>/dev/null
-	mv -f /boot/System.map /boot/System.map.old 2>/dev/null
 	ln -sf vmlinuz-%{alt_kernel} /boot/vmlinuz
 	ln -sf System.map-%{alt_kernel} /boot/System.map
-	mv -f %{initrd_dir}/initrd %{initrd_dir}/initrd.old 2>/dev/null
 	ln -sf initrd-%{alt_kernel} %{initrd_dir}/initrd
 fi
 
 %depmod %{kernel_release}
 
 /sbin/geninitrd -f --initrdfs=initramfs  %{initrd_dir}/initrd-%{kernel_release}.gz %{kernel_release}
-mv -f %{initrd_dir}/initrd-%{alt_kernel} %{initrd_dir}/initrd-%{alt_kernel}.old 2>/dev/null
 ln -sf initrd-%{kernel_release}.gz %{initrd_dir}/initrd-%{alt_kernel}
 
 if [ -x /sbin/new-kernel-pkg ]; then
@@ -596,7 +594,6 @@ elif [ -x /sbin/rc-boot ]; then
 fi
 
 %post vmlinux
-mv -f /boot/vmlinux-%{alt_kernel} /boot/vmlinux-%{alt_kernel}.old 2>/dev/null
 ln -sf vmlinux-%{kernel_release} /boot/vmlinux-%{alt_kernel}
 
 %post drm
@@ -641,7 +638,7 @@ ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/build
 ln -sfn %{_kernelsrcdir} /lib/modules/%{kernel_release}/source
 
 %triggerun module-build -- %{name} = %{epoch}:%{version}-%{release}
-if [ "$1" = 0 ]; then
+if [ "$1" = "0" ]; then
 	rm -f /lib/modules/%{kernel_release}/{build,source}
 fi
 
