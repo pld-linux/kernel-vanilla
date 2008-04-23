@@ -115,7 +115,8 @@ Conflicts:	util-linux < 2.10o
 Conflicts:	xfsprogs < 2.6.0
 ExclusiveOS:	Linux
 %{?with_noarch:BuildArch:	noarch}
-ExclusiveArch:	%{ix86} %{x8664} ppc alpha sparc noarch
+# TODO: arm ia64 ppc64 sparc64
+ExclusiveArch:	%{ix86} %{x8664} alpha ppc sparc noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %ifarch %{ix86} %{x8664}
