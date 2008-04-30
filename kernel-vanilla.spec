@@ -415,6 +415,7 @@ BuildConfig() {
 
 	echo "" > .config
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config >> .config
+	sed -i "/CONFIG_LOCALVERSION=.*/d" .config
 	echo "CONFIG_LOCALVERSION=\"-%{_localversion}\"" >> .config
 
 	TuneUpConfigForIX86 .config
