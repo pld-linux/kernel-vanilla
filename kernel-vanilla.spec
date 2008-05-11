@@ -3,6 +3,10 @@
 #   possible enabled in this kernel with maybe benefit of losing performance,
 #   so you can use this kernel to test the shiniest hardware.
 #
+# TODO:
+#	- asm-offsets_32.c requires kernelsrcdir/drivers/lguest/lg.h
+#	  what breaks kernel-module-build
+#
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
 %bcond_with	noarch		# build noarch packages
@@ -49,7 +53,7 @@
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
 %define		basever	2.6.25
-%define		postver	.1
+%define		postver	.3
 %define		rel		0.1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
@@ -66,7 +70,7 @@ Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
 # Source0-md5:	db95a49a656a3247d4995a797d333153
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	a30cc67dace1035493cb088f97f84330
+# Source1-md5:	49c56cf1394b2286033bb10c7cef7260
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
 Source4:	kernel-config-update.py
