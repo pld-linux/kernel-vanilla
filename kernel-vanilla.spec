@@ -18,20 +18,15 @@
 %define		alt_kernel	vanilla%{?with_pae:-pae}
 
 %define		_basever	2.6.25
-%define		_postver	.3
+%define		_postver	.4
 %define		_rel		1
-
-#%define		_ver		2.6.20
-#%define		_rc		rc4
-%define		_ver		%{nil}
-%define		_rc		%{nil}
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
 Summary(fr):	Le Kernel-Linux (La partie centrale du systeme)
 Summary(pl):	J±dro Linuksa
 Name:		kernel-%{alt_kernel}
-Version:	%{?_ver:%{_ver}}%{_basever}%{_postver}
+Version:	%{_basever}%{_postver}
 Release:	%{?_rc:%{_rc}}%{_rel}
 Epoch:		3
 License:	GPL v2
@@ -40,11 +35,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	db95a49a656a3247d4995a797d333153
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{_basever}%{_postver}.bz2
-# Source1-md5:	49c56cf1394b2286033bb10c7cef7260
-%endif
-%if "%{_ver}" != "%{nil}"
-Source10:	http://www.kernel.org/pub/linux/kernel/v2.6/testing/patch-%{_ver}-%{_rc}.bz2
-# Source10-md5:	9b325c6086ad2a3fcde643f01a4c4640
+# Source1-md5:	f12f43dd78b765f3d1402aa9d2170cf5
 %endif
 
 Source2:	kernel-vanilla-module-build.pl
