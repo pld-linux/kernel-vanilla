@@ -3,10 +3,6 @@
 #   possible enabled in this kernel with maybe benefit of losing performance,
 #   so you can use this kernel to test the shiniest hardware.
 #
-# TODO:
-#	- asm-offsets_32.c requires kernelsrcdir/drivers/lguest/lg.h
-#	  what breaks kernel-module-build
-#
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
 %bcond_with	noarch		# build noarch packages
@@ -54,7 +50,7 @@
 
 %define		basever	2.6.25
 %define		postver	.3
-%define		rel		0.1
+%define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -765,6 +761,7 @@ fi
 %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
 %{_kernelsrcdir}/arch/*/kernel/sigframe.h
 %{_kernelsrcdir}/arch/x86/kernel/sigframe_32.h
+%{_kernelsrcdir}/drivers/lguest/lg.h
 %dir %{_kernelsrcdir}/scripts
 %dir %{_kernelsrcdir}/scripts/kconfig
 %{_kernelsrcdir}/scripts/Kbuild.include
