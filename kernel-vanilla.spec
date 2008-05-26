@@ -85,6 +85,8 @@ BuildRequires:	module-init-tools
 # for hostname command
 BuildRequires:	net-tools
 BuildRequires:	perl-base
+BuildRequires:	python
+BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
 Autoreqprov:	no
