@@ -14,7 +14,7 @@
 
 %define		_basever		2.6.25
 %define		_postver		.5
-%define		_rel			2
+%define		_rel			3
 
 %define		_enable_debug_packages			0
 
@@ -106,6 +106,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %endif
 %ifnarch %{ix86} %{x8664}
 %define		target_arch_dir		%{_target_base_arch}
+%endif
+
+%ifarch %{ix86}
+%define		kernel_config		x86
+%else
+%define		kernel_config		%{_target_base_arch}
 %endif
 
 %define		defconfig	arch/%{target_arch_dir}/defconfig
@@ -427,7 +433,7 @@ TuneUpConfigForIX86 () {
 BuildConfig() {
 	%{?debug:set -x}
 	# is this a special kernel we want to build?
-	Config="%{target_arch_dir}"
+	Config="%{kernel_config}"
 	KernelVer=%{kernel_release}
 	echo "Building config file using $Config.conf..."
 	cat $RPM_SOURCE_DIR/kernel-vanilla-$Config.config > %{defconfig}
@@ -459,7 +465,7 @@ BuildKernel() {
 }
 
 PreInstallKernel() {
-	Config="%{target_arch_dir}"
+	Config="%{kernel_config}"
 	KernelVer=%{kernel_release}
 
 	mkdir -p $KERNEL_INSTALL_DIR/boot
