@@ -1,0 +1,3 @@
+- call perl directly when using kernel-module-build.pl (build fails when it
+  doesn't have executable rights - while when calling directly via perl, rights
+  doesn't really matter)
