@@ -95,6 +95,8 @@ Requires:	coreutils
 Requires:	geninitrd >= 2.57
 Requires:	module-init-tools >= 0.9.9
 Provides:	%{name}(vermagic) = %{kernel_release}
+Obsoletes:	kernel-vanilla-net-iwl3945
+Obsoletes:	kernel-vanilla-net-iwl4965
 Conflicts:	e2fsprogs < 1.29
 Conflicts:	isdn4k-utils < 3.1pre1
 Conflicts:	jfsutils < 1.1.3
