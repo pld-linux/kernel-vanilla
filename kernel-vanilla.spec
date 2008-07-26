@@ -14,7 +14,7 @@
 
 %define		_basever		2.6.26
 %define		_postver		%{nil}
-%define		_rel			1
+%define		_rel			2
 
 %define		_enable_debug_packages			0
 
@@ -23,12 +23,8 @@
 # kernel release (used in filesystem and eventually in uname -r)
 # modules will be looked from /lib/modules/%{kernel_release}
 # _localversion is just that without version for "> localversion"
-%define		_localversion %{KABI}
+%define		_localversion %{_rel}
 %define		kernel_release %{version}-%{alt_kernel}-%{_localversion}
-
-# Our Kernel ABI, increase this when you want the out of source modules being rebuilt
-# Usually same as %{_rel}
-%define		KABI		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -803,6 +799,7 @@ fi
 %{_kernelsrcdir}/init
 %{_kernelsrcdir}/ipc
 %{_kernelsrcdir}/kernel
+%exclude %{_kernelsrcdir}/kernel/bounds.c
 %{_kernelsrcdir}/lib
 %{_kernelsrcdir}/mm
 %{_kernelsrcdir}/net
