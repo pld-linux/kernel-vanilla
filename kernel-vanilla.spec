@@ -24,13 +24,13 @@
 %define		have_oss	1
 %define		have_pcmcia	1
 %define		have_sound	1
-#%%define		have_drm	1
+%define		have_drm	1
 
 %ifnarch %{ix86} alpha ppc
 %define		have_isa	0
 %endif
 %ifarch sparc sparc64
-#%%define		have_drm	0
+%define		have_drm	0
 %define		have_oss	0
 %define		have_pcmcia	0
 %endif
@@ -199,22 +199,22 @@ vmlinux - dekompressiertes Kernel Bild.
 %description vmlinux -l pl.UTF-8
 vmlinux - rozpakowany obraz jądra.
 
-#%package drm
-#Summary:	DRM kernel modules
-#Summary(de.UTF-8):	DRM Kernel Treiber
-#Summary(pl.UTF-8):	Sterowniki DRM
-#Group:		Base/Kernel
-#Requires:	%{name} = %{epoch}:%{version}-%{release}
-#Autoreqprov:	no
+%package drm
+Summary:	DRM kernel modules
+Summary(de.UTF-8):	DRM Kernel Treiber
+Summary(pl.UTF-8):	Sterowniki DRM
+Group:		Base/Kernel
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Autoreqprov:	no
 
-#%description drm
-#DRM kernel modules.
+%description drm
+DRM kernel modules.
 
-#%description drm -l de.UTF-8
-#DRM Kernel Treiber.
+%description drm -l de.UTF-8
+DRM Kernel Treiber.
 
-#%description drm -l pl.UTF-8
-#Sterowniki DRM.
+%description drm -l pl.UTF-8
+Sterowniki DRM.
 
 %package pcmcia
 Summary:	PCMCIA modules
@@ -610,11 +610,11 @@ fi
 %post vmlinux
 ln -sf vmlinux-%{kernel_release} /boot/vmlinux-%{alt_kernel}
 
-#%post drm
-#%depmod %{kernel_release}
+%post drm
+%depmod %{kernel_release}
 
-#%postun drm
-#%depmod %{kernel_release}
+%postun drm
+%depmod %{kernel_release}
 
 %post pcmcia
 %depmod %{kernel_release}
@@ -670,9 +670,9 @@ fi
 /lib/modules/%{kernel_release}/kernel/arch
 /lib/modules/%{kernel_release}/kernel/crypto
 /lib/modules/%{kernel_release}/kernel/drivers
-#%if %{have_drm}
-#%exclude /lib/modules/%{kernel_release}/kernel/drivers/char/drm
-#%endif
+%if %{have_drm}
+%exclude /lib/modules/%{kernel_release}/kernel/drivers/char/drm
+%endif
 /lib/modules/%{kernel_release}/kernel/fs
 /lib/modules/%{kernel_release}/kernel/kernel
 /lib/modules/%{kernel_release}/kernel/lib
@@ -710,11 +710,11 @@ fi
 /boot/vmlinux-%{kernel_release}
 %endif
 
-#%if %{have_drm}
-#%files drm
-#%defattr(644,root,root,755)
-#/lib/modules/%{kernel_release}/kernel/drivers/char/drm
-#%endif
+%if %{have_drm}
+%files drm
+%defattr(644,root,root,755)
+/lib/modules/%{kernel_release}/kernel/drivers/char/drm
+%endif
 
 %if %{have_pcmcia}
 %files pcmcia
