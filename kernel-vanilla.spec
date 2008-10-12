@@ -841,7 +841,7 @@ fi
 /lib/firmware/atmsar11.fw
 %dir /lib/firmware/cpia2
 /lib/firmware/cpia2/stv0672_vp4.bin
-$dir /lib/firmware/dabusb
+%dir /lib/firmware/dabusb
 /lib/firmware/dabusb/bitstream.bin
 /lib/firmware/dabusb/firmware.fw
 %dir /lib/firmware/edgeport
