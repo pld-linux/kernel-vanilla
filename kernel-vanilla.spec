@@ -671,7 +671,7 @@ fi
 /lib/modules/%{kernel_release}/kernel/crypto
 /lib/modules/%{kernel_release}/kernel/drivers
 %if %{have_drm}
-%exclude /lib/modules/%{kernel_release}/kernel/drivers/char/drm
+%exclude /lib/modules/%{kernel_release}/kernel/drivers/gpu/drm
 %endif
 /lib/modules/%{kernel_release}/kernel/fs
 /lib/modules/%{kernel_release}/kernel/kernel
@@ -713,7 +713,7 @@ fi
 %if %{have_drm}
 %files drm
 %defattr(644,root,root,755)
-/lib/modules/%{kernel_release}/kernel/drivers/char/drm
+/lib/modules/%{kernel_release}/kernel/drivers/gpu/drm
 %endif
 
 %if %{have_pcmcia}
