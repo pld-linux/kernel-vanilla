@@ -373,7 +373,7 @@ Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 %package firmware
 Summary:	Built-in kernel firmware
 Summary(de.UTF-8):	Eingebaute Kernel Firmware
-Summary(pl.UTF-8):	Firmware zawarty w j�drze linuksa
+Summary(pl.UTF-8):	Firmware zawarty w jądrze linuksa
 Group:		System Environment/Kernel
 
 %description firmware
@@ -383,7 +383,7 @@ Built-in kernel firmware.
 Eingebaute Kernel Firmware.
 
 %description firmware -l pl.UTF-8
-Firmware zawarty w j�drze linuksa.
+Firmware zawarty w jądrze linuksa.
 
 %prep
 %setup -qc
