@@ -375,19 +375,15 @@ Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 /usr/src/linux/Documentation.
 
 %package firmware
-Summary:	Built-in kernel firmware
-Summary(de.UTF-8):	Eingebaute Kernel Firmware
-Summary(pl.UTF-8):	Firmware zawarty w jądrze linuksa
+Summary:	Firmware for Linux kernel drivers
+Summary(pl.UTF-8):	Firmware dla sterowników z jądra Linuksa
 Group:		System Environment/Kernel
 
 %description firmware
-Built-in kernel firmware.
-
-%description firmware -l de.UTF-8
-Eingebaute Kernel Firmware.
+Firmware for Linux kernel drivers.
 
 %description firmware -l pl.UTF-8
-Firmware zawarty w jądrze linuksa.
+Firmware dla sterowników z jądra Linuksa.
 
 %prep
 %setup -qc
