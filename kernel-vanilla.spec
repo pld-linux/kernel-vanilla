@@ -3,6 +3,10 @@
 #   possible enabled in this kernel with maybe benefit of losing performance,
 #   so you can use this kernel to test the shiniest hardware.
 #
+# TODO:
+# - ppc symbols
+# - firmware subpackage and --with noarch issue
+#
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
 %bcond_with	noarch		# build noarch packages
@@ -50,7 +54,7 @@
 
 %define		basever	2.6.27
 %define		postver	%{nil}
-%define		rel		1
+%define		rel		0.1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
