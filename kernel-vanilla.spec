@@ -273,14 +273,29 @@ OSS (Open Sound System) Treiber.
 %description sound-oss -l pl.UTF-8
 Sterowniki dźwięku OSS (Open Sound System).
 
+%package firmware
+Summary:	Firmware for Linux kernel drivers
+Summary(pl.UTF-8):	Firmware dla sterowników z jądra Linuksa
+Group:		System Environment/Kernel
+
+%description firmware
+Firmware for Linux kernel drivers.
+
+%description firmware -l pl.UTF-8
+Firmware dla sterowników z jądra Linuksa.
+
 %package config
 Summary:	Kernel config and module symvers
+Summary(pl.UTF-8):	Konfiguracja jądra i wersje symboli w modułach (symvers)
 Group:		Development/Building
 Autoreqprov:	no
 Conflicts:	rpmbuild(macros) < 1.433
 
 %description config
 Kernel config and module symvers.
+
+%description config -l pl.UTF-8
+Konfiguracja jądra i wersje symboli w modułąch (symvers).
 
 %package headers
 Summary:	Header files for the Linux kernel
@@ -373,17 +388,6 @@ Verzeichniss vorgefunden werden kann.
 %description doc -l pl.UTF-8
 Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 /usr/src/linux/Documentation.
-
-%package firmware
-Summary:	Firmware for Linux kernel drivers
-Summary(pl.UTF-8):	Firmware dla sterowników z jądra Linuksa
-Group:		System Environment/Kernel
-
-%description firmware
-Firmware for Linux kernel drivers.
-
-%description firmware -l pl.UTF-8
-Firmware dla sterowników z jądra Linuksa.
 
 %prep
 %setup -qc
