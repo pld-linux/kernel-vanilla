@@ -753,6 +753,54 @@ fi
 %endif			# %{have_oss}
 %endif			# %{have_sound}
 
+%files firmware
+/lib/firmware/atmsar11.fw
+%dir /lib/firmware/cpia2
+/lib/firmware/cpia2/stv0672_vp4.bin
+%dir /lib/firmware/dabusb
+/lib/firmware/dabusb/bitstream.bin
+/lib/firmware/dabusb/firmware.fw
+%dir /lib/firmware/edgeport
+/lib/firmware/edgeport/boot.fw
+/lib/firmware/edgeport/boot2.fw
+/lib/firmware/edgeport/down.fw
+/lib/firmware/edgeport/down2.fw
+/lib/firmware/edgeport/down3.bin
+%dir /lib/firmware/emi26
+/lib/firmware/emi26/bitstream.fw
+/lib/firmware/emi26/firmware.fw
+/lib/firmware/emi26/loader.fw
+%dir /lib/firmware/emi62
+/lib/firmware/emi62/bitstream.fw
+/lib/firmware/emi62/loader.fw
+/lib/firmware/emi62/midi.fw
+/lib/firmware/emi62/spdif.fw
+%dir /lib/firmware/ess
+/lib/firmware/ess/maestro3_assp_kernel.fw
+/lib/firmware/ess/maestro3_assp_minisrc.fw
+/lib/firmware/intelliport2.bin
+%dir /lib/firmware/kaweth
+/lib/firmware/kaweth/new_code.bin
+/lib/firmware/kaweth/new_code_fix.bin
+/lib/firmware/kaweth/trigger_code.bin
+/lib/firmware/kaweth/trigger_code_fix.bin
+%dir /lib/firmware/keyspan_pda
+/lib/firmware/keyspan_pda/keyspan_pda.fw
+/lib/firmware/keyspan_pda/xircom_pgs.fw
+%dir /lib/firmware/korg
+/lib/firmware/korg/k1212.dsp
+/lib/firmware/ti_3410.fw
+/lib/firmware/ti_5052.fw
+%dir /lib/firmware/ttusb-budget
+/lib/firmware/ttusb-budget/dspbootcode.bin
+%dir /lib/firmware/vicam
+/lib/firmware/vicam/firmware.fw
+/lib/firmware/whiteheat.fw
+/lib/firmware/whiteheat_loader.fw
+/lib/firmware/yamaha/ds1_ctrl.fw
+/lib/firmware/yamaha/ds1_dsp.fw
+/lib/firmware/yamaha/ds1e_ctrl.fw
+
 %files config
 %defattr(644,root,root,755)
 %dir %{_kernelsrcdir}
@@ -836,51 +884,3 @@ fi
 %{_kernelsrcdir}/REPORTING-BUGS
 %endif
 %endif
-
-%files firmware
-/lib/firmware/atmsar11.fw
-%dir /lib/firmware/cpia2
-/lib/firmware/cpia2/stv0672_vp4.bin
-%dir /lib/firmware/dabusb
-/lib/firmware/dabusb/bitstream.bin
-/lib/firmware/dabusb/firmware.fw
-%dir /lib/firmware/edgeport
-/lib/firmware/edgeport/boot.fw
-/lib/firmware/edgeport/boot2.fw
-/lib/firmware/edgeport/down.fw
-/lib/firmware/edgeport/down2.fw
-/lib/firmware/edgeport/down3.bin
-%dir /lib/firmware/emi26
-/lib/firmware/emi26/bitstream.fw
-/lib/firmware/emi26/firmware.fw
-/lib/firmware/emi26/loader.fw
-%dir /lib/firmware/emi62
-/lib/firmware/emi62/bitstream.fw
-/lib/firmware/emi62/loader.fw
-/lib/firmware/emi62/midi.fw
-/lib/firmware/emi62/spdif.fw
-%dir /lib/firmware/ess
-/lib/firmware/ess/maestro3_assp_kernel.fw
-/lib/firmware/ess/maestro3_assp_minisrc.fw
-/lib/firmware/intelliport2.bin
-%dir /lib/firmware/kaweth
-/lib/firmware/kaweth/new_code.bin
-/lib/firmware/kaweth/new_code_fix.bin
-/lib/firmware/kaweth/trigger_code.bin
-/lib/firmware/kaweth/trigger_code_fix.bin
-%dir /lib/firmware/keyspan_pda
-/lib/firmware/keyspan_pda/keyspan_pda.fw
-/lib/firmware/keyspan_pda/xircom_pgs.fw
-%dir /lib/firmware/korg
-/lib/firmware/korg/k1212.dsp
-/lib/firmware/ti_3410.fw
-/lib/firmware/ti_5052.fw
-%dir /lib/firmware/ttusb-budget
-/lib/firmware/ttusb-budget/dspbootcode.bin
-%dir /lib/firmware/vicam
-/lib/firmware/vicam/firmware.fw
-/lib/firmware/whiteheat.fw
-/lib/firmware/whiteheat_loader.fw
-/lib/firmware/yamaha/ds1_ctrl.fw
-/lib/firmware/yamaha/ds1_dsp.fw
-/lib/firmware/yamaha/ds1e_ctrl.fw
