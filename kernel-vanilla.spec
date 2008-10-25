@@ -797,7 +797,9 @@ fi
 /lib/firmware/korg/k1212.dsp
 /lib/firmware/ti_3410.fw
 /lib/firmware/ti_5052.fw
+%ifarch %{ix86}
 /lib/firmware/tr_smctr.bin
+%endif
 %dir /lib/firmware/ttusb-budget
 /lib/firmware/ttusb-budget/dspbootcode.bin
 %dir /lib/firmware/vicam
