@@ -401,9 +401,6 @@ cd linux-%{basever}
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
 %endif
 
-# if we really want to have vanilla kernel we should create copy from Makefile
-#cp Makefile{,.vanilla}
-
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{postver}_%{alt_kernel}#g' Makefile
 
