@@ -806,6 +806,7 @@ fi
 /lib/firmware/vicam/firmware.fw
 /lib/firmware/whiteheat.fw
 /lib/firmware/whiteheat_loader.fw
+%dir /lib/firmware/yamaha
 /lib/firmware/yamaha/ds1_ctrl.fw
 /lib/firmware/yamaha/ds1_dsp.fw
 /lib/firmware/yamaha/ds1e_ctrl.fw
