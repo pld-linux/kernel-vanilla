@@ -41,20 +41,16 @@
 
 %define		alt_kernel	vanilla
 
-# Our Kernel ABI, increase this when you want out of source modules being rebuilt
-%define		KABI		1
-# Module.symvers: e05892f5d4e6f21d9456f4cdf02e6021
-
 # kernel release (used in filesystem and eventually in uname -r)
 # modules will be looked from /lib/modules/%{kernel_release}
-# _localversion is just that without version for "> localversion"
-%define		_localversion %{KABI}
-%define		kernel_release %{version}_%{alt_kernel}-%{_localversion}
+# localversion is just that without version for "> localversion"
+%define		localversion %{rel}
+%define		kernel_release %{version}_%{alt_kernel}-%{localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
 %define		basever	2.6.27
-%define		postver	.3
-%define		rel		0.1
+%define		postver	.5
+%define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -70,7 +66,7 @@ Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
 # Source0-md5:	b3e78977aa79d3754cb7f8143d7ddabd
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	4f0dc89b4989619c616d40507b5f7f34
+# Source1-md5:	5ae2b4af08b35b9ecc3653c8fc6c1905
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
 Source4:	kernel-config-update.py
@@ -436,7 +432,7 @@ EOF
 pykconfig() {
 	set -x
 	echo '# %{name}.spec overrides'
-	echo 'LOCALVERSION="-%{_localversion}"'
+	echo 'LOCALVERSION="-%{localversion}"'
 
 	%{?debug:echo '# debug options'}
 	%{?debug:echo 'DEBUG_SLAB=y'}
