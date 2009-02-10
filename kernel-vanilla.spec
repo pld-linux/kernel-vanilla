@@ -48,8 +48,8 @@
 %define		kernel_release %{version}_%{alt_kernel}-%{localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		basever	2.6.27
-%define		postver	.13
+%define		basever	2.6.28
+%define		postver	.4
 %define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
@@ -64,9 +64,9 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
-# Source0-md5:	b3e78977aa79d3754cb7f8143d7ddabd
+# Source0-md5:	d351e44709c9810b85e29b877f50968a
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	ead4980144479f23f7ca9b22ea9ee44f
+# Source1-md5:	65afbbf63a73ee7be7227531622049fe
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
 Source4:	kernel-config-update.py
