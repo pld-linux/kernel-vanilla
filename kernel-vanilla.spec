@@ -686,7 +686,6 @@ fi
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/pcmcia
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/*/pcmcia
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/bluetooth/*_cs.ko*
-%exclude /lib/modules/%{kernel_release}/kernel/drivers/ide/legacy/ide-cs.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/*_cs.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/hostap/hostap_cs.ko*
@@ -719,7 +718,6 @@ fi
 /lib/modules/%{kernel_release}/kernel/drivers/pcmcia
 /lib/modules/%{kernel_release}/kernel/drivers/*/pcmcia
 /lib/modules/%{kernel_release}/kernel/drivers/bluetooth/*_cs.ko*
-/lib/modules/%{kernel_release}/kernel/drivers/ide/legacy/ide-cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/*_cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/hostap/hostap_cs.ko*
@@ -786,8 +784,11 @@ fi
 /lib/firmware/keyspan_pda/xircom_pgs.fw
 %dir /lib/firmware/korg
 /lib/firmware/korg/k1212.dsp
+%dir /lib/firmware/sun
+/lib/firmware/sun/cassini.bin
 /lib/firmware/ti_3410.fw
 /lib/firmware/ti_5052.fw
+/lib/firmware/tr_smctr.bin
 %dir /lib/firmware/ttusb-budget
 /lib/firmware/ttusb-budget/dspbootcode.bin
 %dir /lib/firmware/vicam
