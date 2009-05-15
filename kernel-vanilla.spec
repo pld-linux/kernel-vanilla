@@ -814,19 +814,25 @@ fi
 %if %{with noarch}
 %files headers
 %defattr(644,root,root,755)
-%{_kernelsrcdir}/include/*
-%exclude %dir %{_kernelsrcdir}/include/linux
-%exclude %{_kernelsrcdir}/include/linux/autoconf-dist.h
-%exclude %{_kernelsrcdir}/include/linux/utsrelease.h
-%exclude %{_kernelsrcdir}/include/linux/version.h
+%{_kernelsrcdir}/include
+%dir %{_kernelsrcdir}/arch
+%dir %{_kernelsrcdir}/arch/[!K]*
+%{_kernelsrcdir}/arch/*/include
+%dir %{_kernelsrcdir}/security
+%dir %{_kernelsrcdir}/security/selinux
+%{_kernelsrcdir}/security/selinux/include
+%{_kernelsrcdir}/config-dist
+%{_kernelsrcdir}/Module.symvers-dist
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
-%{_kernelsrcdir}/Kbuild
-%{_kernelsrcdir}/kernel/bounds.c
+%ifarch ppc ppc64
+%{_kernelsrcdir}/arch/powerpc/lib/crtsavres.*
+%endif
 %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
-%{_kernelsrcdir}/arch/*/kernel/sigframe.h
+%{_kernelsrcdir}/arch/*/kernel/sigframe*.h
 %{_kernelsrcdir}/drivers/lguest/lg.h
+%{_kernelsrcdir}/kernel/bounds.c
 %dir %{_kernelsrcdir}/scripts
 %dir %{_kernelsrcdir}/scripts/kconfig
 %{_kernelsrcdir}/scripts/Kbuild.include
@@ -838,6 +844,12 @@ fi
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
+%{_kernelsrcdir}/scripts/mkcompile_h
+%dir %{_kernelsrcdir}/scripts/selinux
+%{_kernelsrcdir}/scripts/selinux/Makefile
+%dir %{_kernelsrcdir}/scripts/selinux/mdp
+%{_kernelsrcdir}/scripts/selinux/mdp/Makefile
+%{_kernelsrcdir}/scripts/selinux/mdp/*.c
 
 %files doc
 %defattr(644,root,root,755)
@@ -847,22 +859,39 @@ fi
 %if %{with source}
 %files source -f aux_files_exc
 %defattr(644,root,root,755)
-%{_kernelsrcdir}/arch/*/[!Mk]*
+%{_kernelsrcdir}/arch/*/[!Mik]*
 %{_kernelsrcdir}/arch/*/kernel/[!M]*
+%{_kernelsrcdir}/arch/ia64/ia32/[!M]*
+%{_kernelsrcdir}/arch/ia64/install.sh
+%{_kernelsrcdir}/arch/m68k/ifpsp060/[!M]*
+%{_kernelsrcdir}/arch/m68k/ifpsp060/MISC
+%{_kernelsrcdir}/arch/parisc/install.sh
+%{_kernelsrcdir}/arch/x86/ia32/[!M]*
+%{_kernelsrcdir}/arch/ia64/kvm
+%{_kernelsrcdir}/arch/powerpc/kvm
+%ifarch ppc ppc64
+%exclude %{_kernelsrcdir}/arch/powerpc/lib/crtsavres.*
+%endif
+%{_kernelsrcdir}/arch/s390/kvm
+%{_kernelsrcdir}/arch/x86/kvm
 %exclude %{_kernelsrcdir}/arch/*/kernel/asm-offsets*
-%exclude %{_kernelsrcdir}/arch/*/kernel/sigframe.h
+%exclude %{_kernelsrcdir}/arch/*/kernel/sigframe*.h
+%exclude %{_kernelsrcdir}/drivers/lguest/lg.h
 %{_kernelsrcdir}/block
 %{_kernelsrcdir}/crypto
 %{_kernelsrcdir}/drivers
+%{_kernelsrcdir}/firmware
 %{_kernelsrcdir}/fs
 %{_kernelsrcdir}/init
 %{_kernelsrcdir}/ipc
 %{_kernelsrcdir}/kernel
+%exclude %{_kernelsrcdir}/kernel/bounds.c
 %{_kernelsrcdir}/lib
 %{_kernelsrcdir}/mm
 %{_kernelsrcdir}/net
-%{_kernelsrcdir}/scripts/*
+%{_kernelsrcdir}/virt
 %{_kernelsrcdir}/samples
+%{_kernelsrcdir}/scripts/*
 %exclude %{_kernelsrcdir}/scripts/Kbuild.include
 %exclude %{_kernelsrcdir}/scripts/Makefile*
 %exclude %{_kernelsrcdir}/scripts/basic
@@ -874,6 +903,7 @@ fi
 %exclude %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/sound
 %{_kernelsrcdir}/security
+%exclude %{_kernelsrcdir}/security/selinux/include
 %{_kernelsrcdir}/usr
 %{_kernelsrcdir}/COPYING
 %{_kernelsrcdir}/CREDITS
