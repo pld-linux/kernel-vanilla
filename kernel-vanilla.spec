@@ -64,7 +64,7 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
-# Source0-md5:	64921b5ff5cdadbccfcd3820f03be7d8
+# Source0-md5:	7a80058a6382e5108cdb5554d1609615
 #Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	03f1a0236cc37d8594d2f3c837d81c9d
 Source2:	kernel-vanilla-module-build.pl
