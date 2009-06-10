@@ -7,6 +7,9 @@
 # - ppc symbols
 # - firmware subpackage and --with noarch issue
 #
+# 2.6.30 status:
+# - compile-tested on th-i686 and th-x86_64
+#
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
 %bcond_with	noarch		# build noarch packages
