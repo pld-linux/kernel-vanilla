@@ -54,7 +54,7 @@
 
 %define		basever	2.6.30
 %define		postver	%{nil}
-%define		rel		0.2
+%define		rel		0.2.1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -890,6 +890,9 @@ fi
 %files headers
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/include
+%exclude %{_kernelsrcdir}/include/linux/autoconf-dist.h
+%exclude %{_kernelsrcdir}/include/linux/utsrelease.h
+%exclude %{_kernelsrcdir}/include/linux/version.h
 %dir %{_kernelsrcdir}/arch
 %dir %{_kernelsrcdir}/arch/[!K]*
 %{_kernelsrcdir}/arch/*/include
