@@ -8,8 +8,8 @@
 # - firmware subpackage and --with noarch issue
 #
 # 2.6.30 status:
-# - compile-tested on th-i686 and th-x86_64
 # - works on th-i686
+# - compile-tested on th-x86_64 and th-ppc
 #
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
@@ -54,7 +54,7 @@
 
 %define		basever	2.6.30
 %define		postver	%{nil}
-%define		rel		0.2.1
+%define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
