@@ -95,6 +95,9 @@ BuildRequires:	python
 BuildRequires:	python-modules
 BuildRequires:	rpmbuild(macros) >= 1.379
 BuildRequires:	sed >= 4.0
+%ifarch ppc
+BuildRequires:	uboot-mkimage
+%endif
 Autoreqprov:	no
 Requires:	/sbin/depmod
 Requires:	coreutils
@@ -857,7 +860,7 @@ fi
 /lib/firmware/tigon/tg3_tso5.bin
 /lib/firmware/ti_3410.fw
 /lib/firmware/ti_5052.fw
-%ifarch %{ix86}
+%ifarch %{ix86} ppc
 /lib/firmware/tr_smctr.bin
 %endif
 %dir /lib/firmware/ttusb-budget
