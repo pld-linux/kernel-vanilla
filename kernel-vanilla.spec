@@ -906,6 +906,7 @@ fi
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
+%{_kernelsrcdir}/Kbuild
 %ifarch ppc ppc64
 %{_kernelsrcdir}/arch/powerpc/lib/crtsavres.*
 %endif
