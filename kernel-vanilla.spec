@@ -853,7 +853,9 @@ fi
 /lib/firmware/yamaha/ds1_ctrl.fw
 /lib/firmware/yamaha/ds1_dsp.fw
 /lib/firmware/yamaha/ds1e_ctrl.fw
+%ifnarch %{x8664} sparc
 /lib/firmware/yamaha/yss225_registers.bin
+%endif
 
 %files config
 %defattr(644,root,root,755)
