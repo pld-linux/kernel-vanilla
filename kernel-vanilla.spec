@@ -9,6 +9,7 @@
 #
 # 2.6.30 status:
 # - compile-tested on th-i686 and th-x86_64
+# - works on th-i686
 #
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
