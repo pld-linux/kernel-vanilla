@@ -203,6 +203,19 @@ vmlinux - dekompressiertes Kernel Bild.
 %description vmlinux -l pl.UTF-8
 vmlinux - rozpakowany obraz jądra.
 
+%package dirs
+Summary:	common dirs for kernel packages
+Summary(pl.UTF-8):	Katalogi wspólne dla pakietów kernela
+Group:		Base/Kernel
+
+%description dirs
+This package provides common dirs shared between various kernel
+packages.
+
+%description dirs -l pl.UTF-8
+Katalog ten udostepnia katalogi współdzielone pomiędzy różnymi
+pakietami kernela.
+
 %package drm
 Summary:	DRM kernel modules
 Summary(de.UTF-8):	DRM Kernel Treiber
@@ -533,7 +546,7 @@ install %{objdir}/vmlinux $RPM_BUILD_ROOT/boot/vmlinuz-%{kernel_release}
 	elftoaout %{objdir}/arch/sparc64/boot/image -o %{objdir}/vmlinux.aout
 	install %{objdir}/vmlinux.aout $RPM_BUILD_ROOT/boot/vmlinux.aout-%{kernel_release}
 %endif
-%endif
+%endif # ifarch alpha sparc sparc64
 
 # for initrd
 touch $RPM_BUILD_ROOT/boot/initrd-%{kernel_release}.gz
@@ -704,6 +717,10 @@ fi
 
 %dir %{_sysconfdir}/modprobe.d/%{kernel_release}
 
+%files dirs
+%defattr(644,root,root,755)
+%dir %{_kernelsrcdir}
+
 %ifarch alpha %{ix86} %{x8664} ppc ppc64 sparc sparc64
 %files vmlinux
 %defattr(644,root,root,755)
@@ -860,7 +877,6 @@ fi
 
 %files config
 %defattr(644,root,root,755)
-%dir %{_kernelsrcdir}
 %{_kernelsrcdir}/config-dist
 %{_kernelsrcdir}/Module.symvers-dist
 %dir %{_kernelsrcdir}/include
@@ -880,8 +896,8 @@ fi
 %dir %{_kernelsrcdir}/security
 %dir %{_kernelsrcdir}/security/selinux
 %{_kernelsrcdir}/security/selinux/include
-%{_kernelsrcdir}/config-dist
-%{_kernelsrcdir}/Module.symvers-dist
+#%{_kernelsrcdir}/config-dist
+#%{_kernelsrcdir}/Module.symvers-dist
 
 %files module-build -f aux_files
 %defattr(644,root,root,755)
@@ -912,7 +928,6 @@ fi
 
 %files doc
 %defattr(644,root,root,755)
-%dir %{_kernelsrcdir}
 %{_kernelsrcdir}/Documentation
 
 %if %{with source}
