@@ -14,7 +14,7 @@
 
 %define		_basever		2.6.27
 %define		_postver		.26
-%define		_rel			1
+%define		_rel			2
 
 %define		_enable_debug_packages			0
 
@@ -50,6 +50,8 @@ Source4:	kernel-vanilla-module-build.pl
 
 Source10:	kernel-vanilla-x86.config
 Source11:	kernel-vanilla-x86_64.config
+
+Patch1:		kernel-md_driver_fix.patch
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.18
@@ -372,6 +374,8 @@ Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 %if "%{_postver}" != "%{nil}"
 %{__bzip2} -dc %{SOURCE1} | patch -p1 -s
 %endif
+
+%patch1 -p1
 
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}-%{alt_kernel}#g' Makefile
