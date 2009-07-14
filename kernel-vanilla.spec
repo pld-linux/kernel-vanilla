@@ -864,6 +864,9 @@ fi
 /lib/firmware/yamaha/ds1_ctrl.fw
 /lib/firmware/yamaha/ds1_dsp.fw
 /lib/firmware/yamaha/ds1e_ctrl.fw
+%ifarch %{ix86}
+/lib/firmware/yamaha/yss225_registers.bin
+%endif
 
 %files headers
 %defattr(644,root,root,755)
