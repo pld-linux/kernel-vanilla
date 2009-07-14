@@ -14,7 +14,7 @@
 
 %define		_basever		2.6.30
 %define		_postver		.1
-%define		_rel			0.1
+%define		_rel			1
 
 %define		_enable_debug_packages			0
 
@@ -872,6 +872,12 @@ fi
 %defattr(644,root,root,755)
 %dir %{_kernelsrcdir}
 %{_kernelsrcdir}/include
+%dir %{_kernelsrcdir}/arch
+%dir %{_kernelsrcdir}/arch/[!K]*
+%{_kernelsrcdir}/arch/*/include
+%dir %{_kernelsrcdir}/security
+%dir %{_kernelsrcdir}/security/selinux
+%{_kernelsrcdir}/security/selinux/include
 %{_kernelsrcdir}/config-dist
 %{_kernelsrcdir}/Module.symvers-dist
 
@@ -898,6 +904,11 @@ fi
 %{_kernelsrcdir}/scripts/*.sh
 %{_kernelsrcdir}/scripts/kconfig/*
 %{_kernelsrcdir}/scripts/mkcompile_h
+%dir %{_kernelsrcdir}/scripts/selinux
+%{_kernelsrcdir}/scripts/selinux/Makefile
+%dir %{_kernelsrcdir}/scripts/selinux/mdp
+%{_kernelsrcdir}/scripts/selinux/mdp/Makefile
+%{_kernelsrcdir}/scripts/selinux/mdp/*.c
 
 %files doc
 %defattr(644,root,root,755)
