@@ -695,7 +695,7 @@ fi
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/telephony/ixj_pcmcia.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/usb/gadget/g_midi.ko*
-%exclude /lib/modules/%{kernel_release}/kernel/drivers/ide/legacy/ide-cs.ko*
+%exclude /lib/modules/%{kernel_release}/kernel/drivers/ide/ide-cs.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/*_cs.ko*
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/b43
 %exclude /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/hostap/hostap_cs.ko*
@@ -730,7 +730,7 @@ fi
 /lib/modules/%{kernel_release}/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/telephony/ixj_pcmcia.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/ata/pata_pcmcia.ko*
-/lib/modules/%{kernel_release}/kernel/drivers/ide/legacy/ide-cs.ko*
+/lib/modules/%{kernel_release}/kernel/drivers/ide/ide-cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/*_cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/b43
 /lib/modules/%{kernel_release}/kernel/drivers/net/wireless/hostap/hostap_cs.ko*
@@ -763,12 +763,43 @@ fi
 %endif
 
 %files firmware
+%dir /lib/firmware/3com
+/lib/firmware/3com/3C359.bin
+/lib/firmware/3com/typhoon.bin
+%dir /lib/firmware/acenic
+/lib/firmware/acenic/tg1.bin
+/lib/firmware/acenic/tg2.bin
+%dir /lib/firmware/adaptec
+/lib/firmware/adaptec/starfire_rx.bin
+/lib/firmware/adaptec/starfire_tx.bin
+%dir /lib/firmware/advansys
+/lib/firmware/advansys/3550.bin
+/lib/firmware/advansys/38C0800.bin
+/lib/firmware/advansys/38C1600.bin
+/lib/firmware/advansys/mcode.bin
 /lib/firmware/atmsar11.fw
+%dir /lib/firmware/av7110
+/lib/firmware/av7110/bootcode.bin
+%dir /lib/firmware/bnx2
+/lib/firmware/bnx2/bnx2-mips-06-4.6.16.fw
+/lib/firmware/bnx2/bnx2-mips-09-4.6.17.fw
+/lib/firmware/bnx2/bnx2-rv2p-06-4.6.16.fw
+/lib/firmware/bnx2/bnx2-rv2p-09-4.6.15.fw
+%dir /lib/firmware/cis
+/lib/firmware/cis/LA-PCM.cis
 %dir /lib/firmware/cpia2
 /lib/firmware/cpia2/stv0672_vp4.bin
+%dir /lib/firmware/cxgb3
+/lib/firmware/cxgb3/t3b_psram-1.1.0.bin
+/lib/firmware/cxgb3/t3c_psram-1.1.0.bin
+/lib/firmware/cxgb3/t3fw-7.1.0.bin
 %dir /lib/firmware/dabusb
 /lib/firmware/dabusb/bitstream.bin
 /lib/firmware/dabusb/firmware.fw
+%dir /lib/firmware/e100
+/lib/firmware/e100/d101m_ucode.bin
+/lib/firmware/e100/d101s_ucode.bin
+/lib/firmware/e100/d102e_ucode.bin
 %dir /lib/firmware/edgeport
 /lib/firmware/edgeport/boot.fw
 /lib/firmware/edgeport/boot2.fw
@@ -798,8 +829,25 @@ fi
 /lib/firmware/keyspan_pda/xircom_pgs.fw
 %dir /lib/firmware/korg
 /lib/firmware/korg/k1212.dsp
+/lib/firmware/mts_cdma.fw
+/lib/firmware/mts_edge.fw
+/lib/firmware/mts_gsm.fw
+%dir /lib/firmware/ositech
+/lib/firmware/ositech/Xilinx7OD.bin
+%dir /lib/firmware/qlogic
+/lib/firmware/qlogic/1040.bin
+/lib/firmware/qlogic/12160.bin
+/lib/firmware/qlogic/1280.bin
+%dir /lib/firmware/sun
+/lib/firmware/sun/cassini.bin
+%dir /lib/firmware/tehuti
+/lib/firmware/tehuti/bdx.bin
 /lib/firmware/ti_3410.fw
 /lib/firmware/ti_5052.fw
+%dir /lib/firmware/tigon
+/lib/firmware/tigon/tg3.bin
+/lib/firmware/tigon/tg3_tso.bin
+/lib/firmware/tigon/tg3_tso5.bin
 %ifarch %{ix86}
 /lib/firmware/tr_smctr.bin
 %endif
@@ -809,6 +857,9 @@ fi
 /lib/firmware/vicam/firmware.fw
 /lib/firmware/whiteheat.fw
 /lib/firmware/whiteheat_loader.fw
+%dir /lib/firmware/yam
+/lib/firmware/yam/1200.bin
+/lib/firmware/yam/9600.bin
 %dir /lib/firmware/yamaha
 /lib/firmware/yamaha/ds1_ctrl.fw
 /lib/firmware/yamaha/ds1_dsp.fw
