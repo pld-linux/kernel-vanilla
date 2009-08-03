@@ -8,8 +8,8 @@
 # - firmware subpackage and --with noarch issue
 #
 # 2.6.30 status:
-# - works on th-i686
-# - compile-tested on th-x86_64 and th-ppc
+# - works on th-i686 and th-x86_64
+# - compile-tested on th-ppc
 #
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
