@@ -52,8 +52,8 @@
 %define		kernel_release %{version}_%{alt_kernel}-%{localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		basever	2.6.30
-%define		postver	.5
+%define		basever	2.6.31
+%define		postver	%{nil}
 %define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
@@ -68,7 +68,7 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
-# Source0-md5:	7a80058a6382e5108cdb5554d1609615
+# Source0-md5:	84c077a37684e4cbfa67b18154390d8a
 %if "%{postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	47841c7ff5c81a7b349a79f2fa8e9138
@@ -797,14 +797,19 @@ fi
 /lib/firmware/bnx2/bnx2-mips-09-4.6.17.fw
 /lib/firmware/bnx2/bnx2-rv2p-06-4.6.16.fw
 /lib/firmware/bnx2/bnx2-rv2p-09-4.6.15.fw
+/lib/firmware/bnx2x-e1-4.8.53.0.fw
+/lib/firmware/bnx2x-e1h-4.8.53.0.fw
 %dir /lib/firmware/cis
+/lib/firmware/cis/3CCFEM556.cis
+/lib/firmware/cis/3CXEM556.cis
+/lib/firmware/cis/LA-PCM.cis
 /lib/firmware/cis/LA-PCM.cis
 %dir /lib/firmware/cpia2
 /lib/firmware/cpia2/stv0672_vp4.bin
 %dir /lib/firmware/cxgb3
 /lib/firmware/cxgb3/t3b_psram-1.1.0.bin
 /lib/firmware/cxgb3/t3c_psram-1.1.0.bin
-/lib/firmware/cxgb3/t3fw-7.1.0.bin
+/lib/firmware/cxgb3/t3fw-7.4.0.bin
 %dir /lib/firmware/dabusb
 /lib/firmware/dabusb/bitstream.bin
 /lib/firmware/dabusb/firmware.fw
