@@ -723,9 +723,9 @@ fi
 %if %{with pcmcia}
 %files pcmcia
 %defattr(644,root,root,755)
+%exclude /lib/modules/%{kernel_release}/kernel/drivers/pcmcia/pcmcia*ko*
 /lib/modules/%{kernel_release}/kernel/drivers/pcmcia/*ko*
 /lib/modules/%{kernel_release}/kernel/drivers/*/pcmcia
-%exclude /lib/modules/%{kernel_release}/kernel/drivers/pcmcia/pcmcia*ko*
 /lib/modules/%{kernel_release}/kernel/drivers/bluetooth/*_cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/isdn/hardware/avm/avm_cs.ko*
 /lib/modules/%{kernel_release}/kernel/drivers/telephony/ixj_pcmcia.ko*
@@ -780,19 +780,23 @@ fi
 /lib/firmware/atmsar11.fw
 %dir /lib/firmware/av7110
 /lib/firmware/av7110/bootcode.bin
+/lib/firmware/bnx2x-e1-4.8.53.0.fw
+/lib/firmware/bnx2x-e1h-4.8.53.0.fw
 %dir /lib/firmware/bnx2
 /lib/firmware/bnx2/bnx2-mips-06-4.6.16.fw
 /lib/firmware/bnx2/bnx2-mips-09-4.6.17.fw
 /lib/firmware/bnx2/bnx2-rv2p-06-4.6.16.fw
 /lib/firmware/bnx2/bnx2-rv2p-09-4.6.15.fw
 %dir /lib/firmware/cis
+/lib/firmware/cis/3CCFEM556.cis
+/lib/firmware/cis/3CXEM556.cis
 /lib/firmware/cis/LA-PCM.cis
 %dir /lib/firmware/cpia2
 /lib/firmware/cpia2/stv0672_vp4.bin
 %dir /lib/firmware/cxgb3
 /lib/firmware/cxgb3/t3b_psram-1.1.0.bin
 /lib/firmware/cxgb3/t3c_psram-1.1.0.bin
-/lib/firmware/cxgb3/t3fw-7.1.0.bin
+/lib/firmware/cxgb3/t3fw-7.4.0.bin
 %dir /lib/firmware/dabusb
 /lib/firmware/dabusb/bitstream.bin
 /lib/firmware/dabusb/firmware.fw
