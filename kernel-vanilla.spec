@@ -13,7 +13,7 @@
 %define		have_isa	1
 
 %define		_basever		2.6.31
-%define		_postver		%{nil}
+%define		_postver		.1
 %define		_rel			1
 
 %define		_enable_debug_packages			0
@@ -41,7 +41,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 # Source0-md5:	84c077a37684e4cbfa67b18154390d8a
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	47841c7ff5c81a7b349a79f2fa8e9138
+# Source1-md5:	43977a0a264dd7d173b6ef122c62fb20
 %endif
 
 Source2:	kernel-vanilla-autoconf.h
@@ -68,6 +68,7 @@ Requires:	/sbin/depmod
 Requires:	coreutils
 Requires:	geninitrd >= 2.57
 Requires:	module-init-tools >= 0.9.9
+Obsoletes:	kernel%{_alt_kernel}-firmware
 Obsoletes:	kernel%{_alt_kernel}-isdn-mISDN
 Obsoletes:	kernel-misc-acer_acpi
 Obsoletes:	kernel-misc-fuse
@@ -263,17 +264,6 @@ OSS (Open Sound System) Treiber.
 %description sound-oss -l pl.UTF-8
 Sterowniki dźwięku OSS (Open Sound System).
 
-%package firmware
-Summary:	Firmware for Linux kernel drivers
-Summary(pl.UTF-8):	Firmware dla sterowników z jądra Linuksa
-Group:		System Environment/Kernel
-
-%description firmware
-Firmware for Linux kernel drivers.
-
-%description firmware -l pl.UTF-8
-Firmware dla sterowników z jądra Linuksa.
-
 %package headers
 Summary:	Header files for the Linux kernel
 Summary(de.UTF-8):	Header Dateien für den Linux-Kernel
@@ -468,10 +458,11 @@ PreInstallKernel() {
 	install vmlinux $KERNEL_INSTALL_DIR/boot/vmlinux-$KernelVer
 %endif
 
-	%{__make} %CrossOpts modules_install \
+	%{__make} %CrossOpts modules_install firmware_install \
 		%{?with_verbose:V=1} \
 		DEPMOD=%DepMod \
 		INSTALL_MOD_PATH=$KERNEL_INSTALL_DIR \
+		INSTALL_FW_PATH=$KERNEL_INSTALL_DIR/lib/firmware/$KernelVer \
 		KERNELRELEASE=$KernelVer
 
 	# You'd probabelly want to make it somewhat different
@@ -660,6 +651,7 @@ fi
 /boot/vmlinuz-%{kernel_release}
 /boot/System.map-%{kernel_release}
 %ghost %{initrd_dir}/initrd-%{kernel_release}.gz
+/lib/firmware/%{kernel_release}
 %dir /lib/modules/%{kernel_release}
 %dir /lib/modules/%{kernel_release}/kernel
 /lib/modules/%{kernel_release}/kernel/arch
@@ -760,116 +752,6 @@ fi
 %defattr(644,root,root,755)
 /lib/modules/%{kernel_release}/kernel/sound/oss
 %endif
-%endif
-
-%files firmware
-%dir /lib/firmware/3com
-/lib/firmware/3com/3C359.bin
-/lib/firmware/3com/typhoon.bin
-%dir /lib/firmware/acenic
-/lib/firmware/acenic/tg1.bin
-/lib/firmware/acenic/tg2.bin
-%dir /lib/firmware/adaptec
-/lib/firmware/adaptec/starfire_rx.bin
-/lib/firmware/adaptec/starfire_tx.bin
-%dir /lib/firmware/advansys
-/lib/firmware/advansys/3550.bin
-/lib/firmware/advansys/38C0800.bin
-/lib/firmware/advansys/38C1600.bin
-/lib/firmware/advansys/mcode.bin
-/lib/firmware/atmsar11.fw
-%dir /lib/firmware/av7110
-/lib/firmware/av7110/bootcode.bin
-/lib/firmware/bnx2x-e1-4.8.53.0.fw
-/lib/firmware/bnx2x-e1h-4.8.53.0.fw
-%dir /lib/firmware/bnx2
-/lib/firmware/bnx2/bnx2-mips-06-4.6.16.fw
-/lib/firmware/bnx2/bnx2-mips-09-4.6.17.fw
-/lib/firmware/bnx2/bnx2-rv2p-06-4.6.16.fw
-/lib/firmware/bnx2/bnx2-rv2p-09-4.6.15.fw
-%dir /lib/firmware/cis
-/lib/firmware/cis/3CCFEM556.cis
-/lib/firmware/cis/3CXEM556.cis
-/lib/firmware/cis/LA-PCM.cis
-%dir /lib/firmware/cpia2
-/lib/firmware/cpia2/stv0672_vp4.bin
-%dir /lib/firmware/cxgb3
-/lib/firmware/cxgb3/t3b_psram-1.1.0.bin
-/lib/firmware/cxgb3/t3c_psram-1.1.0.bin
-/lib/firmware/cxgb3/t3fw-7.4.0.bin
-%dir /lib/firmware/dabusb
-/lib/firmware/dabusb/bitstream.bin
-/lib/firmware/dabusb/firmware.fw
-%dir /lib/firmware/e100
-/lib/firmware/e100/d101m_ucode.bin
-/lib/firmware/e100/d101s_ucode.bin
-/lib/firmware/e100/d102e_ucode.bin
-%dir /lib/firmware/edgeport
-/lib/firmware/edgeport/boot.fw
-/lib/firmware/edgeport/boot2.fw
-/lib/firmware/edgeport/down.fw
-/lib/firmware/edgeport/down2.fw
-/lib/firmware/edgeport/down3.bin
-%dir /lib/firmware/emi26
-/lib/firmware/emi26/bitstream.fw
-/lib/firmware/emi26/firmware.fw
-/lib/firmware/emi26/loader.fw
-%dir /lib/firmware/emi62
-/lib/firmware/emi62/bitstream.fw
-/lib/firmware/emi62/loader.fw
-/lib/firmware/emi62/midi.fw
-/lib/firmware/emi62/spdif.fw
-%dir /lib/firmware/ess
-/lib/firmware/ess/maestro3_assp_kernel.fw
-/lib/firmware/ess/maestro3_assp_minisrc.fw
-/lib/firmware/intelliport2.bin
-%dir /lib/firmware/kaweth
-/lib/firmware/kaweth/new_code.bin
-/lib/firmware/kaweth/new_code_fix.bin
-/lib/firmware/kaweth/trigger_code.bin
-/lib/firmware/kaweth/trigger_code_fix.bin
-%dir /lib/firmware/keyspan_pda
-/lib/firmware/keyspan_pda/keyspan_pda.fw
-/lib/firmware/keyspan_pda/xircom_pgs.fw
-%dir /lib/firmware/korg
-/lib/firmware/korg/k1212.dsp
-/lib/firmware/mts_cdma.fw
-/lib/firmware/mts_edge.fw
-/lib/firmware/mts_gsm.fw
-%dir /lib/firmware/ositech
-/lib/firmware/ositech/Xilinx7OD.bin
-%dir /lib/firmware/qlogic
-/lib/firmware/qlogic/1040.bin
-/lib/firmware/qlogic/12160.bin
-/lib/firmware/qlogic/1280.bin
-%dir /lib/firmware/sun
-/lib/firmware/sun/cassini.bin
-%dir /lib/firmware/tehuti
-/lib/firmware/tehuti/bdx.bin
-/lib/firmware/ti_3410.fw
-/lib/firmware/ti_5052.fw
-%dir /lib/firmware/tigon
-/lib/firmware/tigon/tg3.bin
-/lib/firmware/tigon/tg3_tso.bin
-/lib/firmware/tigon/tg3_tso5.bin
-%ifarch %{ix86}
-/lib/firmware/tr_smctr.bin
-%endif
-%dir /lib/firmware/ttusb-budget
-/lib/firmware/ttusb-budget/dspbootcode.bin
-%dir /lib/firmware/vicam
-/lib/firmware/vicam/firmware.fw
-/lib/firmware/whiteheat.fw
-/lib/firmware/whiteheat_loader.fw
-%dir /lib/firmware/yam
-/lib/firmware/yam/1200.bin
-/lib/firmware/yam/9600.bin
-%dir /lib/firmware/yamaha
-/lib/firmware/yamaha/ds1_ctrl.fw
-/lib/firmware/yamaha/ds1_dsp.fw
-/lib/firmware/yamaha/ds1e_ctrl.fw
-%ifarch %{ix86}
-/lib/firmware/yamaha/yss225_registers.bin
 %endif
 
 %files headers
