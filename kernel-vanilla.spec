@@ -6,10 +6,11 @@
 # TODO:
 # - ppc symbols
 # - firmware subpackage and --with noarch issue
+# - ohci-hcd module requires pcmcia. Maybe we should merge pcmcia subpackage
+#   into main package?
 #
-# 2.6.30 status:
+# 2.6.31 status:
 # - works on th-i686 and th-x86_64
-# - compile-tested on th-ppc
 #
 # Conditional build:
 %bcond_without	source		# don't build kernel-source package
