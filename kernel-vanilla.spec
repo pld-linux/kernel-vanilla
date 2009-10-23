@@ -54,7 +54,7 @@
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
 %define		basever	2.6.31
-%define		postver	.4
+%define		postver	.5
 %define		rel		2
 
 Summary:	The Linux kernel (the core of the Linux operating system)
@@ -72,7 +72,7 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
 # Source0-md5:	84c077a37684e4cbfa67b18154390d8a
 %if "%{postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	02078f4231baee4f0004212f2875df2b
+# Source1-md5:	6cac5e59d5562b591cdda485941204d5
 %endif
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
