@@ -53,9 +53,9 @@
 %define		kernel_release %{version}_%{alt_kernel}-%{localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		basever	2.6.31
-%define		postver	.5
-%define		rel		2
+%define		basever	2.6.32
+%define		postver	.1
+%define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -69,10 +69,10 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
-# Source0-md5:	84c077a37684e4cbfa67b18154390d8a
+# Source0-md5:	260551284ac224c3a43c4adac7df4879
 %if "%{postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	6cac5e59d5562b591cdda485941204d5
+# Source1-md5:	abc24a9beb8431a75301dd3884b37a3c
 %endif
 Source2:	kernel-vanilla-module-build.pl
 Source3:	kernel-config.py
@@ -794,23 +794,19 @@ fi
 %dir /lib/firmware/av7110
 /lib/firmware/av7110/bootcode.bin
 %dir /lib/firmware/bnx2
-/lib/firmware/bnx2/bnx2-mips-06-4.6.16.fw
-/lib/firmware/bnx2/bnx2-mips-09-4.6.17.fw
-/lib/firmware/bnx2/bnx2-rv2p-06-4.6.16.fw
-/lib/firmware/bnx2/bnx2-rv2p-09-4.6.15.fw
-/lib/firmware/bnx2x-e1-4.8.53.0.fw
-/lib/firmware/bnx2x-e1h-4.8.53.0.fw
+/lib/firmware/bnx2/bnx2-mips-06-5.0.0.j3.fw
+/lib/firmware/bnx2/bnx2-mips-09-5.0.0.j3.fw
+/lib/firmware/bnx2/bnx2-rv2p-06-5.0.0.j3.fw
+/lib/firmware/bnx2/bnx2-rv2p-09-5.0.0.j3.fw
+/lib/firmware/bnx2/bnx2-rv2p-09ax-5.0.0.j3.fw
+/lib/firmware/bnx2x-e1-5.0.21.0.fw
+/lib/firmware/bnx2x-e1h-5.0.21.0.fw
 %dir /lib/firmware/cis
-/lib/firmware/cis/3CCFEM556.cis
-/lib/firmware/cis/3CXEM556.cis
-/lib/firmware/cis/LA-PCM.cis
-/lib/firmware/cis/LA-PCM.cis
+/lib/firmware/cis/*.cis
 %dir /lib/firmware/cpia2
 /lib/firmware/cpia2/stv0672_vp4.bin
 %dir /lib/firmware/cxgb3
-/lib/firmware/cxgb3/t3b_psram-1.1.0.bin
-/lib/firmware/cxgb3/t3c_psram-1.1.0.bin
-/lib/firmware/cxgb3/t3fw-7.4.0.bin
+/lib/firmware/cxgb3/*.bin
 %dir /lib/firmware/dabusb
 /lib/firmware/dabusb/bitstream.bin
 /lib/firmware/dabusb/firmware.fw
@@ -847,6 +843,8 @@ fi
 /lib/firmware/keyspan_pda/xircom_pgs.fw
 %dir /lib/firmware/korg
 /lib/firmware/korg/k1212.dsp
+%dir /lib/firmware/matrox
+/lib/firmware/matrox/*.fw
 /lib/firmware/mts_cdma.fw
 /lib/firmware/mts_edge.fw
 /lib/firmware/mts_gsm.fw
@@ -856,6 +854,10 @@ fi
 /lib/firmware/qlogic/1040.bin
 /lib/firmware/qlogic/12160.bin
 /lib/firmware/qlogic/1280.bin
+%dir /lib/firmware/r128
+/lib/firmware/r128/r128_cce.bin
+%dir /lib/firmware/radeon
+/lib/firmware/radeon/*.bin
 %dir /lib/firmware/sun
 /lib/firmware/sun/cassini.bin
 %dir /lib/firmware/tehuti
@@ -930,6 +932,7 @@ fi
 %{_kernelsrcdir}/scripts/basic
 %{_kernelsrcdir}/scripts/mkmakefile
 %{_kernelsrcdir}/scripts/mod
+%{_kernelsrcdir}/scripts/module-common.lds
 %{_kernelsrcdir}/scripts/setlocalversion
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
