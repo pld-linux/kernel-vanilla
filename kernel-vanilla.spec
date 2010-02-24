@@ -12,9 +12,9 @@
 %define		have_sound	1
 %define		have_isa	1
 
-%define		_basever		2.6.31
+%define		_basever		2.6.32
 %define		_postver		.9
-%define		_rel			1
+%define		_rel			0.1
 
 %define		_enable_debug_packages			0
 
@@ -38,10 +38,10 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	84c077a37684e4cbfa67b18154390d8a
+# Source0-md5:	260551284ac224c3a43c4adac7df4879
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	819f1552906be755b53154fd570866eb
+# Source1-md5:	7f615dd3b4a3b19fb86e479996a2deb5
 %endif
 
 Source2:	kernel-vanilla-autoconf.h
@@ -666,6 +666,7 @@ fi
 /lib/modules/%{kernel_release}/kernel/kernel
 
 /lib/modules/%{kernel_release}/kernel/lib
+/lib/modules/%{kernel_release}/kernel/mm
 /lib/modules/%{kernel_release}/kernel/net
 %if %{have_sound}
 %dir /lib/modules/%{kernel_release}/kernel/sound
