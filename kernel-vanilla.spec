@@ -14,7 +14,7 @@
 
 %define		_basever		2.6.32
 %define		_postver		.9
-%define		_rel			0.1
+%define		_rel			1
 
 %define		_enable_debug_packages			0
 
@@ -788,6 +788,7 @@ fi
 %{_kernelsrcdir}/scripts/basic
 %{_kernelsrcdir}/scripts/mkmakefile
 %{_kernelsrcdir}/scripts/mod
+%{_kernelsrcdir}/scripts/module-common.lds
 %{_kernelsrcdir}/scripts/setlocalversion
 %{_kernelsrcdir}/scripts/*.c
 %{_kernelsrcdir}/scripts/*.sh
