@@ -17,7 +17,7 @@
 %bcond_with	noarch		# build noarch packages
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	pae		# build PAE (HIGHMEM64G) support on uniprocessor
-%bcond_with	preempt-nort	# build preemptable no realtime kernel
+%bcond_with	preempt_nort	# build preemptable no realtime kernel
 
 %{?debug:%define with_verbose 1}
 
@@ -440,7 +440,7 @@ Q			:= %{!?with_verbose:@}
 MAKE_OPTS	:= %{MakeOpts}
 
 CONFIGS += %{_sourcedir}/kernel-vanilla-multiarch.conf
-%if %{with preempt-nort}
+%if %{with preempt_nort}
 CONFIGS += %{_sourcedir}/kernel-vanilla-preempt-nort.config
 %else
 CONFIGS += %{_sourcedir}/kernel-vanilla-no-preempt-nort.config
