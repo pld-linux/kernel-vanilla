@@ -53,9 +53,9 @@
 %define		kernel_release %{version}_%{alt_kernel}-%{localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		basever	2.6.32
-%define		postver	.1
-%define		rel		1
+%define		basever	2.6.34
+%define		postver	%{nil}
+%define		rel		0.1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -69,7 +69,7 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
-# Source0-md5:	260551284ac224c3a43c4adac7df4879
+# Source0-md5:	10eebcb0178fb4540e2165bfd7efc7ad
 %if "%{postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	abc24a9beb8431a75301dd3884b37a3c
@@ -568,8 +568,9 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d/%{kernel_release}
 # maybe package these to -module-build, then -headers could be noarch
 cp -a %{objdir}/Module.symvers $RPM_BUILD_ROOT%{_kernelsrcdir}/Module.symvers-dist
 cp -aL %{objdir}/.config $RPM_BUILD_ROOT%{_kernelsrcdir}/config-dist
-cp -a %{objdir}/include/linux/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
-cp -a %{objdir}/include/linux/{utsrelease,version}.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
+cp -a %{objdir}/include/generated/autoconf.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf-dist.h
+cp -a %{objdir}/include/generated/utsrelease.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
+cp -a %{objdir}/include/linux/version.h $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 %endif # arch dependant
 
 %if %{with noarch}
@@ -794,13 +795,13 @@ fi
 %dir /lib/firmware/av7110
 /lib/firmware/av7110/bootcode.bin
 %dir /lib/firmware/bnx2
-/lib/firmware/bnx2/bnx2-mips-06-5.0.0.j3.fw
-/lib/firmware/bnx2/bnx2-mips-09-5.0.0.j3.fw
+/lib/firmware/bnx2/bnx2-mips-06-5.0.0.j6.fw
+/lib/firmware/bnx2/bnx2-mips-09-5.0.0.j9.fw
 /lib/firmware/bnx2/bnx2-rv2p-06-5.0.0.j3.fw
-/lib/firmware/bnx2/bnx2-rv2p-09-5.0.0.j3.fw
-/lib/firmware/bnx2/bnx2-rv2p-09ax-5.0.0.j3.fw
-/lib/firmware/bnx2x-e1-5.0.21.0.fw
-/lib/firmware/bnx2x-e1h-5.0.21.0.fw
+/lib/firmware/bnx2/bnx2-rv2p-09-5.0.0.j10.fw
+/lib/firmware/bnx2/bnx2-rv2p-09ax-5.0.0.j10.fw
+/lib/firmware/bnx2x-e1-5.2.13.0.fw
+/lib/firmware/bnx2x-e1h-5.2.13.0.fw
 %dir /lib/firmware/cis
 /lib/firmware/cis/*.cis
 %dir /lib/firmware/cpia2
@@ -953,7 +954,6 @@ fi
 %defattr(644,root,root,755)
 %{_kernelsrcdir}/arch/*/[!Mik]*
 %{_kernelsrcdir}/arch/*/kernel/[!M]*
-%{_kernelsrcdir}/arch/ia64/ia32/[!M]*
 %{_kernelsrcdir}/arch/ia64/install.sh
 %{_kernelsrcdir}/arch/m68k/ifpsp060/[!M]*
 %{_kernelsrcdir}/arch/m68k/ifpsp060/MISC
