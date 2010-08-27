@@ -43,6 +43,9 @@ Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	29aa10a231882a6e52908642b572326f
 %endif
+%if %{with pae}
+NoSource:	0
+%endif
 
 Source2:	kernel-vanilla-autoconf.h
 Source3:	kernel-vanilla-config.h
