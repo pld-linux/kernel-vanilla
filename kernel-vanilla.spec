@@ -53,9 +53,9 @@
 %define		kernel_release %{version}_%{alt_kernel}-%{localversion}
 %define		_kernelsrcdir	/usr/src/linux-%{version}_%{alt_kernel}
 
-%define		basever	2.6.34
+%define		basever	2.6.36
 %define		postver	%{nil}
-%define		rel		0.1
+%define		rel		1
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -69,7 +69,7 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{basever}.tar.bz2
-# Source0-md5:	10eebcb0178fb4540e2165bfd7efc7ad
+# Source0-md5:	61f3739a73afb6914cb007f37fb09b62
 %if "%{postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
 # Source1-md5:	abc24a9beb8431a75301dd3884b37a3c
@@ -796,7 +796,7 @@ fi
 /lib/firmware/av7110/bootcode.bin
 %dir /lib/firmware/bnx2
 /lib/firmware/bnx2/bnx2-mips-06-5.0.0.j6.fw
-/lib/firmware/bnx2/bnx2-mips-09-5.0.0.j9.fw
+/lib/firmware/bnx2/bnx2-mips-09-5.0.0.j15.fw
 /lib/firmware/bnx2/bnx2-rv2p-06-5.0.0.j3.fw
 /lib/firmware/bnx2/bnx2-rv2p-09-5.0.0.j10.fw
 /lib/firmware/bnx2/bnx2-rv2p-09ax-5.0.0.j10.fw
