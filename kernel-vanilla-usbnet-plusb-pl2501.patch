@@ -1,0 +1,52 @@
+--- linux-2.6.36/drivers/net/usb/plusb.c.orig	2010-11-12 18:14:48.000000000 +0100
++++ linux-2.6.36/drivers/net/usb/plusb.c	2010-11-12 18:16:30.000000000 +0100
+@@ -1,5 +1,5 @@
+ /*
+- * PL-2301/2302 USB host-to-host link cables
++ * PL-2301/2302/2501 USB host-to-host link cables
+  * Copyright (C) 2000-2005 by David Brownell
+  *
+  * This program is free software; you can redistribute it and/or modify
+@@ -32,7 +32,7 @@
+ 
+ 
+ /*
+- * Prolific PL-2301/PL-2302 driver ... http://www.prolifictech.com
++ * Prolific PL-2301/PL-2302/PLD-2501 driver ... http://www.prolifictech.com
+  *
+  * The protocol and handshaking used here should be bug-compatible
+  * with the Linux 2.2 "plusb" driver, by Deti Fliegl.
+@@ -45,6 +45,7 @@
+  * seems to get wedged under load.  Prolific docs are weak, and
+  * don't identify differences between PL2301 and PL2302, much less
+  * anything to explain the different PL2302 versions observed.
++ * New PL2501 seem to use same code as PL2301/PL2302.
+  */
+ 
+ /*
+@@ -95,7 +96,7 @@
+ }
+ 
+ static const struct driver_info	prolific_info = {
+-	.description =	"Prolific PL-2301/PL-2302",
++	.description =	"Prolific PL-2301/PL-2302/PL-2501",
+ 	.flags =	FLAG_NO_SETINT,
+ 		/* some PL-2302 versions seem to fail usb_set_interface() */
+ 	.reset =	pl_reset,
+@@ -117,6 +118,9 @@
+ }, {
+ 	USB_DEVICE(0x067b, 0x0001),	// PL-2302
+ 	.driver_info =	(unsigned long) &prolific_info,
++}, {
++	USB_DEVICE(0x067b, 0x2501),     // PL-2501
++	.driver_info =  (unsigned long) &prolific_info,
+ },
+ 
+ 	{ },		// END
+@@ -145,5 +149,5 @@
+ module_exit(plusb_exit);
+ 
+ MODULE_AUTHOR("David Brownell");
+-MODULE_DESCRIPTION("Prolific PL-2301/2302 USB Host to Host Link Driver");
++MODULE_DESCRIPTION("Prolific PL-2301/2302/2501 USB Host to Host Link Driver");
+ MODULE_LICENSE("GPL");

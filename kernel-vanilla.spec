@@ -55,7 +55,7 @@
 
 %define		basever	2.6.36
 %define		postver	%{nil}
-%define		rel		1
+%define		rel		2
 
 Summary:	The Linux kernel (the core of the Linux operating system)
 Summary(de.UTF-8):	Der Linux-Kernel (Kern des Linux-Betriebssystems)
@@ -82,6 +82,7 @@ Source6:	kernel-vanilla-config.h
 Source7:	kernel-vanilla-multiarch.conf
 Source8:	kernel-vanilla-preempt-nort.config
 Source9:	kernel-vanilla-no-preempt-nort.config
+Patch0:		kernel-vanilla-usbnet-plusb-pl2501.patch
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.14.90.0.7
 %ifarch sparc sparc64
@@ -420,6 +421,9 @@ cd linux-%{basever}
 %{__bzip2} -dc %{SOURCE1} | %{__patch} -p1 -s
 %endif
 
+#new usb ids
+%patch0 -p1
+
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{postver}_%{alt_kernel}#g' Makefile
 
@@ -689,6 +693,7 @@ fi
 %dir /lib/modules/%{kernel_release}
 %dir /lib/modules/%{kernel_release}/kernel
 /lib/modules/%{kernel_release}/kernel/arch
+/lib/modules/%{kernel_release}/kernel/block
 /lib/modules/%{kernel_release}/kernel/crypto
 /lib/modules/%{kernel_release}/kernel/drivers
 %if %{have_drm}
