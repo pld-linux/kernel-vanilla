@@ -118,6 +118,7 @@ Conflicts:	ppp < 1:2.4.0
 Conflicts:	procps < 3.2.0
 Conflicts:	quota-tools < 3.09
 Conflicts:	reiserfsprogs < 3.6.3
+Conflicts:	rpm < 4.4.2-0.2
 Conflicts:	udev < 1:071
 Conflicts:	util-linux < 2.10o
 Conflicts:	xfsprogs < 2.6.0
@@ -296,7 +297,7 @@ Sterowniki dźwięku OSS (Open Sound System).
 %package firmware
 Summary:	Firmware for Linux kernel drivers
 Summary(pl.UTF-8):	Firmware dla sterowników z jądra Linuksa
-Group:		System Environment/Kernel
+Group:		Base/Kernel
 
 %description firmware
 Firmware for Linux kernel drivers.
@@ -332,8 +333,8 @@ building kernel modules.
 
 %description headers -l de.UTF-8
 Dies sind die C Header Dateien für den Linux-Kernel, die definierte
-Strukturen und Konstante beinhalten, die beim rekompilieren des Kernels
-oder bei Kernel Modul kompilationen gebraucht werden.
+Strukturen und Konstante beinhalten, die beim rekompilieren des
+Kernels oder bei Kernel Modul kompilationen gebraucht werden.
 
 %description headers -l pl.UTF-8
 Pakiet zawiera pliki nagłówkowe jądra, niezbędne do rekompilacji jądra
@@ -615,20 +616,21 @@ fi
 
 %depmod %{kernel_release}
 
+%posttrans
+# generate initrd after all dependant modules are installed
 /sbin/geninitrd -f --initrdfs=initramfs  %{initrd_dir}/initrd-%{kernel_release}.gz %{kernel_release}
 ln -sf initrd-%{kernel_release}.gz %{initrd_dir}/initrd-%{alt_kernel}
 
-if [ -x /sbin/new-kernel-pkg ]; then
-	if [ -f /etc/pld-release ]; then
-		title=$(sed 's/^[0-9.]\+ //' < /etc/pld-release)
-	else
-		title='PLD Linux'
+# update boot loaders when old package files are gone from filesystem
+if [ -x /sbin/update-grub -a -f /etc/sysconfig/grub ]; then
+	if [ "$(. /etc/sysconfig/grub; echo ${UPDATE_GRUB:-no})" = "yes" ]; then
+		/sbin/update-grub >/dev/null
 	fi
-
-	title="$title %{alt_kernel}"
-
-	/sbin/new-kernel-pkg --initrdfile=%{initrd_dir}/initrd-%{kernel_release}.gz --install %{kernel_release} --banner "$title"
-elif [ -x /sbin/rc-boot ]; then
+fi
+if [ -x /sbin/new-kernel-pkg ]; then
+	/sbin/new-kernel-pkg --initrdfile=%{initrd_dir}/initrd-%{kernel_release}.gz --install %{kernel_release} --banner "PLD Linux (%{pld_release})%{?alt_kernel: / %{alt_kernel}}"
+fi
+if [ -x /sbin/rc-boot ]; then
 	/sbin/rc-boot 1>&2 || :
 fi
 
@@ -782,6 +784,7 @@ fi
 %endif			# %{have_sound}
 
 %files firmware
+%defattr(644,root,root,755)
 %dir /lib/firmware/3com
 /lib/firmware/3com/3C359.bin
 /lib/firmware/3com/typhoon.bin
