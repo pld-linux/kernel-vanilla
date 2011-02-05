@@ -524,7 +524,7 @@ install -d $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 touch $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/{utsrelease,version,autoconf-dist}.h
 
 %if %{without noarch}
-%{__make} %{MakeOpts} %{!?with_verbose:-s} modules_install \
+%{__make} -j1 %{MakeOpts} %{!?with_verbose:-s} modules_install \
 	-C %{objdir} \
 	%{?with_verbose:V=1} \
 	DEPMOD=%{DepMod} \
