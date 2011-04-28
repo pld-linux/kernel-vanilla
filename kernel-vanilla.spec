@@ -12,8 +12,8 @@
 %define		have_sound	1
 %define		have_isa	1
 
-%define		_basever		2.6.32
-%define		_postver		.24
+%define		_basever		2.6.36
+%define		_postver		.4
 %define		_rel			1
 
 %define		_enable_debug_packages			0
@@ -38,10 +38,10 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	260551284ac224c3a43c4adac7df4879
+# Source0-md5:	61f3739a73afb6914cb007f37fb09b62
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	e3346e3b4b92f048b8ecded829f45cdf
+# Source1-md5:	df0414c63e51681cc20df8c211fa738c
 %endif
 
 Source2:	kernel-vanilla-autoconf.h
@@ -50,6 +50,8 @@ Source4:	kernel-vanilla-module-build.pl
 
 Source10:	kernel-vanilla-x86.config
 Source11:	kernel-vanilla-x86_64.config
+
+Patch0:		kernel-vanilla-small_fixes.patch
 
 URL:		http://www.kernel.org/
 BuildRequires:	binutils >= 3:2.18
@@ -363,11 +365,10 @@ Pakiet zawiera dokumentację do jądra Linuksa pochodzącą z katalogu
 %{__bzip2} -dc %{SOURCE1} | patch -p1 -s
 %endif
 
+%patch0 -p1
+
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{_postver}-%{alt_kernel}#g' Makefile
-
-# on sparc this line causes CONFIG_INPUT=m (instead of =y), thus breaking build
-sed -i -e '/select INPUT/d' net/bluetooth/hidp/Kconfig
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' -o -name '.gitignore' ')' -print0 | xargs -0 -r -l512 rm -f
@@ -484,19 +485,19 @@ KERNEL_INSTALL_DIR="$KERNEL_BUILD_DIR/build-done/kernel"
 rm -rf $KERNEL_INSTALL_DIR
 BuildConfig
 ln -sf %{defconfig} .config
+BuildKernel
+install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/generated
 install -d $KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux
-rm -f include/linux/autoconf.h
-%{__make} %CrossOpts include/linux/autoconf.h
-install include/linux/autoconf.h \
-	$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/autoconf-dist.h
+install include/generated/autoconf.h \
+	$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/generated/autoconf-dist.h
+install include/generated/utsrelease.h \
+	$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/generated/
+install include/linux/version.h \
+	$KERNEL_INSTALL_DIR%{_kernelsrcdir}/include/linux/
 install .config \
 	$KERNEL_INSTALL_DIR%{_kernelsrcdir}/config-dist
-BuildKernel
 PreInstallKernel
 
-%{__make} %CrossOpts include/linux/utsrelease.h
-cp include/linux/utsrelease.h{,.save}
-cp include/linux/version.h{,.save}
 cp scripts/mkcompile_h{,.save}
 
 %install
@@ -531,23 +532,21 @@ cd $RPM_BUILD_ROOT%{_kernelsrcdir}
 %{__make} %CrossOpts mrproper archclean \
 	RCS_FIND_IGNORE='-name build-done -prune -o'
 
-if [ -e $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/autoconf-dist.h ]; then
-	install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/autoconf-dist.h \
-		$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
-	install	$KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/config-dist \
-		$RPM_BUILD_ROOT%{_kernelsrcdir}
-fi
-
 cp -Rdp$l $KERNEL_BUILD_DIR/include/linux/* \
 	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
 
 %{__make} %CrossOpts mrproper
-mv -f include/linux/utsrelease.h.save $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/utsrelease.h
-cp include/linux/version.h{.save,}
-cp scripts/mkcompile_h{.save,}
-rm -rf include/linux/version.h.save
-rm -rf scripts/mkcompile_h.save
-install %{SOURCE2} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/autoconf.h
+install -d $RPM_BUILD_ROOT%{_kernelsrcdir}/include/generated
+install -d $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
+install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/linux/version.h \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux
+install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/generated/autoconf-dist.h \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/generated
+install $KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/include/generated/utsrelease.h \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}/include/generated
+install	$KERNEL_BUILD_DIR/build-done/kernel%{_kernelsrcdir}/config-dist \
+	$RPM_BUILD_ROOT%{_kernelsrcdir}
+install %{SOURCE2} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/generated/autoconf.h
 install %{SOURCE3} $RPM_BUILD_ROOT%{_kernelsrcdir}/include/linux/config.h
 
 # collect module-build files and directories
@@ -797,8 +796,11 @@ fi
 %dir %{_kernelsrcdir}/scripts/selinux
 %{_kernelsrcdir}/scripts/selinux/Makefile
 %dir %{_kernelsrcdir}/scripts/selinux/mdp
+%dir %{_kernelsrcdir}/scripts/selinux/genheaders
 %{_kernelsrcdir}/scripts/selinux/mdp/Makefile
 %{_kernelsrcdir}/scripts/selinux/mdp/*.c
+%{_kernelsrcdir}/scripts/selinux/genheaders/Makefile
+%{_kernelsrcdir}/scripts/selinux/genheaders/*.c
 
 %files doc
 %defattr(644,root,root,755)
