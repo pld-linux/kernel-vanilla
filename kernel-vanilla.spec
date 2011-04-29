@@ -12,7 +12,7 @@
 %define		have_sound	1
 %define		have_isa	1
 
-%define		_basever		2.6.36
+%define		_basever		2.6.38
 %define		_postver		.4
 %define		_rel			1
 
@@ -38,10 +38,10 @@ Epoch:		3
 License:	GPL v2
 Group:		Base/Kernel
 Source0:	http://www.kernel.org/pub/linux/kernel/v2.6/linux-%{_basever}.tar.bz2
-# Source0-md5:	61f3739a73afb6914cb007f37fb09b62
+# Source0-md5:	7d471477bfa67546f902da62227fa976
 %if "%{_postver}" != "%{nil}"
 Source1:	http://www.kernel.org/pub/linux/kernel/v2.6/patch-%{version}.bz2
-# Source1-md5:	df0414c63e51681cc20df8c211fa738c
+# Source1-md5:	6ef1279c7bd0078fc0fd50aa83e86203
 %endif
 
 Source2:	kernel-vanilla-autoconf.h
