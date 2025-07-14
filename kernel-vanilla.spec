@@ -423,7 +423,7 @@ cd linux-%{basever}
 %endif
 
 #new usb ids
-%patch0 -p1
+%patch -P0 -p1
 
 # Fix EXTRAVERSION in main Makefile
 sed -i 's#EXTRAVERSION =.*#EXTRAVERSION = %{postver}_%{alt_kernel}#g' Makefile
